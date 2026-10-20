@@ -11778,6 +11778,8 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
 
 <script>
 /* ========== v224 解放タブ：まだ ひらいていない ときは あと何回か 表示 ========== */
+/* v228 スマホで カードを スワイプしても 画面が 動かないように */
+document.head.insertAdjacentHTML('beforeend','<style>@media (hover:none){html,body{overflow:hidden!important;overscroll-behavior:none!important}}html,body{overscroll-behavior:none}body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text}#hand,#hand .card,.table{touch-action:none}</style>');
 /* v225 せまい スマホ：「かう」の 小タブを 2段に／配当表を 1列に／かけ金ボタンを はみ出さないように */
 document.head.insertAdjacentHTML('beforeend','<style>@media (max-width:380px){#shop .ssub:has(.stab.p[data-t=music]){flex-wrap:wrap;overflow:visible}#shop .ssub:has(.stab.p[data-t=music]) .stab.p{flex:1 0 calc(33% - 6px)}}@media (max-width:380px){body #pay{grid-template-columns:1fr!important;font-size:.72rem!important}body #pay div{padding:0 6px}}@media (max-width:360px){body .bar{gap:4px!important;padding:8px 6px!important}body .bar button.b.sm{min-width:34px!important;padding:6px 0!important}body .bet{gap:3px!important}body .bet output{min-width:1.2em!important}body .bar button.b.main{width:6.2em!important}}</style>');
 {const _u=unlockHTML;unlockHTML=function(){const P=S.prog||0;if(P<40){const n=40-P;return `<h3>🔒 アイテム 解放</h3><div class="ulock" style="margin:10px 4px 6px;padding:14px 10px;text-align:center;font-size:.95rem;line-height:1.8;border:2px dashed #c8901f;border-radius:12px;background:rgba(255,255,255,.55);color:#5a3a10">まだ ひらいていないよ。<br>あと <b style="color:#e2265a;font-size:1.2em">${n}回</b> くばると ひらきます🔓</div>`}return _u.apply(this,arguments)}}
