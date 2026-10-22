@@ -1414,6 +1414,7 @@ body.lk-grow .stab.g[data-t="brk"],body.lk-grow .stab.g[data-t="note"]{display:n
 .abTop{display:flex;gap:10px;align-items:center}.abI{font-size:2.6rem;width:56px;height:56px;display:grid;place-items:center;background:#fff;border-radius:16px;box-shadow:0 2px 6px rgba(0,0,0,.12)}.abTop b{font-size:1.1rem}
 .abTags{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}.abTags em{font-style:normal;font-size:.66rem;font-weight:800;background:#e6fff4;color:#1a7a5a;border-radius:999px;padding:1px 8px}.abTags em.st{background:#f0e0ff;color:#6a2aa8}.abTags em.aw{background:#fff0c8;color:#a8600a}
 .abD{font-size:.84rem;line-height:1.6;margin:10px 2px;background:#fff;border-radius:12px;padding:8px 10px;border:1px solid #f4dcb8}
+.obDesc{font-size:.84rem;line-height:1.6;margin:8px 2px 4px;color:#5a3a1a}
 .abRows{display:grid;grid-template-columns:1fr 1fr;gap:6px}.abRows div{background:#fff;border-radius:10px;padding:5px 8px;display:flex;flex-direction:column}.abRows span{font-size:.62rem;color:#9a7a5a}.abRows b{font-size:.84rem}.abRows small{font-size:.6rem;color:#9a7a5a;font-weight:600}.abRows .cap{font-style:normal;font-size:.6rem;background:#ffb020;color:#fff;border-radius:6px;padding:0 4px}
 .abBox h4{margin:12px 0 4px;font-size:.8rem;color:#a0601a}.abO{font-size:.76rem;background:#fff;border-radius:10px;padding:5px 8px;margin:3px 0}.abO.on{background:#e6fff4;border:1px solid #9fe0bc}.abO.none{color:#a09080;border:1px dashed #e0c8a8;background:transparent}.abO i{font-style:normal;font-size:.62rem;color:#1a7a5a;font-weight:800}
 .abX{display:block;width:100%;margin-top:12px;border:none;border-radius:14px;padding:10px;font-family:inherit;font-weight:800;background:linear-gradient(#ffb04a,#ff7a1a);color:#fff;box-shadow:0 3px 0 #a84a00}
@@ -11606,6 +11607,9 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
       if(mates.length)fh+=mates.map(m=>{const nv=Math.max(vOf(o),vOf(m))+Math.min(vOf(o),vOf(m))*.35;const c=fuseCost(o,m);return `<button class="b oAct fuseB" data-fa="${o.id}" data-fb="${m.id}" ${S.coins>=c&&S.phase!=='busy'?'':'disabled'}>${EQK[m.k][0]} ${EQK[m.k][2](vOf(m))}（${rarNm(m.r)}・${EL[elOf(m)][0]}）と 合体<small>→ <b>${EQK[o.k][2](nv)}</b> の 球 1つに ・ ${fmtC(c)}枚 ・ 上限を こえる ことも</small></button>`}).join('');
       else fh+=`<div class="abO none">同じ 能力の 球が ほかに ない</div>`;
       const anchor=P.querySelector('.abD');if(anchor)anchor.insertAdjacentHTML('beforebegin',fh)}catch(e){}}}
+  /* ---------- 球の 詳細：能力の 説明 ---------- */
+  {const _oo=window.orbOpen;window.orbOpen=function(oid){_oo.apply(this,arguments);try{const o=S.balls.find(x=>x.id===oid),P=$('abPop');if(!o||!P||P.querySelector('.obDesc'))return;const d=ABD[o.k];if(!d)return;
+      const top=P.querySelector('.abTop');if(top)top.insertAdjacentHTML('afterend',`<p class="obDesc">${d}</p>`)}catch(e){}}}
   document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.fuseB');if(!b)return;e.stopPropagation();e.preventDefault();
     if(!b.dataset.arm){b.dataset.arm=1;b.querySelector('small').insertAdjacentHTML('beforeend','<br><b>もう一度 タップで 合体（相手の 球は なくなる）</b>');return}
     const a=S.balls.find(x=>x.id===b.dataset.fa),m=S.balls.find(x=>x.id===b.dataset.fb);if(!a||!m)return;const c=fuseCost(a,m);if(S.coins<c)return;S.coins-=c;
