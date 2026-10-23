@@ -177,6 +177,7 @@ body.busy #skiphint{opacity:.85}
   font-family:var(--pixel);font-size:1.02rem;line-height:1.55;color:#fff3dc;background:rgba(30,16,12,.92);border:2px solid #ff9a3c;border-radius:14px;padding:12px 20px;white-space:normal;word-break:keep-all;overflow-wrap:anywhere;text-align:center;width:max-content;max-width:88vw;font-size:.98rem;
   box-shadow:0 0 0 4px rgba(255,154,60,.18),0 10px 30px rgba(0,0,0,.5),0 0 24px rgba(255,140,50,.45);transition:opacity .4s,transform .4s cubic-bezier(.2,1.4,.4,1)}
 #toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#toast.stick{pointer-events:auto;cursor:pointer}#toast .tapX{display:block;margin-top:8px;font-size:.7rem;color:#ffe2c0;opacity:.8}
 #toast small{display:block;margin-top:4px;font-size:.82rem;color:#ffe2c0}
 #toast b{color:#ffc46b;font-weight:400}
 #items{margin:6px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-variant-numeric:tabular-nums}
@@ -3645,7 +3646,8 @@ async function midGust(){await wait(400);evToast('🍃 突風！ カードが �
   {const W0=FX.W(),H0=FX.H();for(let n=0;n<3;n++)later(()=>FX.burst(0,H0*(.4+Math.random()*.3),10,'confetti',{speed:8,g:.02}),n*200)}say('midGustMum',{n:2,delay:500,gap:900});await wait(1200);cs.forEach(c=>{c.style.transition='';c.style.transform=''})}
 async function hsTremor(){await wait(500);evToast('🌋 地鳴りが…！ 浜辺が 揺れている');sfx.rumble(2.6);for(let n=0;n<5;n++){later(()=>shake(),n*450)}{const W0=FX.W(),H0=FX.H();for(let n=0;n<4;n++)later(()=>FX.burst(W0*Math.random(),H0*.7,14,'shard',{colors:['#c9a87a','#a88a5a','#e9d4a8'],speed:3,up:2,g:.3,size:4}),n*400)}say('hsTremorMum',{n:2,delay:900,gap:1100});await wait(2200)}
 function hsTaunt(){const c0=$('c0');evToast('👁️ 親が こちらを 見つめている…');c0.classList.add('taunt');setTimeout(()=>c0.classList.remove('taunt'),3200);sfx.tease();say('hsTaunt',{n:2,delay:600,gap:1200})}
-function evToast(h){const el=$('toast');el.innerHTML=h;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),3400)}
+function evToast(h){const el=$('toast');const st=/^\s*(⚗️|🔗 <b>合体)/.test(String(h||''));if(el._stk&&!st){el._wait=h;return}el.innerHTML=h;el.classList.add('on');clearTimeout(el._t);
+  if(st){el._stk=1;el.classList.add('stick');el.insertAdjacentHTML('beforeend','<small class="tapX">タップで とじる</small>');el._keep=el.innerHTML}else{el.classList.remove('stick');el._t=setTimeout(()=>el.classList.remove('on'),3400)}}
 async function dblWave(){const c0=$('c0'),old=S.dbl.dealer,dp=power(old);await wait(900);evToast('🌊 大波が 親のカードを さらった！');sfx.wave();say('evWaveDl',{n:2,delay:300,gap:900});
   c0.classList.add('down');await wait(500);c0.style.transition='transform .7s ease-in,opacity .7s';c0.style.transform='translate(-60%,-30%) rotate(-25deg)';c0.style.opacity='0';await wait(800);
   const used=S.dbl.picks;let pool=newDeck().filter(c=>!c.j&&c.r>=2&&c.r<=Math.min(9,dp-3)&&!used.some(u=>!u.j&&u.r===c.r&&u.s===c.s));const nd=pool[0]||{r:5,s:2};S.dbl.dealer=nd;S.dbl.picks=fixPicks(nd,S.dbl.picks.slice(),pool.slice(1));
@@ -11868,6 +11870,13 @@ document.head.insertAdjacentHTML('beforeend','<style>@media (hover:none){html,bo
 document.head.insertAdjacentHTML('beforeend','<style>@media (max-width:380px){#shop .ssub:has(.stab.p[data-t=music]){flex-wrap:wrap;overflow:visible}#shop .ssub:has(.stab.p[data-t=music]) .stab.p{flex:1 0 calc(33% - 6px)}}@media (max-width:380px){body #pay{grid-template-columns:1fr!important;font-size:.72rem!important}body #pay div{padding:0 6px}}@media (max-width:360px){body .bar{gap:4px!important;padding:8px 6px!important}body .bar button.b.sm{min-width:34px!important;padding:6px 0!important}body .bet{gap:3px!important}body .bet output{min-width:1.2em!important}body .bar button.b.main{width:6.2em!important}}</style>');
 {const _u=unlockHTML;unlockHTML=function(){const P=S.prog||0;if(P<40){const n=40-P;return `<h3>🔒 アイテム 解放</h3><div class="ulock" style="margin:10px 4px 6px;padding:14px 10px;text-align:center;font-size:.95rem;line-height:1.8;border:2px dashed #c8901f;border-radius:12px;background:rgba(255,255,255,.55);color:#5a3a10">まだ ひらいていないよ。<br>あと <b style="color:#e2265a;font-size:1.2em">${n}回</b> くばると ひらきます🔓</div>`}return _u.apply(this,arguments)}}
 {const _bs=buildShop;buildShop=function(){const r=_bs.apply(this,arguments);try{if((S.prog||0)<40&&S.shopTab==='unlock'){const v=$('shopBody').querySelector('.spanel .sinv');if(v)v.remove()}}catch(e){}return r}}
+/* ========== v235 合成の 結果は タップするまで 消さない ========== */
+{const el=$('toast');let busy=false;
+  // ほかの 表示が 上書き・消そうと しても 合成の 結果は 残す（あとで 出す）
+  new MutationObserver(()=>{if(busy)return;busy=true;try{if(el._stk){if(!el.querySelector('.tapX')&&el._keep){el._wait2=el.innerHTML;el.innerHTML=el._keep}clearTimeout(el._t);if(!el.classList.contains('on'))el.classList.add('on');if(!el.classList.contains('stick'))el.classList.add('stick')}}finally{Promise.resolve().then(()=>busy=false)}}).observe(el,{childList:true,attributes:true,attributeFilter:['class']});
+  el.addEventListener('click',e=>{if(!el._stk)return;e.stopPropagation();e.preventDefault();el._stk=0;el._keep='';el.classList.remove('on','stick');const w=el._wait,w2=el._wait2;el._wait=el._wait2=null;
+    const sh2=()=>{if(el._stk)return;el.innerHTML=w2;el.classList.add("on");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("on"),3400)};
+    if(w)setTimeout(()=>evToast(w),400);if(w2)setTimeout(sh2,w?3900:400)},true)}
 </script>
 
 </body></html>
