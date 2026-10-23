@@ -71,6 +71,8 @@ body.revC #hand{direction:rtl}body.revC #hand .slot{direction:ltr}
 /* v243 タップの 感度 */
 html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.bubble,.b{touch-action:manipulation}
 .foot button{position:relative}.foot button::after{content:'';position:absolute;inset:-9px -3px}
+
+#toast,#abPop,#getPop,#chestPop,#hsOffer,#drift,.nxGauge{overscroll-behavior:contain}
 </style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12071,6 +12073,14 @@ for(let i=0;i<5;i++){const el=$('c'+i);if(!el)continue;
     let got=false;const on=()=>{got=true};addEventListener('click',on,{capture:true,once:true});
     setTimeout(()=>{removeEventListener('click',on,{capture:true});if(got)return;const t=document.elementFromPoint(s0.x,s0.y);if(!t||!s0.el||!s0.el.isConnected)return;
       const b=(s0.el.closest&&s0.el.closest(SEL))||null;if(!b||!(b===t||b.contains(t)))return;if(b.disabled)return;b._synt=Date.now();b.click()},90)},true)}
+/* ========== v245 ポップアップ等を スワイプしても 画面が 動かないように ========== */
+{const touchOnly=matchMedia('(hover:none)');let sx=0,sy=0;
+  const canScroll=(el,dx,dy)=>{for(let n=el;n&&n!==document.body&&n!==document.documentElement;n=n.parentElement){const cs=getComputedStyle(n);
+      if(Math.abs(dy)>=Math.abs(dx)){if(/(auto|scroll)/.test(cs.overflowY)&&n.scrollHeight>n.clientHeight+1){if(dy>0&&n.scrollTop>0)return true;if(dy<0&&n.scrollTop+n.clientHeight<n.scrollHeight-1)return true}}
+      else{if(/(auto|scroll)/.test(cs.overflowX)&&n.scrollWidth>n.clientWidth+1){if(dx>0&&n.scrollLeft>0)return true;if(dx<0&&n.scrollLeft+n.clientWidth<n.scrollWidth-1)return true}}}return false};
+  addEventListener('touchstart',e=>{const t=e.touches[0];if(t){sx=t.clientX;sy=t.clientY}},{capture:true,passive:true});
+  addEventListener('touchmove',e=>{if(!touchOnly.matches||!e.cancelable||e.touches.length>1)return;const t=e.touches[0];const dx=t.clientX-sx,dy=t.clientY-sy;
+    if(!canScroll(e.target,dx,dy))e.preventDefault()},{capture:true,passive:false})}
 /* ========== v235 合成の 結果は タップするまで 消さない ========== */
 {const el=$('toast');let busy=false;
   // ほかの 表示が 上書き・消そうと しても 合成の 結果は 残す（あとで 出す）
