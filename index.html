@@ -59,6 +59,14 @@
 @keyframes nxPuff{to{transform:translate(var(--dx),-130px) scale(3.2);opacity:0}}
 .card.nxGray .face{filter:grayscale(.85) brightness(.8);transition:filter .8s}
 @media (prefers-reduced-motion:reduce){.nxCine .stripes,.nxAur i,.nxNova .rays{animation:none}}
+
+/* v241 呪い 追加・清めの 羽根 */
+body.fogC .card .face{filter:blur(2.2px) saturate(.7)}body.fogC #hand{position:relative}body.fogC #hand::after{content:'';position:absolute;inset:-6px;pointer-events:none;background:radial-gradient(ellipse at 30% 50%,rgba(235,240,250,.35),transparent 60%),radial-gradient(ellipse at 75% 40%,rgba(235,240,250,.3),transparent 55%);animation:fogM 6s ease-in-out infinite alternate}
+body.revC #hand{direction:rtl}body.revC #hand .slot{direction:ltr}
+.holyBtn{display:block;width:100%;margin-top:8px;min-height:46px!important;background:linear-gradient(#ffffff,#f1ecff)!important;color:#5a2a9a!important;border:2px solid #b07ad8!important;font-size:.85rem!important}
+.holyBtn small{display:block;font-size:.65rem;color:#7a5aa0}
+.holyFx{position:fixed;inset:0;z-index:60;pointer-events:none;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.95),rgba(255,250,220,.5) 30%,transparent 65%);animation:holyA 1.6s ease-out forwards}
+@keyframes holyA{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
 </style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10360,7 +10368,7 @@ Object.assign(MUMS,{rule6:['6枚目！？','ずるい ルールや','入れか�
  curseGet:['呪いの 装備…','なんか 寒気が する','強いけど 怖い','代償か…'],curseIdle:['呪い、効いてる…','背筋が ぞくっと','強さには 代償が つきもの']});
 Object.assign(EMO,{rule6:['🃏'],rulePay:['👯'],dblX3:['🔺'],curseGet:['💀','🩸'],curseIdle:['💀']});
 setInterval(()=>{try{if(!document.hidden&&cursedAny()&&!curOn('c_silent')&&Math.random()<.12)say('curseIdle',{delay:0})}catch(e){}},200000);
-(()=>{const ul=document.querySelector('#rules ul:last-of-type');if(ul)ul.insertAdjacentHTML('beforeend','<li><b>🩸 呪いの 装備</b>：とても 強い かわりに 代償が ある 装備。宝箱や 入荷に まれに 出る。いつでも はずせる。</li><li><b>🃏 ルール改造</b>：ジャックポットで 手に入る ★能力の なかには、6枚目の カード・ジョーカー2枚・ワンペア配当・4枚フラッシュ・透視・3倍アップ など、ルールそのものを 変える ものが ある。</li>')})();
+(()=>{const ul=document.querySelector('#rules ul:last-of-type');if(ul)ul.insertAdjacentHTML('beforeend','<li><b>🩸 呪いの 装備</b>：全部で 12種類。🕊️「清めの 羽根」（合成や 5連勝 以上で まれに 見つかる）を 使うと 呪いを 解ける。とても 強い かわりに 代償が ある 装備。宝箱や 入荷に まれに 出る。いつでも はずせる。</li><li><b>🃏 ルール改造</b>：ジャックポットで 手に入る ★能力の なかには、6枚目の カード・ジョーカー2枚・ワンペア配当・4枚フラッシュ・透視・3倍アップ など、ルールそのものを 変える ものが ある。</li>')})();
 
 /* ========== v190 フェーズ3：ロケット・月面カジノ・転生 ========== */
 S.moon=BOOTSAVE.moon||0;S.moonOn=BOOTSAVE.moonOn||0;S.rb=Object.assign({n:0,stars:0,just:0},BOOTSAVE.rb||{});
@@ -12014,6 +12022,37 @@ const NX={
   else await NX.pillar(el,lean);
   flipUp(el,true);sfx.flipBig();await wait(450);el.classList.remove('slow');
   if(win){NX.nova(el,lean==='rainbow'?'rainbow':'gold');rTxt('勝ち！','gold',1100,'3rem').classList.add('stamp')}else{NX.smoke(el);rTxt('負け…','blue',1100,'2.6rem').classList.add('droop')}await wait(700)}}
+/* ========== v241 呪いの 装備 追加・清めの 羽根（呪いを 解く） ========== */
+Object.assign(CURSE,{
+ c_blood:{nm:'血の 契約',ico:'🩸',good:'ダブルアップで 勝つと さらに +30%',bad:'ダブルアップで 負けると 持ちコインの 2% が 消える'},
+ c_glass:{nm:'硝子の 呪い',ico:'🥀',good:'配当 ×2',bad:'ショップの 値段が 1.5倍'},
+ c_fog:{nm:'霧の 呪い',ico:'🌫️',good:'配当 ×2.2',bad:'カードが 霧で 見えにくい'},
+ c_rev:{nm:'逆さの 呪い',ico:'🙃',good:'宝箱の コイン ×3',bad:'カードの 並びが 左右 逆さま'},
+ c_lone:{nm:'孤独の 呪い',ico:'🕸️',good:'配当 ×2.5',bad:'連勝の 宝箱が 出ない'},
+ c_rush:{nm:'焦りの 呪い',ico:'⏳',good:'配当 ×1.6・宝箱の コイン ×2',bad:'浜辺の 時間が 3倍速で 進む'}});
+{const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase!==p0&&S.phase==='won'&&S.win>0){let m=1;if(curOn('c_glass'))m*=2;if(curOn('c_fog'))m*=2.2;if(curOn('c_lone'))m*=2.5;if(curOn('c_rush'))m*=1.6;
+  if(m>1){S.win=Math.ceil(S.win*m);const el=$('msgIn')||$('msg');if(el)el.innerHTML=el.innerHTML.replace(/配当 <b>[\d,]+<\/b>/,`配当 <b>${S.win.toLocaleString()}</b>`);ui();document.body.classList.add('cursePulse');setTimeout(()=>document.body.classList.remove('cursePulse'),900)}}}catch(e){}return r}}
+{const _pd=pickDouble;pickDouble=async function(i){const w0=S.win,s0=S.streak;const r=await _pd.apply(this,arguments);try{const won=S.streak>s0&&S.win>w0;
+  if(curOn('c_blood')){if(won){S.win=Math.ceil(S.win*1.3);ui()}else if(S.coins>100){const l=Math.ceil(S.coins*.02);S.coins-=l;save();ui();setTimeout(()=>evToast(`🩸 血の 契約… <b>−${l.toLocaleString()}</b>枚`),900)}}
+  if(curOn('c_lone'))S.chestPending=0;
+  if(won&&S.streak>=5&&Math.random()<.06)holyGet('🎉 '+S.streak+'連勝の ごほうび')}catch(e){}return r}}
+{const _cr=chestRoll;chestRoll=function(n){const o=_cr.apply(this,arguments);try{if(o&&o.t==='coin'){const m=(curOn('c_rev')?3:1)*(curOn('c_rush')?2:1);if(m>1){o.v*=m;o.n=o.v.toLocaleString()+'枚'}}}catch(e){}return o}}
+{const _fp=finalPrice;finalPrice=function(){const v=_fp.apply(this,arguments);try{if(curOn('c_glass'))return Math.round(v*1.5)}catch(e){}return v}}
+{let last=Date.now();setInterval(()=>{try{const n=Date.now(),dt=Math.min(5,(n-last)/1000);last=n;document.body.classList.toggle('fogC',curOn('c_fog'));document.body.classList.toggle('revC',curOn('c_rev'));
+  if(curOn('c_rush')&&!document.hidden)S.gameMin=((S.gameMin||0)+dt*2*1440/10800)%1440}catch(e){}},1000)}
+/* 清めの 羽根 */
+function holyGet(src){S.eq.holy=(S.eq.holy||0)+1;save();setTimeout(()=>{evToast(`🕊️ <b>清めの 羽根</b> を 見つけた！<br><small>${src||''} ・ 呪いの 装備の 詳細から 呪いを 解ける（×${S.eq.holy}）</small>`);try{[1319,1568,2093].forEach((f,k)=>tone(f,.4,'sine',.03,k*.12))}catch(e){}},1200)}
+{const _ds=doSynth;doSynth=async function(){const r=await _ds.apply(this,arguments);try{if(Math.random()<.03)holyGet('⚗️ 合成の なかから')}catch(e){}return r}}
+{const _eo=window.eqOpen;window.eqOpen=function(id){_eo.apply(this,arguments);try{const it=eqGet(id),P=$('abPop');if(!it||!P||!it.curse||!CURSE[it.curse])return;const n=S.eq.holy||0;
+   const bx=[...P.querySelectorAll('.trBox')].find(b=>b.textContent.includes('呪い：'));const h=`<button class="b holyBtn" data-holy="${it.id}" ${n?'':'disabled'}>🕊️ 清めの 羽根で 呪いを 解く（のこり ${n}）<small>${n?'呪いが 消えて、かわりに 装備の ボーナス +10%':'合成や 5連勝 以上で まれに 見つかる'}</small></button>`;
+   if(bx)bx.insertAdjacentHTML('beforeend',h)}catch(e){}}}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-holy]');if(!b)return;e.stopPropagation();e.preventDefault();const it=eqGet(b.dataset.holy);if(!it||!it.curse||!(S.eq.holy>0))return;
+  if(!b.dataset.arm){b.dataset.arm=1;b.firstChild.textContent='もう一度 タップで 呪いを 解く ';return}
+  const C=CURSE[it.curse];delete it.curse;it.bo=+((it.bo||0)+.1).toFixed(3);S.eq.holy--;try{orbSync();eqApply()}catch(er){}save();ui();
+  const p=$('abPop');if(p)p.remove();const fx=document.createElement('div');fx.className='holyFx';document.body.appendChild(fx);setTimeout(()=>fx.remove(),1700);
+  try{[1047,1319,1568,2093,2637].forEach((f,k)=>tone(f,.6,'sine',.03,k*.1));FX.burst(innerWidth/2,innerHeight*.45,80,'spark',{colors:['#ffffff','#fff3c4','#d8c4ff'],speed:7,g:.02})}catch(er){}
+  try{rTxt('浄 化','white',1500,'3.4rem').classList.add('stamp')}catch(er){}evToast(`🕊️ <b>${C.nm}</b> が 解けた！<br><small>${eqName(it)} ・ ボーナス +${Math.round(it.bo*100)}%</small>`);
+  try{buildShop()}catch(er){}setTimeout(()=>{try{eqOpen(it.id)}catch(er){}},1800)},true);
 /* ========== v235 合成の 結果は タップするまで 消さない ========== */
 {const el=$('toast');let busy=false;
   // ほかの 表示が 上書き・消そうと しても 合成の 結果は 残す（あとで 出す）
