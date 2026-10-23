@@ -11419,7 +11419,7 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
   {const _n=eqNk;eqNk=function(it){return it&&it.v2?orbsOf(it).length:_n.apply(this,arguments)}}
   {const _s=eqSlots;eqSlots=function(it){return it&&it.v2?(it.sl||1)+(it.slotx||0):_s.apply(this,arguments)}}
   {const _r=eqRar;eqRar=function(it){return it&&it.v2?it.rar:_r.apply(this,arguments)}}
-  {const _nm=eqName;eqName=function(it){if(it&&it.v2){const B=EQB[it.b]||EQB.omamori;return (RPRE[it.rar]||'')+B[1]+(it.plus?` +${it.plus}`:'')}return _nm.apply(this,arguments)}}
+  {const _nm=eqName;eqName=function(it){if(it&&it.v2){const B=EQB[it.b]||EQB.omamori;return (it.curse?'🩸呪いの ':'')+(RPRE[it.rar]||'')+B[1]+(it.plus?` +${it.plus}`:'')}return _nm.apply(this,arguments)}}
   eqSellP=function(it){if(it&&it.v2)return nice(((EQR[it.rar]||EQR.N).p)*.35*(1+(it.plus||0)*.15));return 100};
   // 古い 形の 装備が 入ってきたら 新しい 形に（能力は 少しだけ 球に なる）
   function convert(it){if(!it||it.v2)return it;let r=it.rar||'N';if(!ORR.includes(r))r='N';const ks=Object.keys(it.fx||{}).filter(k=>it.fx[k]>0&&EQK[k]).sort((a,b)=>it.fx[b]-it.fx[a]);const nit=newEq(r,it.b);nit.id=it.id;
@@ -11729,7 +11729,7 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
   /* ---------- 装備 カード・詳細に 特性と 共鳴 ---------- */
   {const _eh=eqHTML;eqHTML=function(){let h=_eh.apply(this,arguments);return h.replace(/<button class="b eqDet" data-eo="open" data-id="([^"]+)">/g,(m,id)=>{const it=eqGet(id);if(!it)return m;const r=resoOf(it);return (it.tr?`<div class="trRow">${trChip(it.tr)}</div>`:'')+(r.m>1?`<div class="trRow"><span class="rsChip">${EL[r.el][0]} 共鳴 ×${r.m}</span></div>`:'')+m})}}
   {const _eo=window.eqOpen;window.eqOpen=function(id){_eo.apply(this,arguments);try{const it=eqGet(id),P=$('abPop');if(!it||!P)return;const r=resoOf(it),bo=boOf(it);
-      let add='';if(it.tr)add+=`<div class="trBox">${TR[it.tr][0]} <b>特性：${TR[it.tr][1]}</b><small>${TR[it.tr][2]}${it.tr==='whim'?`（今日は +${Math.round(whimBo(it)*100)}%）`:''}${it.tr==='night'?(night()?'（いま 夜：発動中）':'（いまは 昼）'):''}</small></div>`;
+      let add='';if(it.curse&&typeof CURSE!=='undefined'&&CURSE[it.curse]){const C=CURSE[it.curse];add+=`<div class="trBox" style="background:#f6e8ff;border-color:#b07ad8">${C.ico} <b>呪い：${C.nm}</b><small>◎ ${C.good}<br>✖ ${C.bad}<br>（つけている 間だけ。はずせば 呪いも 消える）</small></div>`}if(it.tr)add+=`<div class="trBox">${TR[it.tr][0]} <b>特性：${TR[it.tr][1]}</b><small>${TR[it.tr][2]}${it.tr==='whim'?`（今日は +${Math.round(whimBo(it)*100)}%）`:''}${it.tr==='night'?(night()?'（いま 夜：発動中）':'（いまは 昼）'):''}</small></div>`;
       add+=`<div class="trBox rs${r.m>1?' on':''}">${r.el?EL[r.el][0]:'🔗'} <b>属性の 共鳴</b><small>${r.m>1?`${EL[r.el][1]}属性 ${r.n}つ → その球の 効果 ×${r.m}（4つで ×1.3）`:`同じ 属性の 球を ${r.need||3}つ つけると 共鳴（効果 ×1.15）`}</small></div>`;
       const st=P.querySelector('.eoStats');if(st)st.insertAdjacentHTML('afterend',add);
       P.querySelectorAll('.eoOrb').forEach(row=>{const ob=row.querySelector('.orb[data-id]');if(!ob)return;const o=S.balls.find(x=>x.id===ob.dataset.id);if(!o)return;const v=row.querySelector('.eoV small b');const f=window.eqOrbEff(it,o);if(v&&EQK[o.k])v.textContent=EQK[o.k][2](f);const mul=orbMul(it,o);if(mul>1){const t=row.querySelector('.eoOI>b');if(t)t.insertAdjacentHTML('beforeend',` <span class="rsChip sm">×${f1(mul)}</span>`)}});
