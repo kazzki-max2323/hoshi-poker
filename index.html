@@ -1,4 +1,65 @@
-<!doctype html><html lang="ja"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
+<!doctype html><html lang="ja"><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+/* ===== v238 演出 強化（シネマ カットイン・ガラス・津波・オーロラ・墨・期待度ゲージ・光の柱・超新星・煙） ===== */
+.nxCine{position:fixed;inset:0;z-index:56;pointer-events:none;--c1:#1f5fd0;--c2:#3ea0ff;--c3:#d8ecff}
+.nxCine.c-green{--c1:#0f8a62;--c2:#3fdc9a;--c3:#dcfff0}.nxCine.c-red{--c1:#a3101f;--c2:#ff3b4f;--c3:#ffe0e4}.nxCine.c-gold{--c1:#a8700a;--c2:#ffd23f;--c3:#fff6cc}.nxCine.c-rainbow{--c1:#c48bff;--c2:#ffffff;--c3:#ffffff}.nxCine.c-white{--c1:#3a3f60;--c2:#a8b0d8;--c3:#ffffff}
+.nxCine .lb{position:absolute;left:0;right:0;height:11vh;background:#000;animation:nxLb .35s ease-out both}.nxCine .lb.t{top:0;transform-origin:top}.nxCine .lb.b{bottom:0;transform-origin:bottom}
+@keyframes nxLb{from{transform:scaleY(0)}}
+.nxCine .band{position:absolute;left:-10%;right:-10%;top:42%;transform:translateY(-50%) skewY(-6deg);padding:16px 0 14px;text-align:center;overflow:hidden;
+  background:linear-gradient(90deg,transparent,var(--c1) 12%,var(--c2) 50%,var(--c1) 88%,transparent);box-shadow:0 -3px 0 rgba(255,255,255,.85),0 3px 0 rgba(255,255,255,.85),0 0 46px var(--c2);animation:nxBand .5s cubic-bezier(.2,1.2,.3,1) both}
+.nxCine.c-rainbow .band{background:linear-gradient(90deg,#ff4f6d,#ffb347,#ffe066,#55e0b4,#3ea0ff,#c48bff,#ff4f6d);background-size:200% 100%;animation:nxBand .5s cubic-bezier(.2,1.2,.3,1) both,rbw 1s linear infinite}
+@keyframes nxBand{from{transform:translateY(-50%) skewY(-6deg) scaleY(0);opacity:0}}
+.nxCine .stripes{position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.16) 0 14px,transparent 14px 34px);background-size:68px 100%;animation:nxStr .5s linear infinite}
+@keyframes nxStr{to{background-position:68px 0}}
+.nxCine .band::after{content:'';position:absolute;top:0;bottom:0;width:30%;left:-40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.8),transparent);animation:nxShine 1s .35s ease-in-out both}
+@keyframes nxShine{to{left:120%}}
+.nxCine .ttl{position:relative;font-family:var(--pixel);font-size:clamp(2.1rem,10.5vw,3.3rem);line-height:1.1;letter-spacing:.04em;color:#fff;white-space:nowrap;-webkit-text-stroke:3px rgba(12,6,30,.9);paint-order:stroke fill;filter:drop-shadow(0 4px 0 rgba(0,0,0,.35)) drop-shadow(0 0 14px var(--c3))}
+.nxCine.c-gold .ttl span{background:linear-gradient(180deg,#fff 10%,#ffe066 50%,#ff9d00);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nxCine .ttl span{display:inline-block;animation:nxChar .45s cubic-bezier(.2,1.8,.4,1) both}
+@keyframes nxChar{from{transform:translateY(-60%) scale(2.4);opacity:0}}
+.nxCine .sub{position:relative;margin-top:4px;font-family:var(--pixel);font-size:.95rem;color:var(--c3);letter-spacing:.25em;text-shadow:0 2px 0 rgba(0,0,0,.45)}
+.nxCine.out{animation:nxOut .4s ease-in forwards}@keyframes nxOut{to{opacity:0;transform:scale(1.08)}}
+.nxShat{position:fixed;inset:0;z-index:58;pointer-events:none}
+.nxShat i{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.55),var(--g1) 40%,var(--g2));transition:transform .95s cubic-bezier(.4,0,.8,.6),opacity .95s ease-in;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6)}
+.nxShat i::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 45%,rgba(255,255,255,.7) 50%,transparent 55%)}
+.nxTide{position:fixed;inset:0;z-index:55;pointer-events:none;overflow:hidden}
+.nxTide i{position:absolute;left:-15%;width:130%;height:100%;bottom:-100%;border-radius:45% 55% 0 0/12% 16% 0 0;box-shadow:inset 0 10px 0 rgba(255,255,255,.85),inset 0 22px 18px rgba(255,255,255,.35);
+  background:linear-gradient(#c9f6ff,#3ea0ff 30%,#1450a8);opacity:.78;animation:nxTideUp 1.7s cubic-bezier(.3,.6,.3,1) forwards}
+.nxTide i:nth-child(2){animation-delay:.14s;background:linear-gradient(#ecfdff,#7fd6ff 25%,#2a78d0);opacity:.7;left:-25%}
+.nxTide i:nth-child(3){animation-delay:.28s;background:linear-gradient(#ffffff,#b5ecff 25%,#4a9be0);opacity:.55;left:-5%}
+@keyframes nxTideUp{0%{bottom:-100%}48%{bottom:-22%}100%{bottom:-112%}}
+.nxAur{position:fixed;inset:0;z-index:55;pointer-events:none;mix-blend-mode:screen;animation:nxFade 2.8s ease-in-out forwards}
+.nxAur i{position:absolute;left:-30%;width:160%;height:26%;top:var(--t);filter:blur(16px);opacity:.8;border-radius:50%;background:linear-gradient(90deg,transparent,var(--a) 30%,var(--b) 60%,transparent);animation:nxAurM 2.8s ease-in-out infinite alternate}
+@keyframes nxAurM{from{transform:translateX(-8%) skewY(var(--s))}to{transform:translateX(8%) skewY(calc(var(--s) * -1))}}
+@keyframes nxFade{0%{opacity:0}20%,75%{opacity:1}100%{opacity:0}}
+.nxInk{position:fixed;left:50%;top:40%;z-index:57;pointer-events:none;transform:translate(-50%,-50%)}
+.nxInk b{display:block;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-weight:900;font-size:9rem;line-height:1;color:#120814;text-shadow:0 0 2px #fff,0 0 22px rgba(255,255,255,.9),0 0 50px var(--ic,#ff3b4f);animation:nxInkIn .5s cubic-bezier(.2,1.8,.4,1) both}
+.nxInk i{position:absolute;left:50%;top:50%;border-radius:50%;background:#120814;box-shadow:0 0 8px rgba(255,255,255,.7);animation:nxSplat .35s ease-out both}
+@keyframes nxInkIn{from{transform:scale(3) rotate(-12deg);opacity:0}}@keyframes nxSplat{from{transform:translate(-50%,-50%) scale(0)}}
+.nxInk.out{animation:nxOut .4s ease-in forwards}
+.nxGauge{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);z-index:57;width:min(320px,80vw);padding:10px 14px 12px;box-sizing:border-box;background:linear-gradient(rgba(24,14,50,.92),rgba(8,6,24,.92));border:2px solid #ffe7a8;border-radius:16px;
+  box-shadow:0 0 0 3px rgba(0,0,0,.4),0 0 30px rgba(255,220,120,.45);font-family:var(--pixel);color:#fff;text-align:center;pointer-events:none;animation:bwpop .4s cubic-bezier(.2,1.6,.4,1)}
+.nxGauge .lbl{font-size:.85rem;letter-spacing:.3em;color:#ffe7a8;margin-bottom:6px}
+.nxGauge .bar{position:relative;height:20px;border-radius:999px;background:#1d1640;overflow:hidden;box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
+.nxGauge .bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#3ea0ff,#3fdc9a 35%,#ff3b4f 62%,#ffd23f 85%,#fff);background-size:var(--gw) 100%;box-shadow:0 0 12px rgba(255,255,255,.6)}
+.nxGauge .bar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(20% - 2px),rgba(0,0,0,.45) calc(20% - 2px) 20%)}
+.nxGauge .pct{font-size:2.1rem;line-height:1.15;margin-top:4px;color:var(--gc,#fff);text-shadow:0 0 16px var(--gc,#fff)}
+.nxGauge .pct small{font-size:.9rem}
+.nxGauge.crack{animation:nxCrack .6s ease-in forwards}@keyframes nxCrack{30%{transform:translate(-50%,-50%) rotate(-3deg)}100%{transform:translate(-50%,10%) rotate(14deg);opacity:0}}
+.nxGauge.out{animation:nxOut .35s ease-in forwards;transform:translate(-50%,-50%)}
+.nxPil{position:fixed;top:0;width:110px;margin-left:-55px;z-index:55;pointer-events:none;transform-origin:top;mix-blend-mode:screen;filter:blur(1.5px);
+  background:linear-gradient(90deg,transparent,var(--pc) 28%,#fff 50%,var(--pc) 72%,transparent);animation:pillar 2.2s ease-out forwards}
+.nxNova{position:fixed;z-index:56;pointer-events:none;width:0;height:0}
+.nxNova .rays{position:absolute;left:-60vmax;top:-60vmax;width:120vmax;height:120vmax;background:repeating-conic-gradient(rgba(255,240,180,.4) 0 6deg,transparent 6deg 16deg);
+  -webkit-mask:radial-gradient(circle,#000 4%,transparent 58%);mask:radial-gradient(circle,#000 4%,transparent 58%);animation:nxRays 2.2s ease-out forwards}
+@keyframes nxRays{0%{transform:scale(.2) rotate(0);opacity:0}18%{opacity:1}100%{transform:scale(1) rotate(70deg);opacity:0}}
+.nxNova b{position:absolute;left:-20px;top:-20px;width:40px;height:40px;border-radius:50%;border:4px solid var(--rc);box-shadow:0 0 18px var(--rc),inset 0 0 12px var(--rc);animation:nxRing 1.1s ease-out both}
+@keyframes nxRing{to{transform:scale(15);opacity:0;border-width:1px}}
+.nxSmoke{position:fixed;z-index:56;pointer-events:none;width:0;height:0}
+.nxSmoke i{position:absolute;width:64px;height:64px;margin:-32px;border-radius:50%;background:radial-gradient(circle,rgba(150,150,165,.9),rgba(110,110,130,0) 70%);filter:blur(3px);animation:nxPuff 1.9s ease-out both}
+@keyframes nxPuff{to{transform:translate(var(--dx),-130px) scale(3.2);opacity:0}}
+.card.nxGray .face{filter:grayscale(.85) brightness(.8);transition:filter .8s}
+@media (prefers-reduced-motion:reduce){.nxCine .stripes,.nxAur i,.nxNova .rays{animation:none}}
+</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -11874,6 +11935,83 @@ document.head.insertAdjacentHTML('beforeend','<style>@media (hover:none){html,bo
 document.head.insertAdjacentHTML('beforeend','<style>@media (max-width:380px){#shop .ssub:has(.stab.p[data-t=music]){flex-wrap:wrap;overflow:visible}#shop .ssub:has(.stab.p[data-t=music]) .stab.p{flex:1 0 calc(33% - 6px)}}@media (max-width:380px){body #pay{grid-template-columns:1fr!important;font-size:.72rem!important}body #pay div{padding:0 6px}}@media (max-width:360px){body .bar{gap:4px!important;padding:8px 6px!important}body .bar button.b.sm{min-width:34px!important;padding:6px 0!important}body .bet{gap:3px!important}body .bet output{min-width:1.2em!important}body .bar button.b.main{width:6.2em!important}}</style>');
 {const _u=unlockHTML;unlockHTML=function(){const P=S.prog||0;if(P<40){const n=40-P;return `<h3>🔒 アイテム 解放</h3><div class="ulock" style="margin:10px 4px 6px;padding:14px 10px;text-align:center;font-size:.95rem;line-height:1.8;border:2px dashed #c8901f;border-radius:12px;background:rgba(255,255,255,.55);color:#5a3a10">まだ ひらいていないよ。<br>あと <b style="color:#e2265a;font-size:1.2em">${n}回</b> くばると ひらきます🔓</div>`}return _u.apply(this,arguments)}}
 {const _bs=buildShop;buildShop=function(){const r=_bs.apply(this,arguments);try{if((S.prog||0)<40&&S.shopTab==='unlock'){const v=$('shopBody').querySelector('.spanel .sinv');if(v)v.remove()}}catch(e){}return r}}
+/* ========== v238 リーチ・ダブルアップ演出 強化 ========== */
+const NX={
+  col:{blue:['#3ea0ff','#9fd3ff'],green:['#3fdc9a','#a8ffd0'],red:['#ff3b4f','#ffb0b8'],gold:['#ffd23f','#fff3a0'],rainbow:['#ff5c8a','#7aa2ff'],white:['#ffffff','#e8ecff']},
+  lv:c=>Math.max(0,['blue','green','red','gold','rainbow'].indexOf(c)),
+  el(cls,html){const d=document.createElement('div');d.className=cls;if(html)d.innerHTML=html;document.body.appendChild(d);return d},
+  chars:t=>[...t].map((c,i)=>`<span style="animation-delay:${i*45}ms">${c===' '?'&nbsp;':c}</span>`).join(''),
+  sparks(x,y,col,n){try{const C=col==='rainbow'?['#ff5c8a','#ffd23f','#55e0b4','#7aa2ff','#c98cff','#fff']:[NX.col[col][0],NX.col[col][1],'#ffffff'];FX.burst(x,y,n||40,'spark',{colors:C,speed:8,g:.03})}catch(e){}},
+  async cine(title,sub,col,ms){const d=NX.el('nxCine c-'+col,`<i class="lb t"></i><i class="lb b"></i><div class="band"><div class="stripes"></div><div class="ttl">${NX.chars(title)}</div>${sub?`<div class="sub">${sub}</div>`:''}</div>`);
+    try{sfx.whoosh()}catch(e){}await wait(260);const lv=NX.lv(col);try{sfx.cut(Math.min(4,lv+1))}catch(e){}if(lv>=2)shake();if(lv>=3)flash(col==='gold'?'#ffe9a0':'#ffffff');
+    NX.sparks(innerWidth*.2,innerHeight*.42,col,20);NX.sparks(innerWidth*.8,innerHeight*.42,col,20);if(col==='rainbow')for(let k=0;k<3;k++)later(()=>FX.meteor(),k*250);
+    await wait((ms||1900)-260);d.classList.add('out');setTimeout(()=>d.remove(),450)},
+  async shatter(col){const g=NX.col[col]||NX.col.white,d=NX.el('nxShat');d.style.setProperty('--g1',g[0]+'99');d.style.setProperty('--g2',g[1]+'cc');
+    const C=4,Rw=6,P=[];for(let r=0;r<=Rw;r++){P.push([]);for(let c=0;c<=C;c++){const edge=r===0||r===Rw||c===0||c===C;P[r].push([c/C*100+(edge?0:(Math.random()-.5)*14),r/Rw*100+(edge?0:(Math.random()-.5)*9)])}}
+    const sh=[];for(let r=0;r<Rw;r++)for(let c=0;c<C;c++){const a=P[r][c],b=P[r][c+1],e=P[r+1][c+1],f=P[r+1][c];for(const tri of (Math.random()<.5?[[a,b,e],[a,e,f]]:[[a,b,f],[b,e,f]])){const i=document.createElement('i');i.style.clipPath=`polygon(${tri.map(q=>q[0]+'% '+q[1]+'%').join(',')})`;d.appendChild(i);sh.push([i,tri])}}
+    d.style.opacity='0';await wait(30);d.style.transition='opacity .12s';d.style.opacity='1';const ck=$('crack');if(ck)ck.classList.add('on');try{noise(.25,{v:.14,type:'highpass',f:2500})}catch(e){}shake();await wait(520);
+    try{noise(.6,{v:.12,type:'highpass',f:1800});tone(2400,.2,'triangle',.02);tone(3100,.25,'triangle',.015,.05)}catch(e){}flash('#ffffff');if(ck)ck.classList.remove('on');
+    for(const[i,tri] of sh){const cx=(tri[0][0]+tri[1][0]+tri[2][0])/3-50,cy=(tri[0][1]+tri[1][1]+tri[2][1])/3-45;i.style.transitionDelay=(Math.random()*.12)+'s';i.style.transform=`translate(${cx*9}px,${cy*9+260}px) rotate(${(Math.random()-.5)*160}deg) scale(.8)`;i.style.opacity='0'}
+    setTimeout(()=>d.remove(),1300);await wait(450)},
+  async tide(){const d=NX.el('nxTide','<i></i><i></i><i></i>');try{sfx.wave();later(()=>sfx.wave(),400)}catch(e){}shake();await wait(1700);d.remove()},
+  async aurora(col){const g=col&&NX.col[col]?NX.col[col]:['#55e0b4','#7aa2ff'];const d=NX.el('nxAur',[['14%','#55e0b4','#7aa2ff','-4deg'],['28%',g[0],'#c98cff','5deg'],['42%','#7af7ff',g[1],'-3deg']].map(([t,a,b,s2])=>`<i style="--t:${t};--a:${a};--b:${b};--s:${s2}"></i>`).join(''));
+    try{bell&&[0,4,7,12].forEach((n,k)=>tone(523*Math.pow(2,n/12),.9,'sine',.018,k*.18))}catch(e){}await wait(2800);d.remove()},
+  async ink(ch,col){const d=NX.el('nxInk',`<b style="--ic:${(NX.col[col]||NX.col.red)[0]}">${ch}</b>`);for(let k=0;k<14;k++){const i=document.createElement('i'),r=6+Math.random()*22,a=Math.random()*7,dist=70+Math.random()*90;i.style.width=i.style.height=r+'px';i.style.marginLeft=(Math.cos(a)*dist)+'px';i.style.marginTop=(Math.sin(a)*dist)+'px';i.style.animationDelay=(.05+Math.random()*.15)+'s';d.appendChild(i)}
+    try{noise(.18,{v:.16,type:'lowpass',f:700});sfx.big()}catch(e){}shake();await wait(1500);d.classList.add('out');setTimeout(()=>d.remove(),420)},
+  async gauge(target,label,crack){const d=NX.el('nxGauge',`<div class="lbl">${label||'期待度'}</div><div class="bar"><i></i></div><div class="pct">0<small>%</small></div>`);const bar=d.querySelector('.bar i'),pc=d.querySelector('.pct');d.style.setProperty('--gw',d.querySelector('.bar').offsetWidth+'px');
+    const goal=Math.round(Math.max(8,Math.min(crack?99:100,target*100))),C=v=>v>=100?'#ffffff':v>=85?'#ffd23f':v>=62?'#ff3b4f':v>=35?'#3fdc9a':'#3ea0ff';
+    let v=0,step=0;while(v<goal){const left=goal-v;v=Math.min(goal,v+Math.max(1,Math.round(left*(left>20?.12:.08))));bar.style.width=v+'%';pc.innerHTML=v+'<small>%</small>';d.style.setProperty('--gc',C(v));try{tone(500+v*9,.035,'square',.014)}catch(e){}await wait(goal-v<10?110:55);step++}
+    const col=goal>=100?'rainbow':goal>=85?'gold':goal>=62?'red':goal>=35?'green':'blue';
+    if(crack){await wait(600);try{noise(.4,{v:.12,type:'highpass',f:1500});sfx.lose()}catch(e){}d.classList.add('crack');setTimeout(()=>d.remove(),650);await wait(500);return col}
+    if(goal>=85){flash(goal>=100?'#ffffff':'#ffe9a0');shake();try{sfx.big()}catch(e){}NX.sparks(innerWidth/2,innerHeight*.4,col,50)}else try{tone(880,.15,'triangle',.03)}catch(e){}
+    await wait(900);d.classList.add('out');setTimeout(()=>d.remove(),380);return col},
+  async pillar(el,col){const[cx,cy]=center(el);const d=NX.el('nxPil');d.style.left=cx+'px';d.style.height=cy+'px';d.style.setProperty('--pc',(NX.col[col]||NX.col.white)[0]);try{tone(1568,1.2,'sine',.025);tone(2093,1.2,'sine',.018,.1)}catch(e){}
+    await wait(500);NX.sparks(cx,cy,col,36);el.classList.add('rglow');await wait(1400);el.classList.remove('rglow');setTimeout(()=>d.remove(),400)},
+  nova(el,col){const[cx,cy]=center(el);const rc=(NX.col[col]||NX.col.gold)[0];const d=NX.el('nxNova',`<div class="rays"></div>${[0,1,2,3].map(k=>`<b style="--rc:${k%2?'#ffffff':rc};animation-delay:${k*.13}s"></b>`).join('')}`);d.style.left=cx+'px';d.style.top=cy+'px';setTimeout(()=>d.remove(),2300);
+    flash('#ffffff');shake();try{fxConfetti()}catch(e){}NX.sparks(cx,cy,'rainbow',70)},
+  smoke(el){const[cx,cy]=center(el);const d=NX.el('nxSmoke',Array.from({length:9},(_,k)=>`<i style="--dx:${(Math.random()-.5)*90}px;animation-delay:${k*.09}s;left:${(Math.random()-.5)*50}px;top:${(Math.random()-.5)*40}px"></i>`).join(''));d.style.left=cx+'px';d.style.top=cy+'px';setTimeout(()=>d.remove(),2800);try{noise(1.2,{v:.05,type:'lowpass',f:400})}catch(e){}}};
+/* リーチ：はじまり */
+{const _ro=rOpen;rOpen=async function(kind,el,tg,name){if(Math.random()<.45){const col=tg<=4?'gold':tg===5?'red':'green',K=pick(['cine','cine','shatter','tide','aurora','ink']);
+   if(K==='cine')await NX.cine(`${name} リーチ`,'あと 1枚',col,1900);
+   else if(K==='shatter'){await NX.shatter(col);await NX.cine('リーチ！！',name,col,1500)}
+   else if(K==='tide'){const t=NX.tide();await wait(700);rTxt(`${name} リーチ`,col==='gold'?'gold':'blue',1300,'2.6rem').classList.add('stamp');await t}
+   else if(K==='aurora'){const a=NX.aurora(col);await wait(500);rTxt(`${name}…`,col,1500,'2.4rem');await wait(1500);await a}
+   else await NX.ink(tg<=4?'極':tg===5?'激':'熱',col);
+   return}return _ro.apply(this,arguments)}}
+/* リーチ：予告 */
+{const _ry=rYokoku;rYokoku=async function(kind,el,tr,hit){if(Math.random()<.35){const col=trustCol(tr,hit),K=pick(['gauge','gauge','pillar','cine']);
+   if(K==='gauge')await NX.gauge(col==='rainbow'?1:tr*.95+.04,'期待度');
+   else if(K==='pillar')await NX.pillar(el,col);
+   else await NX.cine({blue:'チャンス',green:'チャンス！',red:'激アツ！！',gold:'超激アツ！！！',rainbow:'★ 確 定 ★'}[col],'',col,1600);
+   return}return _ry.apply(this,arguments)}}
+/* リーチ：結末 */
+{const _rf=rFinish;rFinish=async function(P,el,inner,tg,hit){if(Math.random()<.35){
+   if(hit){const K=pick(['nova','gaugeHit','cineHit']);
+     if(K==='gaugeHit'){await NX.gauge(1,'そろう 確率');}
+     else if(K==='cineHit'){el.classList.add('rTrem');await wait(600);el.classList.remove('rTrem')}
+     else{el.classList.add('rglow');for(let n=0;n<3;n++){sfx.heart();await wait(300-n*60)}el.classList.remove('rglow')}
+     el.classList.remove('down');sfx.flipBig();NX.nova(el,tg<=4?'gold':'rainbow');try{sfx.big()}catch(e){}
+     if(K==='cineHit')await NX.cine('大 当 た り','そろった！','rainbow',1700);else{bigNum(el,'そろった！！','go');await wait(900)}}
+   else{const K=pick(['smoke','almost','grayout']);
+     if(K==='almost'){await NX.gauge(.99,'そろう 確率',true)}
+     else if(K==='grayout'){el.classList.add('rglow');sfx.heart();await wait(500);el.classList.remove('rglow');document.body.classList.add('slowmo');await wait(700);document.body.classList.remove('slowmo')}
+     else{el.classList.add('rTrem');await wait(800);el.classList.remove('rTrem')}
+     el.classList.remove('down');sfx.flip();if(K==='smoke')NX.smoke(el);el.classList.add('nxGray');setTimeout(()=>el.classList.remove('nxGray'),1600);await wait(250);bigNum(el,K==='almost'?'あと 一歩…':'ざんねん…','lose');try{sfx.lose()}catch(e){}await wait(500)}
+   return}return _rf.apply(this,arguments)}}
+/* ダブルアップ：カットイン */
+{const _ci=cutIn;cutIn=async function(win,L){if(Math.random()<.45){const P=win?[['blue',.15],['green',.25],['red',.33],['gold',.18],['rainbow',.09]]:[['blue',.45],['green',.35],['red',.17],['gold',.03]];let r=Math.random(),c=P[0][0];for(const[n,w]of P){if((r-=w)<0){c=n;break}}
+   const T={blue:'チャンス？',green:'チャンス！',red:'激アツ！！',gold:'超激アツ！！！',rainbow:'★ 確 定 ★'};try{say('cut_'+c,{delay:900})}catch(e){}await NX.cine(T[c],L>=2?`${L}連勝中`:'',c,1800);return}return _ci.apply(this,arguments)}}
+/* ダブルアップ：めくり方 */
+{const _ps=pickStyle;pickStyle=function(L){if(Math.random()<.3)return pick(['nxCine','nxShatter','nxGauge','nxAurora','nxPillar']);return _ps(L)}}
+{const _rs=revealStyled;revealStyled=async function(style,el,i,L){if(!String(style).startsWith('nx'))return _rs.apply(this,arguments);let win=false;try{win=power(S.dbl.picks[i-1])>power(S.dbl.dealer)}catch(e){}
+  const lean=win?pick(['red','gold','gold','rainbow','green']):pick(['blue','green','green','red']);
+  if(style==='nxCine')await NX.cine('勝 負 ！',L>=1?`${L+1}連勝を かけて`:'運命の 1枚',lean==='rainbow'?'gold':lean,1700);
+  else if(style==='nxShatter')await NX.shatter(lean);
+  else if(style==='nxGauge')await NX.gauge(win?R0(.6,1):R0(.1,.75),'勝つ 予感');
+  else if(style==='nxAurora'){const a=NX.aurora(lean);await wait(600);el.classList.add('slow');await a}
+  else await NX.pillar(el,lean);
+  flipUp(el,true);sfx.flipBig();await wait(450);el.classList.remove('slow');
+  if(win){NX.nova(el,lean==='rainbow'?'rainbow':'gold');rTxt('勝ち！','gold',1100,'3rem').classList.add('stamp')}else{NX.smoke(el);rTxt('負け…','blue',1100,'2.6rem').classList.add('droop')}await wait(700)}}
 /* ========== v235 合成の 結果は タップするまで 消さない ========== */
 {const el=$('toast');let busy=false;
   // ほかの 表示が 上書き・消そうと しても 合成の 結果は 残す（あとで 出す）
