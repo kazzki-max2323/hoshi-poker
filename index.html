@@ -1121,6 +1121,7 @@ body.stk3 .wrap::before{background:radial-gradient(ellipse at 50% 100%,rgba(255,
 #shop .srow.tre .sinfo small{font-size:.6rem!important;line-height:1.3;margin-top:1px}
 #shop .srow.tre .treAb .fx1{padding:0 4px;margin-top:2px}
 #shop .synTre{display:flex;flex-direction:column;gap:2px;margin:0 0 8px;padding:6px 10px;border-radius:12px;background:#fff;border:1px solid #f4dcb8;font-size:.72rem;line-height:1.45;color:#5a3a1a;text-align:left}#shop .synTre b{font-size:.78rem;color:#a0601a}
+#shop .synPr{display:block;font-style:normal;font-size:.68rem;line-height:1.2;margin-top:2px;color:#b8500a;font-weight:800}
 #shop .synTk{display:block;font-style:normal;font-size:.7rem;line-height:1.1}
 #shop .treDesc span{display:block}
 #shop .treDesc{display:flex;flex-direction:column;gap:2px;margin-top:3px;font-size:.62rem!important;line-height:1.4;color:#7a5a3a!important;text-align:left}
@@ -11680,7 +11681,7 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
           let m=1,tag='';if(sy==='top15'&&i===iMax){m=1.5;tag=' 🧪×1.5'}if(sy==='low30'&&i===iMin){m=1.8;tag=' 🧪×1.8'}
           if(foc&&i!==iMax)return `<div class="spL">${orbHTML(o,{sm:1})}<div><b>${K[1]}</b><small>${K[2](v)} ・ 🎯 伸びは いちばん 強い 球に 集まる</small>${bar(v,capE)}</div></div>`;
           const a=foc?L0*1.2*gi.length:L0*m,b=foc?L1*1.2*gi.length:L1*m;if(foc)tag=' 🎯集中';
-          const lo=Math.min(capE,v+a),hi=Math.min(capE,v+b);return `<div class="spL">${orbHTML(o,{sm:1})}<div><b>${K[1]}${tag}</b><small>${K[2](v)} → <b>${K[2](lo)===K[2](hi)?K[2](lo):`${K[2](lo)}〜${K[2](hi)}`}</b>（ときどき もっと）</small>${bar(v,capE)}</div></div>`}).join('');
+          const lo=Math.min(capE,v+a),hi=Math.min(capE,v+b);return `<div class="spL">${orbHTML(o,{sm:1})}<div><b>${K[1]}${tag}</b><small>${K[2](v)} → <b>${(()=>{const A=K[2](lo),B=K[2](hi);if(A===B)return A;let n=0;while(n<A.length&&A[n]===B[n])n++;const sp=A.lastIndexOf(' ',n-1)+1;return `${A}〜${B.slice(sp)}`})()}</b>（ときどき もっと）</small>${bar(v,capE)}</div></div>`}).join('');
         h=h.replace(/<p class="synPrev">[\s\S]*?<\/p>/,`<div class="synPrev"><div class="synPT">🌱 この 合成で 球が 強くなる <small>たからもの（${t.r}）は なくなる</small></div>${gi.length?'':'<small class="spN" style="color:#c8341a">⚠️ 全部の 球が 上限に 届いている。合成しても 球は 強くならない（たからものは なくなる）</small>'}${lines}${sy&&SYND2[sy]?`<small class="spN">🧪 素材の 力：${SYND2[sy]}${am>1||sy==='guard'||sy==='pPolish'||sy==='lvup'?'（上の 予想に 込み）':''}</small>`:''}<small class="spN">能力が 変わったり・消えたり・下がったりは しない</small></div>`)}}}
       else if(!A||!B){h=h.replace(/<p class="synPrev">[\s\S]*?<\/p>/,`<div class="synPrev guide"><div class="synPT">⚗️ 合成の しかた</div><div class="spG"><div><b>🎒＋🐚</b><span>装備 ＋ たからもの<br><small>その装備の 球が 強くなる</small></span></div><div><b>🎒＋🎒</b><span>装備 ＋ 装備<br><small>左の 装備が 変化（右は なくなる）</small></span></div><div><b>🐚＋🐚</b><span>たからもの 2つ<br><small>何が 起こるか お楽しみ</small></span></div></div></div>`)}}catch(e){}return h}}
 })();
@@ -11751,8 +11752,9 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
       h=h.replace(/(<button class="synIt[^"]*" data-t="tre" data-id="([^"]+)"[^>]*>[\s\S]*?)(<b class="synP">)/g,(m,a,id,b)=>{const t=TRE.find(x=>x.id===id);const ic=(t&&t.sk&&EQK[t.sk]?EQK[t.sk][0]:'')+(t&&t.syn&&SYND2[t.syn]?'🧪':'');return a+(ic?`<em class="synTk">${ic}</em>`:'')+b});
       h=h.replace(/(<button class="synIt[^"]*" data-t="tre" data-id="([^"]+)"[^>]*>(?:(?!<\/button>)[\s\S])*?<b class="synP">)球 Lv \+(\d+)〜(\d+)<\/b>/g,(m,a,id,lo,hi)=>{const t=TRE.find(x=>x.id===id),sy=t&&t.syn||'',am={amp5:1.2,amp10:1.3,amp20:1.45,amp30:1.6}[sy]||1;if(am===1&&sy!=='guard')return m;
         const l=sy==='guard'?(+lo+ +hi)/2:+lo;return a+`球 Lv +${Math.round(l*am)}〜${Math.round(hi*am)}</b>`});
+      h=h.replace(/(<button class="synIt[^"]*" data-t="tre" data-id="([^"]+)"[^>]*>(?:(?!<\/button>)[\s\S])*?<b class="synP">[^<]*<\/b>)/g,(m,a,id)=>{const t=TRE.find(x=>x.id===id);let v=0;try{v=t?sellPrice(t):0}catch(e){}return v?a+`<em class="synPr">💰 ${v.toLocaleString()}枚</em>`:m});
       const ts=(synSel||[]).filter(m=>m&&m.t==='tre').map(m=>TRE.find(x=>x.id===m.id)).filter((t,i,a)=>t&&a.indexOf(t)===i);
-      const bx=ts.map(t=>{const ds=treSynLines(t);return `<div class="synTre"><b>${t.e} ${t.n} の 力</b>${ds.length?ds.map(d=>`<span>${d}</span>`).join(''):'<span>とくべつな 力は なし（球を 育てる だけ）</span>'}</div>`}).join('');
+      const bx=ts.map(t=>{const ds=treSynLines(t);let sv=0;try{sv=sellPrice(t)}catch(e){}return `<div class="synTre"><b>${t.e} ${t.n} の 力${sv?` <small>（売ると ${sv.toLocaleString()}枚）</small>`:''}</b>${ds.length?ds.map(d=>`<span>${d}</span>`).join(''):'<span>とくべつな 力は なし（球を 育てる だけ）</span>'}</div>`}).join('');
       if(bx)h=h.replace('<button class="b synGo"',bx+'<button class="b synGo"')}catch(e){}return h}}
   /* ---------- 球の 詳細：能力の 説明 ---------- */
   {const _oo=window.orbOpen;window.orbOpen=function(oid){_oo.apply(this,arguments);try{const o=S.balls.find(x=>x.id===oid),P=$('abPop');if(!o||!P||P.querySelector('.obDesc'))return;const d=ABD[o.k];if(!d)return;
