@@ -10549,6 +10549,28 @@ Object.assign(SYNM,{amp5:['球の 伸び ×1.2',SYNM.amp5[1]],amp10:['球の 伸
  luck:['大きく 伸びやすい',SYNM.luck[1]],lvup:['成長上限 +5%',SYNM.lvup[1]],newab:['球が 生まれやすい',SYNM.newab[1]],cap6:['球枠 ＋1 チャンス',SYNM.cap6[1]],
  slot1:['球枠 ＋1 チャンス',SYNM.slot1[1]],lbs:['突破の 石 50%',SYNM.lbs[1]]});
 treSkTxt=function(t){if(!t)return '';const a=t.sk&&EQK[t.sk]?`${EQK[t.sk][0]}${EQK[t.sk][1]}の 球が 生まれる（${t.syn==='newab'?25:5}%）`:'',b=t.syn&&SYNM[t.syn]?'🧪'+SYNM[t.syn][0]:'';return [a,b].filter(Boolean).join(' ／ ')};
+/* ========== v234 新しい 能力・特性・素材の 力・装備 ========== */
+Object.assign(EQK,{firstW:['🌅','朝いちばん',v=>`最初の 勝ち +${f1(v*10)}%`,10],comeback:['🔥','逆転の 一手',v=>`負けの 次 +${f1(v*4)}%`,10],
+ chain:['⛓️','連続 役',v=>`続けて 勝つと +${f1(v*3)}%`,10],lucky7:['🎰','ラッキー7',v=>`7 1枚ごとに +${f1(v*2)}%`,10]});
+Object.assign(FXSN,{firstW:'朝いちばん',comeback:'逆転の一手',chain:'連続役',lucky7:'ラッキー7'});
+Object.assign(ABD,{firstW:'浜辺の 1日で 最初に 役で 勝った とき、配当が 増える（日が 変わると また 使える）。',comeback:'負けた すぐ 次の 勝負で 役が できると、配当が 増える。',
+ chain:'前の 勝負に 続けて 役が できると、配当が 増える。',lucky7:'勝った 手札に 7が 入っていると、7の 枚数ぶん 配当が 増える。'});
+Object.assign(SYNM,{gamble:['🎲賭け',['N','R','SR']],copy:['🪞写し',['R','SR','SSR']],shift:['🌀変身',['N','R','SR']],bless:['✨祝福',['SR','SSR','UR']],rarUp:['⬆️昇格',['SR','SSR','UR']]});
+const SYNX={gamble:'賭け：全部の 球の 伸びが ×0・×1・×3 の どれか',copy:'写し：いちばん 強い 球と 同じ 能力の 球（N）が 生まれる',shift:'変身：いちばん 弱い 球の 能力が 別の 能力に 変わる（強さは そのまま）',
+ bless:'祝福：装備の ボーナスが +3%',rarUp:'昇格：ランダムな 球 1つの レア度が 1つ 上がる（URまで）'};
+Object.assign(SYND2,SYNX);Object.keys(SYNX).forEach(k=>{SYND[k]=SYNX[k]+'。'});
+TRE.forEach(t=>{if(t.syn)return;let h=0;for(const c of 'x2#'+t.id+t.n)h=(h*131+c.charCodeAt(0))>>>0;if(h%100<12){const ok=Object.keys(SYNX).filter(k=>SYNM[k][1].includes(t.r));if(ok.length)t.syn=ok[(h>>>8)%ok.length]}});
+Object.assign(EQB,{eyepatch:['🏴‍☠️','海賊の 眼帯',{pay:1}],uchiwa:['🪭','夏祭りの うちわ',{day:1}],chochin:['🏮','ちょうちんの 明かり',{night:1}],goggle:['🤿','素潜りの ゴーグル',{trebig:1}],
+ tako:['🪁','星空の 凧',{star:1}],ukulele:['🪕','浜辺の ウクレレ',{visint:1}],bottle:['🍾','手紙入りの ボトル',{arr:1}],kaiten:['🧿','波よけの お守り',{safe:1}]});
+EQBK.push('eyepatch','uchiwa','chochin','goggle','tako','ukulele','bottle','kaiten');
+{let fwDay=-1;try{fwDay=+(localStorage.getItem('hoshipoker_fw')||-1)}catch(e){}let lost=false,won=false;
+ const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase===p0)return r;const w=S.phase==='won'&&S.win>0;
+  if(w){let m=0;const ts=[];const fw=eqv('firstW');if(fw&&fwDay!==S.gday){fwDay=S.gday;try{localStorage.setItem('hoshipoker_fw',fwDay)}catch(e){}m+=fw*.1;ts.push('🌅 朝いちばん')}
+    const cb=eqv('comeback');if(cb&&lost){m+=cb*.04;ts.push('🔥 逆転')}const ch=eqv('chain');if(ch&&won){m+=ch*.03;ts.push('⛓️ 連続 役')}
+    const l7=eqv('lucky7');if(l7){const n=(S.hand||[]).filter(c=>c&&!c.j&&c.r===7).length;if(n){m+=l7*.02*n;ts.push(`🎰 7が ${n}枚`)}}
+    if(m>0){const b0=S.win;S.win=Math.ceil(S.win*(1+m));const el=$('msgIn')||$('msg');if(el)el.innerHTML=el.innerHTML.replace(/配当 <b>[\d,]+<\/b>/,`配当 <b>${S.win.toLocaleString()}</b>`);ui();setTimeout(()=>evToast(`${ts.join('・')} ボーナス <b>+${(S.win-b0).toLocaleString()}</b>枚`),900)}
+    if(Math.random()<.04&&S.eq.on.some(id=>{const it=eqGet(id);return it&&it.tr==='finder'})){const t=rollTre(.3);if(t)setTimeout(()=>addTre(t,'🐚 宝ひろい：勝った 浜辺で 見つけた'),1600)}}
+  lost=!w;won=w}catch(e){}return r}}
 function treSynLines(t){const ds=[];if(!t)return ds;
   if(t.sk&&EQK[t.sk])ds.push(`${EQK[t.sk][0]} 装備と 合成すると 5%で「${EQK[t.sk][1]}」の 球が 生まれる${ABD[t.sk]?`（${ABD[t.sk].replace(/。$/,'')}）`:''}`);
   if(t.syn&&SYND2[t.syn])ds.push(`🧪 装備と 合成すると：${SYND2[t.syn]}`);
@@ -11436,14 +11458,18 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
       if(sy==='lvup'){it.cap=+(it.cap*1.05).toFixed(2);extra+=`<br>📈 装備の 成長上限が 上がった（Lv${LV(it.cap)}）`}
       const cap=sy==='pPolish'?+(it.cap*1.1).toFixed(2):it.cap,vs=os.map(o=>oVal(o)),gi=os.map((o,i)=>i).filter(i=>vs[i]<cap);
       const iMax=gi.reduce((a,i)=>a<0||vs[i]>vs[a]?i:a,-1),iMin=gi.reduce((a,i)=>a<0||vs[i]<vs[a]?i:a,-1),iR=gi.length?gi[Math.random()*gi.length|0]:-1;
-      const AMP={amp5:1.2,amp10:1.3,amp20:1.45,amp30:1.6};let pool=0;
+      const AMP={amp5:1.2,amp10:1.3,amp20:1.45,amp30:1.6};let pool=0;const gm=sy==='gamble'?[0,1,3][Math.random()*3|0]:1;if(sy==='gamble')extra+=gm===3?'<br>🎲 賭けに 勝った！ 伸び ×3':gm===0?'<br>🎲 賭けに 負けた… 伸び ×0':'<br>🎲 賭けは 引き分け（伸び ×1）';
       const grow=(i,inc)=>{const o=os[i],v0=vs[i];const nv=Math.min(cap,v0+inc);o.v=Math.round(nv*100)/100;grew++;lines.push(`${EQK[o.k][0]} ${EQK[o.k][2](v0)} → <b>${EQK[o.k][2](o.v)}</b>`)};
       os.forEach((o,i)=>{if(o.v==null)o.v=vs[i];if(vs[i]>=cap){maxd++;return}
         let inc=sy==='guard'?R((I[0]+I[1])/2,I[1]):R(I[0],I[1]);if(AMP[sy])inc*=AMP[sy];
         if(sy==='top15'&&i===iMax)inc*=1.5;if(sy==='low30'&&i===iMin)inc*=1.8;if(sy==='rnd50'&&i===iR)inc*=2;if(sy==='pAwaken'&&i===iR)inc*=3;
-        if(Math.random()<(sy==='luck'?.2:.07)){inc*=2.5;big++}
+        if(sy==='gamble')inc*=gm;if(Math.random()<(sy==='luck'?.2:.07)*(it.tr==='lucky'?2:1)){inc*=2.5;big++}
         if(sy==='pFocus'&&gi.length>1){pool+=inc*1.2;return}grow(i,inc)});
       if(pool&&iMax>=0)grow(iMax,pool);useTre(t.id);
+      if(sy==='copy'&&os.length){const src=os.reduce((a,o)=>oVal(o)>oVal(a)?o:a,os[0]);const o=mkOrb('N',src.k);S.balls.push(o);extra+=`<br>🪞 写し：<b>${EQK[src.k][1]}</b> の 球（N）が 生まれた`}
+      if(sy==='shift'&&os.length){const o=os.reduce((a,x)=>oVal(x)<oVal(a)?x:a,os[0]),k0=o.k;let k=k0;for(let n=0;n<8&&k===k0;n++)k=pick(normK());o.k=k;extra+=`<br>🌀 変身：${EQK[k0][0]} ${EQK[k0][1]} → <b>${EQK[k][0]} ${EQK[k][1]}</b>`}
+      if(sy==='bless'){it.bo=+((it.bo||0)+.03).toFixed(3);extra+=`<br>✨ 祝福：装備の ボーナスが <b>+${Math.round(it.bo*100)}%</b>`}
+      if(sy==='rarUp'&&os.length){const c=os.filter(o=>ORR.indexOf(o.r)<4);if(c.length){const o=pick(c),r0=o.r;o.r=ORR[ORR.indexOf(r0)+1];extra+=`<br>⬆️ 昇格：${EQK[o.k][0]} ${EQK[o.k][1]} の 球が ${r0} → <b>${o.r}</b>`}}
       const bc=sy==='newab'?.25:.05;if(t.sk&&EQK[t.sk]&&Math.random()<bc){const o=mkOrb('R',t.sk);S.balls.push(o);extra+=`<br>✨ たからものから <b>${EQK[t.sk][1]}</b> の 球が 生まれた！`}
       else if(sy==='newab'&&!t.sk&&Math.random()<bc){const o=mkOrb();S.balls.push(o);extra+=`<br>✨ <b>${EQK[o.k][1]}</b> の 球が 生まれた！（${o.r}）`}
       if(sy==='pTwin'){const a=mkOrb('N'),b=mkOrb('N');S.balls.push(a,b);extra+=`<br>✨ 双子の 球が 生まれた：${EQK[a.k][0]} ${EQK[a.k][1]}・${EQK[b.k][0]} ${EQK[b.k][1]}`}
@@ -11602,17 +11628,18 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
   const elOf=o=>{if(!o.el){let h=0;for(const c of o.id+o.k)h=(h*31+c.charCodeAt(0))>>>0;o.el=ELK[h%4]}return o.el};
   /* ---------- 特性 ---------- */
   const TR={night:['🌙','夜ふかし','夜は ボーナスが 2倍'],grow:['🌱','育て上手','合成で 球が 上がる 幅 +50%'],reso:['🔗','共鳴しやすい','同じ属性 2つで 共鳴（ふつうは 3つ）'],
-    whim:['🎲','気まぐれ','ボーナスが 日替わり（0〜40%）'],magnet:['🧲','かけら集め','役で 勝つと ときどき 球のかけら'],twin:['👯','なかよし','同じ能力の 球が 2つ以上で それぞれ +30%'],pocket:['🎒','大きな ポケット','球枠 +1']};
+    whim:['🎲','気まぐれ','ボーナスが 日替わり（0〜40%）'],magnet:['🧲','かけら集め','役で 勝つと ときどき 球のかけら'],twin:['👯','なかよし','同じ能力の 球が 2つ以上で それぞれ +30%'],pocket:['🎒','大きな ポケット','球枠 +1'],
+    lucky:['🍀','幸運','合成で 大きく 伸びる 確率 ×2'],sunny:['☀️','早起き','昼は ボーナスが 2倍'],finder:['🐚','宝ひろい','役で 勝つと ときどき（4%）たからもの']};
   const TRK=Object.keys(TR);window.EQTR=TR;
   const night=()=>{try{const h=GH();return h>=19||h<5}catch(e){return false}};
   const whimBo=it=>{let h=(S.gday||0)*977;for(const c of it.id)h=(h*31+c.charCodeAt(0))>>>0;return (h%41)/100};
-  const boOf=it=>{let b=it.bo||0;if(it.tr==='night'&&night())b*=2;if(it.tr==='whim')b+=whimBo(it);return b};
+  const boOf=it=>{let b=it.bo||0;if(it.tr==='night'&&night())b*=2;if(it.tr==='sunny'&&!night())b*=2;if(it.tr==='whim')b+=whimBo(it);return b};
   function resoOf(it){const os=ballsOf(it),c={};os.forEach(o=>{const e=elOf(o);c[e]=(c[e]||0)+1});let best=null,n=0;for(const e in c)if(c[e]>n){n=c[e];best=e}const need=it.tr==='reso'?2:3;return n>=need?{el:best,n,m:n>=4?1.3:1.15}:{el:best,n,m:1,need}}
   function orbMul(it,o){let m=1;const r=resoOf(it);if(r.m>1&&elOf(o)===r.el)m*=r.m;if(it.tr==='twin'&&ballsOf(it).filter(x=>x.k===o.k).length>=2)m*=1.3;return m}
   window.eqOrbEff=(it,o)=>vOf(o)*(1+boOf(it))*orbMul(it,o);
   // 効果の 合計（装備中の 新しい装備は 特性・共鳴を 反映）
   {const _es=eqSum;eqSum=function(){const s=_es.apply(this,arguments);try{S.eq.on.forEach(id=>{const it=eqGet(id);if(!it||!it.v2)return;for(const k in it.fx)s[k]=(s[k]||0)-it.fx[k];ballsOf(it).forEach(o=>{if(EQK[o.k])s[o.k]=(s[o.k]||0)+window.eqOrbEff(it,o)})});for(const k in s)if(Math.abs(s[k])<1e-9)delete s[k]}catch(e){}return s}}
-  setInterval(()=>{try{if(S.eq.on.some(id=>{const it=eqGet(id);return it&&(it.tr==='night'||it.tr==='whim')}))eqApply()}catch(e){}},30000);
+  setInterval(()=>{try{if(S.eq.on.some(id=>{const it=eqGet(id);return it&&(it.tr==='night'||it.tr==='whim'||it.tr==='sunny')}))eqApply()}catch(e){}},30000);
   /* ---------- 入荷：特性つき 装備 ---------- */
   {const _st=eqStock;eqStock=function(){const L=_st.apply(this,arguments);try{let ch=false;L.forEach(s=>{if(s.trc)return;s.trc=1;ch=true;const ri=O.ORR.indexOf(s.rar);if(ri>=1&&Math.random()<.18+ri*.08){s.tr=TRK[Math.random()*TRK.length|0];if(s.tr==='pocket')s.sl++;s.p=nice(s.p*1.3)}});if(ch)save()}catch(e){}return L}}
   {const _bi=eqBuyIt;eqBuyIt=function(i){const s=eqStock()[i],n0=S.eq.bag.length;const r=_bi.apply(this,arguments);try{if(s&&s.tr&&S.eq.bag.length>n0){const it=S.eq.bag[S.eq.bag.length-1];it.tr=s.tr;eqApply();save();buildShop()}}catch(e){}return r}}
