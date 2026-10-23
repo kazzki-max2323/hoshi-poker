@@ -10393,7 +10393,7 @@ const SYND={amp5:'合成した 装備の すべての 能力が 5% 上がる。'
  lvup:'装備の レベルが さらに +1 される。',newab:'空き枠が あれば、新しい 能力が ひとつ 芽生える。',cap6:'合成した 装備の 能力枠が +1 される。',slot1:'合成した 装備の 能力枠が +1 される。',lbs:'合成すると 限界突破の 石が 必ず 出る。',
  pFocus:'合成の パターンが「集中」に 確定（いちばん 強い 能力に 力が 集まる）。',pAwaken:'合成の パターンが「覚醒」に 確定（能力 ひとつが 2倍）。',pPolish:'合成の パターンが「磨き上げ」に 確定（全部の 能力が 少しずつ 上がる）。',pTwin:'合成の パターンが「双子の芽」に 確定（小さな 能力が 2つ 生まれる）。'};
 function synOpen(m,tid){const t=tid?TRE.find(x=>x.id===tid):null;const S2=SYNM[m];let h=`<div class="abTop"><span class="abI">🧪</span><div><b>素材の 力：${S2?S2[0]:m}</b><div class="abTags"><em>合成 専用</em></div></div></div><p class="abD">${SYND[m]||''}<br><small>この たからものを 合成の 素材に したとき だけ 効果が 出る。</small></p>`;
-  if(t){h+=`<h4>🐚 たからもの</h4><div class="abO">${t.e} ${t.n} <b>${t.r}</b>${t.sk&&EQK[t.sk]?`<br>✨ 合成すると <span class="fx1 abC abInfo" data-ab="${t.sk}">${EQK[t.sk][0]}<i>${abShort(t.sk)}</i><b>ⓘ</b></span> が つく`:''}</div>`}abSheet(h)}
+  if(t){h+=`<h4>🐚 たからもの</h4><div class="abO">${t.e} ${t.n} <b>${t.r}</b>${t.sk&&EQK[t.sk]?`<br>✨ 装備と 合成すると 5%で <span class="fx1 abC abInfo" data-ab="${t.sk}">${EQK[t.sk][0]}<i>${abShort(t.sk)}</i><b>ⓘ</b></span> の 球が 生まれる`:''}</div>`}abSheet(h)}
 /* ---------- 合成タブ：選んだ 素材の 能力を 表示（タップで 詳細） ---------- */
 {const _sh=synHTML;synHTML=function(){let h=_sh.apply(this,arguments);try{const ms=(synSel||[]).filter(Boolean);if(!ms.length)return h;
   const part=ms.map(m=>{if(m.t==='eq'){const it=eqGet(m.id);if(!it)return'';return `<div class="synAb"><b>${eqIcon(it)} ${eqName(it)}</b><div>${fxTxt(it.fx)||'<small>能力なし</small>'}</div></div>`}
@@ -10536,9 +10536,16 @@ treAbTag=function(row){if(row.querySelector('.treAb'))return;const btn=row.query
   el.innerHTML=h||'<span class="fx1 none">能力なし</span>';inf.appendChild(el)};
 document.querySelectorAll('#shop .srow.tre.case .treAb').forEach(e=>e.remove());
 /* たからものの 力（いまの 合成で 実際に 起こること） */
+const SYND2={amp5:'球の 伸びが ×1.2',amp10:'球の 伸びが ×1.3',amp20:'球の 伸びが ×1.45',amp30:'球の 伸びが ×1.6',
+ top15:'いちばん 強い 球の 伸びが ×1.5',low30:'いちばん 弱い 球の 伸びが ×1.8',rnd50:'ランダムな 球 1つの 伸びが ×2',guard:'伸びが 小さく ならない（いつも 範囲の 上半分）',
+ luck:'大きく 伸びる 確率が 7% → 20%',lvup:'装備の 成長上限が 5% 上がる',newab:'球が 生まれる 確率が 25%に（能力が ない たからものでも ランダムな 球）',
+ cap6:'30%で 装備の 球枠が ＋1',slot1:'30%で 装備の 球枠が ＋1',lbs:'50%で 限界突破の 石が 出る',
+ pFocus:'集中：全部の 球の 伸びを いちばん 強い 球 1つに 集める（合計 ×1.2）',pAwaken:'覚醒：ランダムな 球 1つが 3倍 伸びる',
+ pPolish:'磨き上げ：成長上限の 1.1倍まで 伸びる（上限に 届いた 球も 伸びる）',pTwin:'双子の芽：小さな 球（N）が 2つ 生まれる'};
+Object.keys(SYND2).forEach(k=>{SYND[k]=SYND2[k]+'。'});
 function treSynLines(t){const ds=[];if(!t)return ds;
   if(t.sk&&EQK[t.sk])ds.push(`${EQK[t.sk][0]} 装備と 合成すると 5%で「${EQK[t.sk][1]}」の 球が 生まれる${ABD[t.sk]?`（${ABD[t.sk].replace(/。$/,'')}）`:''}`);
-  if(t.syn&&SYNM[t.syn])ds.push(/amp/.test(t.syn)?'🧪 装備と 合成すると 球の 伸びが ×1.2':`🧪「${SYNM[t.syn][0]}」は いまの 合成では 効果なし`);
+  if(t.syn&&SYND2[t.syn])ds.push(`🧪 装備と 合成すると：${SYND2[t.syn]}`);
   return ds}
 /* 売る 画面：たからものの 能力の 説明も 表示 */
 {const _ta=treAbTag;treAbTag=function(row){_ta.apply(this,arguments);try{const ab=row.querySelector('.treAb');if(!ab||row.querySelector('.treDesc'))return;const btn=row.querySelector('[data-id]');const t=btn&&TRE.find(x=>x.id===btn.dataset.id);if(!t)return;
@@ -11419,9 +11426,23 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
     evToast(`⚗️ <b>${title}</b>${sub?`<br>${sub}`:''}`);try{say(kind==='great'?'synGreat':kind==='good'?'synGood':kind==='bad'?'synBad':'synNormal',{delay:700})}catch(e){}}
   doSynth=async function(){if(!synValid()||S.phase==='busy')return;const k=synKind(),fee=synFee();if(S.coins<fee)return;const[A,B]=synSel;
     if(k==='et'){const E=A.t==='eq'?A:B,T=A.t==='tre'?A:B,it=eqGet(E.id),t=TRE.find(x=>x.id===T.id);const os=orbsOf(it);if(!os.length){evToast('先に 球を つけてね');return}
-      S.coins-=fee;const I=TINC[t.r]||TINC.N;let grew=0,maxd=0,big=0;const lines=[];os.forEach(o=>{const v0=oVal(o);if(o.v==null)o.v=v0;if(v0<it.cap){let inc=R(I[0],I[1]);if(t.syn&&/amp/.test(t.syn))inc*=1.2;if(Math.random()<.07){inc*=2.5;big++}const nv=Math.min(it.cap,v0+inc);o.v=Math.round(nv*100)/100;grew++;lines.push(`${EQK[o.k][0]} ${EQK[o.k][2](v0)} → <b>${EQK[o.k][2](o.v)}</b>`)}else maxd++});useTre(t.id);
-      let extra='';if(t.sk&&EQK[t.sk]&&Math.random()<.05){const o=mkOrb('R',t.sk);S.balls.push(o);extra=`<br>✨ たからものから <b>${EQK[t.sk][1]}</b> の 球が 生まれた！`}
-      synSel=[E,null];orbSync();eqApply();save();ui();buildShop();if(Math.random()<.04){S.lbStone=(S.lbStone||0)+1;extra+='<br>💠 限界突破の 石も 生まれた！'}resFx(big?'great':grew?'good':'normal',grew?(big?'大きく 強くなった！':`球が ${grew}個 強くなった`):'もう 上限まで 強くなっている',lines.join('<br>')+(maxd?`<br>（${maxd}個は この装備の 上限 Lv${LV(it.cap)} に 到達）`:'')+extra);return}
+      S.coins-=fee;const I=TINC[t.r]||TINC.N,sy=t.syn||'';let grew=0,maxd=0,big=0,extra='';const lines=[];
+      if(sy==='lvup'){it.cap=+(it.cap*1.05).toFixed(2);extra+=`<br>📈 装備の 成長上限が 上がった（Lv${LV(it.cap)}）`}
+      const cap=sy==='pPolish'?+(it.cap*1.1).toFixed(2):it.cap,vs=os.map(o=>oVal(o)),gi=os.map((o,i)=>i).filter(i=>vs[i]<cap);
+      const iMax=gi.reduce((a,i)=>a<0||vs[i]>vs[a]?i:a,-1),iMin=gi.reduce((a,i)=>a<0||vs[i]<vs[a]?i:a,-1),iR=gi.length?gi[Math.random()*gi.length|0]:-1;
+      const AMP={amp5:1.2,amp10:1.3,amp20:1.45,amp30:1.6};let pool=0;
+      const grow=(i,inc)=>{const o=os[i],v0=vs[i];const nv=Math.min(cap,v0+inc);o.v=Math.round(nv*100)/100;grew++;lines.push(`${EQK[o.k][0]} ${EQK[o.k][2](v0)} → <b>${EQK[o.k][2](o.v)}</b>`)};
+      os.forEach((o,i)=>{if(o.v==null)o.v=vs[i];if(vs[i]>=cap){maxd++;return}
+        let inc=sy==='guard'?R((I[0]+I[1])/2,I[1]):R(I[0],I[1]);if(AMP[sy])inc*=AMP[sy];
+        if(sy==='top15'&&i===iMax)inc*=1.5;if(sy==='low30'&&i===iMin)inc*=1.8;if(sy==='rnd50'&&i===iR)inc*=2;if(sy==='pAwaken'&&i===iR)inc*=3;
+        if(Math.random()<(sy==='luck'?.2:.07)){inc*=2.5;big++}
+        if(sy==='pFocus'&&gi.length>1){pool+=inc*1.2;return}grow(i,inc)});
+      if(pool&&iMax>=0)grow(iMax,pool);useTre(t.id);
+      const bc=sy==='newab'?.25:.05;if(t.sk&&EQK[t.sk]&&Math.random()<bc){const o=mkOrb('R',t.sk);S.balls.push(o);extra+=`<br>✨ たからものから <b>${EQK[t.sk][1]}</b> の 球が 生まれた！`}
+      else if(sy==='newab'&&!t.sk&&Math.random()<bc){const o=mkOrb();S.balls.push(o);extra+=`<br>✨ <b>${EQK[o.k][1]}</b> の 球が 生まれた！（${o.r}）`}
+      if(sy==='pTwin'){const a=mkOrb('N'),b=mkOrb('N');S.balls.push(a,b);extra+=`<br>✨ 双子の 球が 生まれた：${EQK[a.k][0]} ${EQK[a.k][1]}・${EQK[b.k][0]} ${EQK[b.k][1]}`}
+      if((sy==='cap6'||sy==='slot1')&&Math.random()<.3){it.sl=(it.sl||1)+1;extra+=`<br>🫧 装備の 球枠が ＋1（${eqSlots(it)}枠）`}
+      synSel=[E,null];orbSync();eqApply();save();ui();buildShop();if(Math.random()<(sy==='lbs'?.5:.04)){S.lbStone=(S.lbStone||0)+1;extra+='<br>💠 限界突破の 石も 生まれた！'}resFx(big?'great':grew?'good':'normal',grew?(big?'大きく 強くなった！':`球が ${grew}個 強くなった`):'もう 上限まで 強くなっている',lines.join('<br>')+(maxd?`<br>（${maxd}個は この装備の 上限 Lv${LV(it.cap)} に 到達）`:'')+extra);return}
     if(k==='ee'){const a=eqGet(A.id),b=eqGet(B.id);if(!a||!b)return;S.coins-=fee;orbsOf(b).forEach(o=>o.on=null);S.eq.bag=S.eq.bag.filter(x=>x.id!==b.id);S.eq.on=S.eq.on.filter(x=>x!==b.id);
       const bi=ORR.indexOf(b.rar),ai=ORR.indexOf(a.rar);const T=[['slot',22],['cap',22],['bonus',13],['stone',8],['orb',7],['evo',ai<5?6+bi:0],['neweq',3],['none',17]];let x=Math.random()*T.reduce((s,q)=>s+q[1],0),res='none';for(const[n,w]of T){x-=w;if(x<0){res=n;break}}
       a.plus=(a.plus||0)+1;let kind='good',title='',sub='';
@@ -11621,7 +11642,7 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
       const anchor=P.querySelector('.abD');if(anchor)anchor.insertAdjacentHTML('beforebegin',fh)}catch(e){}}}
   /* ---------- 合成：たからものの 力を 表示 ---------- */
   {const _sh=synHTML;synHTML=function(){let h=_sh.apply(this,arguments);try{
-      h=h.replace(/(<button class="synIt[^"]*" data-t="tre" data-id="([^"]+)"[^>]*>[\s\S]*?)(<b class="synP">)/g,(m,a,id,b)=>{const t=TRE.find(x=>x.id===id);const ic=(t&&t.sk&&EQK[t.sk]?EQK[t.sk][0]:'')+(t&&t.syn&&/amp/.test(t.syn)?'🧪':'');return a+(ic?`<em class="synTk">${ic}</em>`:'')+b});
+      h=h.replace(/(<button class="synIt[^"]*" data-t="tre" data-id="([^"]+)"[^>]*>[\s\S]*?)(<b class="synP">)/g,(m,a,id,b)=>{const t=TRE.find(x=>x.id===id);const ic=(t&&t.sk&&EQK[t.sk]?EQK[t.sk][0]:'')+(t&&t.syn&&SYND2[t.syn]?'🧪':'');return a+(ic?`<em class="synTk">${ic}</em>`:'')+b});
       const ts=(synSel||[]).filter(m=>m&&m.t==='tre').map(m=>TRE.find(x=>x.id===m.id)).filter((t,i,a)=>t&&a.indexOf(t)===i);
       const bx=ts.map(t=>{const ds=treSynLines(t);return `<div class="synTre"><b>${t.e} ${t.n} の 力</b>${ds.length?ds.map(d=>`<span>${d}</span>`).join(''):'<span>とくべつな 力は なし（球を 育てる だけ）</span>'}</div>`}).join('');
       if(bx)h=h.replace('<button class="b synGo"',bx+'<button class="b synGo"')}catch(e){}return h}}
