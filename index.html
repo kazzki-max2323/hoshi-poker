@@ -67,6 +67,10 @@ body.revC #hand{direction:rtl}body.revC #hand .slot{direction:ltr}
 .holyBtn small{display:block;font-size:.65rem;color:#7a5aa0}
 .holyFx{position:fixed;inset:0;z-index:60;pointer-events:none;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.95),rgba(255,250,220,.5) 30%,transparent 65%);animation:holyA 1.6s ease-out forwards}
 @keyframes holyA{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
+
+/* v243 タップの 感度 */
+html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.bubble,.b{touch-action:manipulation}
+.foot button{position:relative}.foot button::after{content:'';position:absolute;inset:-9px -3px}
 </style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12053,6 +12057,20 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
   try{[1047,1319,1568,2093,2637].forEach((f,k)=>tone(f,.6,'sine',.03,k*.1));FX.burst(innerWidth/2,innerHeight*.45,80,'spark',{colors:['#ffffff','#fff3c4','#d8c4ff'],speed:7,g:.02})}catch(er){}
   try{rTxt('浄 化','white',1500,'3.4rem').classList.add('stamp')}catch(er){}evToast(`🕊️ <b>${C.nm}</b> が 解けた！<br><small>${eqName(it)} ・ ボーナス +${Math.round(it.bo*100)}%</small>`);
   try{buildShop()}catch(er){}setTimeout(()=>{try{eqOpen(it.id)}catch(er){}},1800)},true);
+/* ========== v243 タップの 感度を 上げる ========== */
+/* カードは 指が 触れた 瞬間に 反応（クリックを 待たない） */
+for(let i=0;i<5;i++){const el=$('c'+i);if(!el)continue;
+  el.addEventListener('pointerdown',e=>{if(e.button>0||window._ccActive)return;if(S.phase!=='hold'&&S.phase!=='dblPick')return;el._pd=Date.now();toggle(i)});
+  el.onclick=()=>{if(Date.now()-(el._pd||0)<900)return;toggle(i)}}
+/* 指が 少し ずれて クリックが 消えた ときも 拾う */
+{let st=null,scrolled=false;const SEL='button,[role=button],a,.card,.synIt,.synSlot,.srow,[data-ab],[data-syn],[data-eo],[data-o],[data-holy],[data-t],.bubble,.chip,.stab,label';
+  addEventListener('touchstart',e=>{if(e.touches.length!==1){st=null;return}const q=e.changedTouches[0];st={x:q.clientX,y:q.clientY,t:Date.now(),el:e.target};scrolled=false},{capture:true,passive:true});
+  addEventListener('scroll',()=>{if(st)scrolled=true},true);
+  addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest(SEL);if(e.isTrusted&&b&&Date.now()-(b._synt||0)<400){e.stopImmediatePropagation();e.preventDefault()}},true);
+  addEventListener('touchend',ev=>{if(!st)return;const s0=st;st=null;const e=ev.changedTouches[0];if(!e||scrolled||window._ccActive||Date.now()-s0.t>800)return;if(Math.hypot(e.clientX-s0.x,e.clientY-s0.y)>32)return;
+    let got=false;const on=()=>{got=true};addEventListener('click',on,{capture:true,once:true});
+    setTimeout(()=>{removeEventListener('click',on,{capture:true});if(got)return;const t=document.elementFromPoint(s0.x,s0.y);if(!t||!s0.el||!s0.el.isConnected)return;
+      const b=(s0.el.closest&&s0.el.closest(SEL))||null;if(!b||!(b===t||b.contains(t)))return;if(b.disabled)return;b._synt=Date.now();b.click()},90)},true)}
 /* ========== v235 合成の 結果は タップするまで 消さない ========== */
 {const el=$('toast');let busy=false;
   // ほかの 表示が 上書き・消そうと しても 合成の 結果は 残す（あとで 出す）
