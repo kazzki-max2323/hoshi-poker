@@ -1058,6 +1058,7 @@ body.stk3 .wrap::before{background:radial-gradient(ellipse at 50% 100%,rgba(255,
 #shop .srow.tre .sinfo b{font-size:.78rem!important;line-height:1.25}
 #shop .srow.tre .sinfo small{font-size:.6rem!important;line-height:1.3;margin-top:1px}
 #shop .srow.tre .treAb .fx1{padding:0 4px;margin-top:2px}
+#shop .treDesc{display:flex;flex-direction:column;gap:2px;margin-top:3px;font-size:.62rem!important;line-height:1.4;color:#7a5a3a!important;text-align:left}
 #shop .srow.tre .sbtns{flex-direction:row!important;gap:4px;align-items:stretch;margin-top:2px}
 #shop .srow.tre .sbtns>.b{flex:1;min-height:30px!important;padding:2px 4px!important;font-size:.78rem!important;margin:0!important}
 #shop .srow.tre .sb2{display:flex;gap:4px;margin:0!important}
@@ -10532,6 +10533,10 @@ treAbTag=function(row){if(row.querySelector('.treAb'))return;const btn=row.query
   if(t&&t.syn&&SYNM[t.syn])h+=`<span class="fx1 abC st" data-syn="${t.syn}" data-tre="${t.id}">🧪<i>${SYNM[t.syn][0]}</i><b>ⓘ</b></span>`;
   el.innerHTML=h||'<span class="fx1 none">能力なし</span>';inf.appendChild(el)};
 document.querySelectorAll('#shop .srow.tre.case .treAb').forEach(e=>e.remove());
+/* 売る 画面：たからものの 能力の 説明も 表示 */
+{const _ta=treAbTag;treAbTag=function(row){_ta.apply(this,arguments);try{const ab=row.querySelector('.treAb');if(!ab||row.querySelector('.treDesc'))return;const btn=row.querySelector('[data-id]');const t=btn&&TRE.find(x=>x.id===btn.dataset.id);if(!t)return;
+  const ds=[];if(t.sk&&EQK[t.sk]&&ABD[t.sk])ds.push(`${EQK[t.sk][0]} ${ABD[t.sk]}`);if(t.syn&&SYND[t.syn])ds.push(`🧪 素材に すると：${SYND[t.syn]}`);
+  if(ds.length)ab.insertAdjacentHTML('afterend',`<small class="treDesc">${ds.map(d=>`<span>${d}</span>`).join('')}</small>`)}catch(e){}}}
 /* ② ショップ：タブごとに「ここで できること」＋ そだてるの 流れ */
 const SDESC={music:'🎵 浜辺に 流れる 音楽を 買う',show:'✨ 浜辺で ショーを 開く（おわったら おみやげ）',deco:'🏖️ 浜辺に 飾りを 置く',fuku:'🛍️ 何が 出るかな？ 福袋',
  equip:'🎒 装備を つける・はずす。🔨壊すと 能力を ノートに 覚える',synth:'⚗️ 2つを 合わせて 装備を 育てる（たからものも 素材に なる）',brk:'💠 能力の 上限を 上げる ／ 🏺 装備の 能力枠を 増やす',note:'📕 覚えた 能力を 装備に つける ／ 🔗 隠しコンボ 図鑑',
