@@ -5775,7 +5775,7 @@ eqApply=function(){const s=eqSum();S.up=S.up||{};S.up.gift=0;['dev','rev','evint
 function maxBetNow(){return 1000+Math.round(eqv('maxb')*500/100)*100}
 /* ---------- 星の 宝珠（7つ 集めると 願いが かなう） ---------- */
 const ORB=[['#ff5c6a','紅'],['#ff9a3c','橙'],['#ffd23f','金'],['#55e0a0','翠'],['#6fb6ff','蒼'],['#7a7aff','藍'],['#c98cff','紫']];
-S.orbs=S.orbs||[0,0,0,0,0,0,0];S.jp=S.jp||50000;
+S.orbs=S.orbs||[0,0,0,0,0,0,0];S.jp=S.jp||100000;
 try{const d=BOOTSAVE;if(Array.isArray(d.orbs))S.orbs=d.orbs;if(d.jp)S.jp=d.jp}catch(e){}
 {const _sv=save;save=function(){_sv.apply(this,arguments);try{const d=JSON.parse(localStorage.getItem('hoshipoker')||'{}');d.orbs=S.orbs;d.jp=Math.round(S.jp);localStorage.setItem('hoshipoker',JSON.stringify(d))}catch(e){}}}
 function orbN(){return S.orbs.filter(Boolean).length}
@@ -5790,7 +5790,7 @@ setTimeout(()=>{if(orbN()>=7)tryWish()},5000);
 {const _rs=renderStatus;renderStatus=function(){_rs();try{const st=$('status');if(!st)return;st.querySelectorAll('.orbchip,.jpchip').forEach(e=>e.remove());if(orbN())st.insertAdjacentHTML('beforeend',`<span class="chip sm orbchip" title="星の 宝珠（7つで 願いが かなう）">${S.orbs.map((o,j)=>o?orbSvg(j,9):'<span class="orb off" style="width:9px;height:9px"></span>').join('')}</span>`);st.insertAdjacentHTML('beforeend',`<span class="chip sm jpchip" title="ジャックポット（願いの 中の チャレンジで 狙える）">🎰${Math.round(S.jp).toLocaleString()}</span>`)}catch(e){}}}
 setInterval(()=>{try{const c=document.querySelector('.jpchip');if(c)c.textContent='🎰'+Math.round(S.jp).toLocaleString()}catch(e){}},3000);
 /* ジャックポットは くばるたびに 少しずつ 貯まる */
-{const _dl=deal;deal=async function(){if(!window._chLock&&S.phase!=='busy'&&S.coins>0)S.jp+=Math.max(1,S.bet*.03);return _dl.apply(this,arguments)}}
+{const _dl=deal;deal=async function(){if(!window._chLock&&S.phase!=='busy'&&S.coins>0)S.jp+=Math.max(10,S.bet*.15);return _dl.apply(this,arguments)}}
 /* 宝珠の 入手：流れ星・連勝宝箱・チャンスの アタリ・夜の 背景イベント */
 {const _mg=meteorGift;meteorGift=function(){if(Math.random()<.1*(window.orbBoost?orbBoost():1)){giveOrb('🌠 流れ星が 運んできた');say('meteorGet',{n:2,delay:900,gap:1100});return}return _mg.apply(this,arguments)}}
 {const _cr=chestRoll;chestRoll=function(n){if(Math.random()<Math.min(.2,(.05+.015*(n-3))*(window.orbBoost?orbBoost():1)))return{t:'orb',e:'🔮',n:'星の 宝珠',r:'SSR'};return _cr(n)}}
@@ -5822,7 +5822,7 @@ async function jpChallenge(){const sym=['7️⃣','🌟','🐚','🌙','💎','�
   await wait(1600);spin[0]=0;R[0].textContent=fin[0];R[0].parentElement.classList.add('stop');try{tone(330,.12,'square',.03)}catch(e){}await wait(700);spin[1]=0;R[1].textContent=fin[1];R[1].parentElement.classList.add('stop');try{tone(392,.12,'square',.03)}catch(e){}
   const reach=fin[0]===fin[1];if(reach){M.innerHTML='<b class="reach">リーチ！！</b>';w.classList.add('reach');try{sfx.riser(2.4,3)}catch(e){}say('jpReach',{delay:0});await wait(2600)}else await wait(800);
   spin[2]=0;clearInterval(loop);R[2].textContent=fin[2];R[2].parentElement.classList.add('stop');try{tone(523,.15,'square',.03)}catch(e){}await wait(500);
-  let v;if(res==='jp'){v=Math.round(S.jp*(1+((typeof eqv==='function'&&eqv('jpB'))||0)*.03));S.jp=50000;w.classList.add('win');M.innerHTML='<b class="jpWin">JACKPOT!!!</b>';try{sfx.fanfare(3);flash('#ffffff');shake();FX.rain('coin',220,{spread:260});FX.burst(innerWidth/2,innerHeight*.4,120,'spark',{colors:['#ff5c8a','#ffd23f','#55e0b4','#7aa2ff','#ffffff'],speed:11,g:.03})}catch(e){}say('jpWin',{n:3,delay:300,gap:1000})}
+  let v;if(res==='jp'){v=Math.round(S.jp*(1+((typeof eqv==='function'&&eqv('jpB'))||0)*.03));S.jp=100000;w.classList.add('win');M.innerHTML='<b class="jpWin">JACKPOT!!!</b>';try{sfx.fanfare(3);flash('#ffffff');shake();FX.rain('coin',220,{spread:260});FX.burst(innerWidth/2,innerHeight*.4,120,'spark',{colors:['#ff5c8a','#ffd23f','#55e0b4','#7aa2ff','#ffffff'],speed:11,g:.03})}catch(e){}say('jpWin',{n:3,delay:300,gap:1000})}
   else if(res==='big'){v=Math.round(S.jp*.25);S.jp-=v*.5;M.innerHTML=`<b>ビッグ！ ${v.toLocaleString()}枚</b>`;try{sfx.fanfare(2);FX.rain('coin',90,{spread:200})}catch(e){}say('jpBig',{n:2,delay:300})}
   else{v=Math.max(2000,Math.round(S.jp*.05));M.innerHTML=`ざんねん… 参加賞 <b>${v.toLocaleString()}枚</b>`;say('jpLose',{n:2,delay:300})}
   try{coinWhy(res==='jp'?'ジャックポット':'スロット')}catch(e){}S.coins+=v;save();ui();try{renderStatus()}catch(e){}await wait(res==='jp'?4500:2600);w.classList.add('bye');await wait(400);w.remove();if(res==='jp')evToast(`🎰 ジャックポット <b>${v.toLocaleString()}枚</b> 獲得！！`)}
@@ -5879,7 +5879,7 @@ function itSell(k,n){if(S.phase==='busy'||S.phase==='dblPick')return;n=Math.min(
 /* ---------- 連敗で ジャックポットが 多く 貯まる＋呟き ---------- */
 let lastNH=S.noHandRun||0;
 setInterval(()=>{const n=S.noHandRun||0;if(n===lastNH)return;const up=n>lastNH;lastNH=n;if(!up||n<2)return;
-  const add=Math.round(Math.max(1,S.bet)*.12*Math.min(10,n));S.jp+=add;save();if(n>=3){try{const j=$('jpc');if(j){j.classList.remove('jpUp');void j.offsetWidth;j.classList.add('jpUp')}}catch(e){}}
+  const add=Math.round(Math.max(1,S.bet)*.3*Math.min(10,n));S.jp+=add;save();if(n>=3){try{const j=$('jpc');if(j){j.classList.remove('jpUp');void j.offsetWidth;j.classList.add('jpUp')}}catch(e){}}
   say('loseRun',{delay:2600,ctx:{streak:n}});if(Math.random()<.65)say(Math.random()<.5?'loseCheer':'loseSelf',{delay:4200});if(n===5||n===10||n%15===0)setTimeout(()=>evToast(`🎰 ${n}連敗… ジャックポットに <b>+${add.toLocaleString()}枚</b>`),3000)},700);
 Object.assign(MUMS,{loseRun:['{streak}連敗…','これで {streak}連敗','{streak}連敗 中','{streak}回 続けて 役なし','あかん {streak}連敗や','{streak}連敗… 数えたくない','まさかの {streak}連敗','{streak}連敗、記録 更新 かも'],
  loseCheer:['次は 来る！','流れは 変わる','負けた分、ジャックポットに 貯まってる','明けない 夜は ない','ここからが 本番','焦らず いこ','深呼吸 深呼吸','波は また 来る','止まない 雨は ない','大丈夫、まだ いける','負けは 勝ちの 準備運動','ドンマイ ドンマイ'],
