@@ -1058,6 +1058,8 @@ body.stk3 .wrap::before{background:radial-gradient(ellipse at 50% 100%,rgba(255,
 #shop .srow.tre .sinfo b{font-size:.78rem!important;line-height:1.25}
 #shop .srow.tre .sinfo small{font-size:.6rem!important;line-height:1.3;margin-top:1px}
 #shop .srow.tre .treAb .fx1{padding:0 4px;margin-top:2px}
+#shop .synTre{display:flex;flex-direction:column;gap:2px;margin:0 0 8px;padding:6px 10px;border-radius:12px;background:#fff;border:1px solid #f4dcb8;font-size:.72rem;line-height:1.45;color:#5a3a1a;text-align:left}#shop .synTre b{font-size:.78rem;color:#a0601a}
+#shop .synTk{display:block;font-style:normal;font-size:.7rem;line-height:1.1}
 #shop .treDesc{display:flex;flex-direction:column;gap:2px;margin-top:3px;font-size:.62rem!important;line-height:1.4;color:#7a5a3a!important;text-align:left}
 #shop .srow.tre .sbtns{flex-direction:row!important;gap:4px;align-items:stretch;margin-top:2px}
 #shop .srow.tre .sbtns>.b{flex:1;min-height:30px!important;padding:2px 4px!important;font-size:.78rem!important;margin:0!important}
@@ -10533,9 +10535,14 @@ treAbTag=function(row){if(row.querySelector('.treAb'))return;const btn=row.query
   if(t&&t.syn&&SYNM[t.syn])h+=`<span class="fx1 abC st" data-syn="${t.syn}" data-tre="${t.id}">🧪<i>${SYNM[t.syn][0]}</i><b>ⓘ</b></span>`;
   el.innerHTML=h||'<span class="fx1 none">能力なし</span>';inf.appendChild(el)};
 document.querySelectorAll('#shop .srow.tre.case .treAb').forEach(e=>e.remove());
+/* たからものの 力（いまの 合成で 実際に 起こること） */
+function treSynLines(t){const ds=[];if(!t)return ds;
+  if(t.sk&&EQK[t.sk])ds.push(`${EQK[t.sk][0]} 装備と 合成すると 5%で「${EQK[t.sk][1]}」の 球が 生まれる${ABD[t.sk]?`（${ABD[t.sk].replace(/。$/,'')}）`:''}`);
+  if(t.syn&&SYNM[t.syn])ds.push(/amp/.test(t.syn)?'🧪 装備と 合成すると 球の 伸びが ×1.2':`🧪「${SYNM[t.syn][0]}」は いまの 合成では 効果なし`);
+  return ds}
 /* 売る 画面：たからものの 能力の 説明も 表示 */
 {const _ta=treAbTag;treAbTag=function(row){_ta.apply(this,arguments);try{const ab=row.querySelector('.treAb');if(!ab||row.querySelector('.treDesc'))return;const btn=row.querySelector('[data-id]');const t=btn&&TRE.find(x=>x.id===btn.dataset.id);if(!t)return;
-  const ds=[];if(t.sk&&EQK[t.sk]&&ABD[t.sk])ds.push(`${EQK[t.sk][0]} ${ABD[t.sk]}`);if(t.syn&&SYND[t.syn])ds.push(`🧪 素材に すると：${SYND[t.syn]}`);
+  const ds=treSynLines(t);
   if(ds.length)ab.insertAdjacentHTML('afterend',`<small class="treDesc">${ds.map(d=>`<span>${d}</span>`).join('')}</small>`)}catch(e){}}}
 /* ② ショップ：タブごとに「ここで できること」＋ そだてるの 流れ */
 const SDESC={music:'🎵 浜辺に 流れる 音楽を 買う',show:'✨ 浜辺で ショーを 開く（おわったら おみやげ）',deco:'🏖️ 浜辺に 飾りを 置く',fuku:'🛍️ 何が 出るかな？ 福袋',
@@ -11612,6 +11619,12 @@ try{S.hag={day:S.gday,m:{}};finalPrice=function(it){return Math.max(1,Math.round
       if(mates.length)fh+=mates.map(m=>{const nv=Math.max(vOf(o),vOf(m))+Math.min(vOf(o),vOf(m))*.35;const c=fuseCost(o,m);return `<button class="b oAct fuseB" data-fa="${o.id}" data-fb="${m.id}" ${S.coins>=c&&S.phase!=='busy'?'':'disabled'}>${EQK[m.k][0]} ${EQK[m.k][2](vOf(m))}（${rarNm(m.r)}・${EL[elOf(m)][0]}）と 合体<small>→ <b>${EQK[o.k][2](nv)}</b> の 球 1つに ・ ${fmtC(c)}枚 ・ 上限を こえる ことも</small></button>`}).join('');
       else fh+=`<div class="abO none">同じ 能力の 球が ほかに ない</div>`;
       const anchor=P.querySelector('.abD');if(anchor)anchor.insertAdjacentHTML('beforebegin',fh)}catch(e){}}}
+  /* ---------- 合成：たからものの 力を 表示 ---------- */
+  {const _sh=synHTML;synHTML=function(){let h=_sh.apply(this,arguments);try{
+      h=h.replace(/(<button class="synIt[^"]*" data-t="tre" data-id="([^"]+)"[^>]*>[\s\S]*?)(<b class="synP">)/g,(m,a,id,b)=>{const t=TRE.find(x=>x.id===id);const ic=(t&&t.sk&&EQK[t.sk]?EQK[t.sk][0]:'')+(t&&t.syn&&/amp/.test(t.syn)?'🧪':'');return a+(ic?`<em class="synTk">${ic}</em>`:'')+b});
+      const ts=(synSel||[]).filter(m=>m&&m.t==='tre').map(m=>TRE.find(x=>x.id===m.id)).filter((t,i,a)=>t&&a.indexOf(t)===i);
+      const bx=ts.map(t=>{const ds=treSynLines(t);return `<div class="synTre"><b>${t.e} ${t.n} の 力</b>${ds.length?ds.map(d=>`<span>${d}</span>`).join(''):'<span>とくべつな 力は なし（球を 育てる だけ）</span>'}</div>`}).join('');
+      if(bx)h=h.replace('<button class="b synGo"',bx+'<button class="b synGo"')}catch(e){}return h}}
   /* ---------- 球の 詳細：能力の 説明 ---------- */
   {const _oo=window.orbOpen;window.orbOpen=function(oid){_oo.apply(this,arguments);try{const o=S.balls.find(x=>x.id===oid),P=$('abPop');if(!o||!P||P.querySelector('.obDesc'))return;const d=ABD[o.k];if(!d)return;
       const top=P.querySelector('.abTop');if(top)top.insertAdjacentHTML('afterend',`<p class="obDesc">${d}</p>`)}catch(e){}}}
