@@ -9865,10 +9865,13 @@ function coinCatch(v){return new Promise(res=>{const lg=Math.log10(Math.max(1,v/
   const grab=c=>{if(c.dead)return;c.dead=true;const val=unit*(c.gold?5:1);got+=val;cnt++;S.coins+=val;sumEl.textContent=got.toLocaleString();sumEl.classList.remove('bump');void sumEl.offsetWidth;sumEl.classList.add('bump');
     c.el.classList.add('pop');const f=document.createElement('div');f.className='ccF'+(c.gold?' g':'');f.textContent='+'+val.toLocaleString();f.style.left=c.x+'px';f.style.top=c.y+'px';w.appendChild(f);setTimeout(()=>f.remove(),800);setTimeout(()=>c.el.remove(),250);
     try{sfx.coin()}catch(e){}if(c.gold)try{tone(1760,.1,'sine',.03);FX.burst(c.x,c.y,14,'spark',{colors:['#ffe066','#fff'],speed:4,g:.03})}catch(e){}if(cnt%12===0)ui()};
-  const hit=(px,py)=>{for(const c of coins){if(c.dead)continue;const r=c.sz*.5+16;if(Math.abs(c.x-px)<r&&Math.abs(c.y-py)<r)grab(c)}};
+  const hit=(px,py)=>{for(const c of coins){if(c.dead)continue;const r=c.sz*.5+22,lag=c.vy*7;if(Math.abs(c.x-px)<r&&py>c.y-r-lag&&py<c.y+r)grab(c)}};
+  // 指の 位置の 間も 線で つないで 判定（速く なぞっても とりこぼさない）
+  const ptr=new Map();const sweep=(id,px,py)=>{const q=ptr.get(id);ptr.set(id,[px,py]);if(!q){hit(px,py);return}const d=Math.hypot(px-q[0],py-q[1]),n=Math.max(1,Math.ceil(d/14));for(let i=1;i<=n;i++)hit(q[0]+(px-q[0])*i/n,q[1]+(py-q[1])*i/n)};
   // コインの雨の 間は、ほかの どんな タップより 優先（window の capture で 先取り）
   let down=false,live=false;const EV=['pointerdown','pointermove','pointerup','pointercancel','click','mousedown','mouseup','touchstart','touchmove','touchend','dblclick','contextmenu'];
-  const cap=e=>{if(e.type==='pointerdown'){down=true;if(live)hit(e.clientX,e.clientY)}else if(e.type==='pointermove'){if(live&&(down||e.pointerType==='mouse'&&e.buttons))hit(e.clientX,e.clientY)}else if(e.type==='pointerup'||e.type==='pointercancel')down=false;
+  const cap=e=>{if(e.type==='pointerdown'){down=true;ptr.delete(e.pointerId);if(live)sweep(e.pointerId,e.clientX,e.clientY);else ptr.set(e.pointerId,[e.clientX,e.clientY])}else if(e.type==='pointermove'){if(live&&(ptr.has(e.pointerId)||e.pointerType==='mouse'&&e.buttons)){const L=e.getCoalescedEvents?e.getCoalescedEvents():[];(L.length?L:[e]).forEach(v=>sweep(e.pointerId,v.clientX,v.clientY))}}else if(e.type==='pointerup'||e.type==='pointercancel'){ptr.delete(e.pointerId);down=ptr.size>0}
+    else if(live&&(e.type==='touchstart'||e.type==='touchmove')){for(const t of e.changedTouches||[])sweep('t'+t.identifier,t.clientX,t.clientY)}else if(e.type==='touchend')for(const t of e.changedTouches||[])ptr.delete('t'+t.identifier);
     e.stopImmediatePropagation();if(e.cancelable&&e.type!=='pointerdown'&&e.type!=='pointermove')e.preventDefault()};
   EV.forEach(t=>window.addEventListener(t,cap,{capture:true,passive:false}));const unhook=()=>EV.forEach(t=>window.removeEventListener(t,cap,{capture:true}));
   window._ccActive=true;
