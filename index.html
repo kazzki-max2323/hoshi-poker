@@ -73,7 +73,110 @@ html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.
 .foot button{position:relative}.foot button::after{content:'';position:absolute;inset:-9px -3px}
 
 #toast,#abPop,#getPop,#chestPop,#hsOffer,#drift,.nxGauge{overscroll-behavior:contain}
-</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
+/*NXCSS-START*/
+/* ===== v250 新しい 装備・球・たからもの システム ===== */
+#nxBtn{position:absolute;top:0;pointer-events:auto;font-family:var(--pixel);font-size:.62rem;color:#2a1700;background:linear-gradient(#bff3e0,#55e0b4 55%,#1f9c78);border:1.5px solid #e0fff4;border-radius:999px;padding:2px 8px;box-shadow:0 2px 0 #0d5a42;cursor:pointer;z-index:2}
+#nxBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #0d5a42}
+#nxBtn.hot::after{content:'!';position:absolute;right:-5px;top:-7px;font-size:.6rem;background:#ff5c8a;color:#fff;border-radius:999px;padding:0 5px;border:1px solid #fff}
+#nxVis{position:absolute;right:0;top:54px;z-index:3;pointer-events:auto;border:2px solid #fff3c4;border-radius:16px;background:linear-gradient(#3a2a70,#1d1546);color:#fff;font-family:var(--pixel);font-size:.62rem;padding:3px 8px 4px;display:flex;flex-direction:column;align-items:center;box-shadow:0 0 16px rgba(255,220,120,.7);cursor:pointer;animation:nxBob 1.6s ease-in-out infinite}
+#nxVis b{font-size:1.5rem;line-height:1.1;font-weight:400}
+@keyframes nxBob{50%{transform:translateY(-4px)}}
+#nxP,#nxM{position:fixed;inset:0;z-index:70;display:flex;align-items:flex-end;justify-content:center;background:rgba(5,4,18,.55)}
+#nxM{z-index:80;align-items:center;padding-inline:14px}
+#nxP[hidden],#nxM[hidden]{display:none!important}
+.nxBox{width:min(520px,100%);height:min(92vh,92dvh);box-sizing:border-box;background:#fff8e8;color:#4a2a0a;border-radius:20px 20px 0 0;border:3px solid #f2a33a;border-bottom:none;display:flex;flex-direction:column;font-family:var(--round);font-weight:500;animation:nxUp .28s cubic-bezier(.2,1,.3,1)}
+@keyframes nxUp{from{transform:translateY(40px);opacity:.4}}
+.nxHead{display:flex;align-items:center;gap:8px;padding:12px 14px 6px}
+.nxHead h2{margin:0;font-family:var(--pixel);font-weight:400;font-size:1.15rem;color:#b8500a;flex:1}
+.nxHead .nxCoin{font-family:var(--pixel);font-size:.9rem;color:#7a4a10}
+.nxX{border:none;background:#e2475a;color:#fff;width:34px;height:34px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 0 #8a1a2a}
+.nxTabs{display:flex;gap:6px;padding:4px 12px 8px;overflow-x:auto;scrollbar-width:none}
+.nxTabs button{flex:1;min-width:64px;border:2px solid #d9a35a;background:#fff;color:#7a4a10;border-radius:12px;padding:6px 4px;font-family:var(--round);font-weight:800;font-size:.78rem;cursor:pointer;white-space:nowrap}
+.nxTabs button.on{background:#d9580f;color:#fff;border-color:#d9580f}
+.nxBody{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:4px 12px calc(16px + env(safe-area-inset-bottom,0px))}
+.nxNote{font-size:.74rem;line-height:1.5;color:#7a5a30;background:#fff1d0;border:1px dashed #e0b060;border-radius:10px;padding:6px 9px;margin:4px 0 8px}
+.nxGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.nxCard{position:relative;background:#fff;border:2px solid #ecd2a2;border-radius:14px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;cursor:pointer;font-size:.72rem;line-height:1.25;min-width:0}
+.nxCard b{font-size:.76rem;color:#4a2a0a;word-break:keep-all;overflow-wrap:anywhere}
+.nxCard small{color:#8a6a40;font-size:.66rem}
+.nxCard.on{border-color:#3fbf8f;box-shadow:0 0 0 2px rgba(63,191,143,.25)}
+.nxCard .nxBadge{position:absolute;top:-6px;right:-4px;font-size:.6rem;background:#3fbf8f;color:#fff;border-radius:999px;padding:1px 6px}
+.nxRow{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #ecd2a2;border-radius:14px;padding:8px 10px;margin:6px 0;cursor:pointer}
+.nxRow.on{border-color:#3fbf8f}
+.nxRow .nxInfo{flex:1;min-width:0}
+.nxRow .nxInfo b{display:block;font-size:.86rem}
+.nxRow .nxInfo small{display:block;color:#8a6a40;font-size:.7rem;line-height:1.35}
+.nxOrb{--rc:#b9bfd0;position:relative;width:46px;height:46px;flex:0 0 46px;border-radius:50%;display:grid;place-items:center;font-size:1.35rem;
+  background:radial-gradient(circle at 32% 28%,#fff 0 12%,#f3f1ff 30%,#d9dcf0 70%,#b5b9d6);border:3px solid var(--rc);box-shadow:0 2px 0 rgba(0,0,0,.15),inset 0 -3px 6px rgba(0,0,0,.08)}
+.nxOrb.sm{width:34px;height:34px;flex-basis:34px;font-size:1rem;border-width:2px}
+.nxOrb.lg{width:72px;height:72px;flex-basis:72px;font-size:2.1rem;border-width:4px}
+.nxOrb.r-LG{border-color:transparent;background:radial-gradient(circle at 32% 28%,#fff 0 12%,#f3f1ff 30%,#d9dcf0 70%,#b5b9d6) padding-box,conic-gradient(#ff5c8a,#ffd23f,#55e0b4,#7aa2ff,#c48bff,#ff5c8a) border-box}
+.nxOrb .lv{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);font-size:.56rem;font-family:var(--pixel);background:#4a2a0a;color:#fff;border-radius:999px;padding:0 5px;white-space:nowrap}
+.nxOrb .el{position:absolute;top:-5px;left:-5px;font-size:.66rem}
+.nxOrb .kd{position:absolute;top:-6px;right:-6px;font-size:.7rem}
+.nxOrb.empty{background:#fff6e0;border:2px dashed #d9a35a;color:#c8901f;font-size:1.2rem}
+.nxSlots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:6px 0}
+.nxSlot{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px;border-radius:12px}
+.nxSlot.sel{background:#ffe7b0}
+.nxSlot small{font-size:.6rem;color:#8a6a40}
+.nxBtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.nxB{flex:1 1 calc(50% - 6px);min-height:42px;border:2px solid #7a4a1a;border-radius:12px;background:#fff6e0;color:#4a2a0a;font-family:var(--round);font-weight:800;font-size:.82rem;cursor:pointer;padding:6px 8px;line-height:1.25}
+.nxB small{display:block;font-size:.64rem;font-weight:600;opacity:.85}
+.nxB.go{background:linear-gradient(#ffcf7a,#f29a2a);border-color:#b8500a;color:#3a1a00}
+.nxB.mint{background:linear-gradient(#c8ffe9,#55e0b4);border-color:#1f9c78;color:#05301f}
+.nxB.red{background:#ffe0e4;border-color:#c8341a;color:#8a1a10}
+.nxB.wide{flex-basis:100%}
+.nxB:disabled{opacity:.45;cursor:default}
+.nxDet{background:#fff;border:2px solid #ecd2a2;border-radius:16px;padding:12px;width:min(480px,100%);max-height:86vh;overflow-y:auto;box-sizing:border-box;color:#4a2a0a;font-family:var(--round);font-weight:500;animation:bwpop .3s cubic-bezier(.2,1.5,.4,1);position:relative}
+.nxDet h3{margin:0;font-size:1.05rem}
+.nxDet .nxTop{display:flex;gap:12px;align-items:center}
+.nxDet .nxTags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.nxTag{font-size:.64rem;font-weight:800;border-radius:999px;padding:1px 8px;background:#eef0ff;color:#3a3a7a}
+.nxTag.r{color:#1a1030}
+.nxSec{margin-top:10px;font-size:.8rem;line-height:1.5}
+.nxSec h4{margin:0 0 4px;font-size:.8rem;color:#a0601a}
+.nxLvBar{position:relative;height:16px;border-radius:999px;background:#f0e2c4;overflow:hidden;margin:6px 0 2px}
+.nxLvBar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#7ad0ff,#3a8ef0)}
+.nxLvBar span{position:relative;display:block;text-align:center;font-size:.68rem;font-weight:800;line-height:16px}
+.nxTal{display:flex;gap:6px;align-items:flex-start;padding:5px 8px;border-radius:10px;margin:3px 0;font-size:.74rem;background:#f6f4ff}
+.nxTal.t-g{background:#fff4cf}.nxTal.t-r{background:linear-gradient(90deg,#ffe0ef,#fff6cf,#dcfff0,#e0ebff)}.nxTal.t-b{background:#1a1020;color:#ffd6dc}
+.nxTal b{white-space:nowrap}
+.nxDx{position:absolute;right:8px;top:8px;border:none;background:#e2475a;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer}
+.nxEmpty{text-align:center;color:#a08060;font-size:.8rem;padding:24px 8px}
+.nxFilter{display:flex;gap:6px;margin:2px 0 8px}
+.nxFilter button{border:1.5px solid #d9a35a;background:#fff;border-radius:999px;padding:3px 10px;font-size:.72rem;font-weight:800;color:#7a4a10;cursor:pointer}
+.nxFilter button.on{background:#7a4a10;color:#fff}
+/* ルーレット */
+.nxWheelW{position:relative;width:min(260px,70vw);aspect-ratio:1;margin:8px auto 4px}
+.nxWheel{position:absolute;inset:0;border-radius:50%;border:6px solid #4a2a0a;box-shadow:0 0 0 4px #ffd23f,0 6px 18px rgba(0,0,0,.3);transition:transform 1.4s cubic-bezier(.12,.75,.2,1)}
+.nxWheel span{position:absolute;left:50%;top:50%;font-family:var(--pixel);font-size:1rem;color:#fff;-webkit-text-stroke:2px #3a1a00;paint-order:stroke fill;white-space:nowrap}
+.nxPin{position:absolute;left:50%;top:-12px;transform:translateX(-50%);width:0;height:0;border:12px solid transparent;border-top:22px solid #e2475a;filter:drop-shadow(0 2px 0 #6a0f20);z-index:2}
+.nxHub{position:absolute;left:50%;top:50%;width:22%;height:22%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7c8,#ffd23f 50%,#b8860b);border:3px solid #4a2a0a;z-index:2;display:grid;place-items:center;font-size:1.2rem}
+.nxRes{text-align:center;font-family:var(--pixel);font-size:1.6rem;min-height:2.2rem;color:#b8500a}
+.nxRes.big{color:#e2265a;animation:bwpop .5s cubic-bezier(.2,1.8,.4,1)}
+.nxRes.rb{background:linear-gradient(90deg,#ff5c8a,#ffb347,#55e0b4,#3ea0ff,#c48bff);-webkit-background-clip:text;background-clip:text;color:transparent;animation:bwpop .5s cubic-bezier(.2,1.8,.4,1)}
+.nxTally{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:4px 0}
+.nxTally i{font-style:normal;font-family:var(--pixel);font-size:.78rem;background:#fff1d0;border-radius:8px;padding:1px 6px}
+.nxTally i.b{background:#ffd23f}.nxTally i.rb{background:linear-gradient(90deg,#ff9fc4,#ffe066,#9ff5d6)}
+/* 才能の 開花 */
+.nxBloom{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.nxBl{border:3px solid #ddd;border-radius:14px;padding:10px;background:#fff;cursor:pointer;text-align:left;font-family:var(--round);color:#4a2a0a;animation:bwpop .4s cubic-bezier(.2,1.5,.4,1) both}
+.nxBl b{display:block;font-size:.95rem}.nxBl small{display:block;font-size:.74rem;line-height:1.4;margin-top:2px}
+.nxBl.t-w{border-color:#c9cbe0}.nxBl.t-g{border-color:#ffd23f;background:#fffbe6;box-shadow:0 0 12px rgba(255,210,63,.6)}
+.nxBl.t-r{border-color:transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(90deg,#ff5c8a,#ffd23f,#55e0b4,#7aa2ff,#c48bff) border-box;box-shadow:0 0 16px rgba(196,139,255,.6)}
+.nxBl.t-b{border-color:#ff3b4f;background:#140a14;color:#ffd6dc;box-shadow:0 0 20px rgba(255,40,60,.7)}
+.nxBl .tier{font-size:.62rem;font-weight:800;border-radius:999px;padding:0 7px;margin-right:4px;vertical-align:1px}
+.t-w .tier{background:#e8e8f0;color:#2a2a40}.t-g .tier{background:#ffd23f;color:#3a2400}.t-r .tier{background:linear-gradient(90deg,#ff7ab8,#ffd23f,#55e0b4,#7aa2ff);color:#1a1030}.t-b .tier{background:#000;color:#ff5a6a;border:1px solid #ff5a6a}
+.nxDet.dark{background:#120a18;border-color:#ff3b4f;color:#ffd6dc}
+.nxDet.dark h3,.nxDet.dark .nxSec h4{color:#ff8a9a}
+/* 浜辺に 飾った たからもの */
+#nxDisp{position:absolute;left:0;right:0;pointer-events:none;z-index:1}
+#nxDisp i{position:absolute;font-style:normal;font-size:1.3rem;transform:translate(-50%,-50%);filter:drop-shadow(0 2px 2px rgba(0,0,0,.45));animation:nxShine 3s ease-in-out infinite}
+#nxDisp i.hi{filter:drop-shadow(0 0 6px rgba(255,230,140,.95)) drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+@keyframes nxShine{50%{transform:translate(-50%,-56%)}}
+@media (prefers-reduced-motion:reduce){#nxVis,#nxDisp i{animation:none}}
+
+/*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -7107,7 +7210,7 @@ $('rulesX').onclick=()=>{$('rules').hidden=true};
 $('pay').onclick=()=>{$('pay').hidden=true;try{localStorage.setItem('hoshipoker_pay','0')}catch(e){}};
 let swallowTap=false,swallowT;
 // v197：スキップは 廃止済み。演出中の タップは「クリックの 時点で まだ 演出中」なら 止める（終わった 直後の タップは 通す）
-document.addEventListener('click',e=>{if(S.phase==='busy'&&!(e.target.closest&&e.target.closest('#hsOffer,.bubble,#meteor,#chestPop,#ccRain,#getPop,#abPop,#tnPop,.thief,#thief,#toast'))){e.preventDefault();e.stopPropagation()}},true);
+document.addEventListener('click',e=>{if(S.phase==='busy'&&!(e.target.closest&&e.target.closest('#hsOffer,.bubble,#meteor,#chestPop,#ccRain,#getPop,#abPop,#tnPop,.thief,#thief,#toast,#nxP,#nxM,#nxVis,#nxBtn'))){e.preventDefault();e.stopPropagation()}},true);
 document.addEventListener('click',e=>{if(swallowTap){swallowTap=false;e.preventDefault();e.stopPropagation()}},true);
 document.addEventListener('keydown',e=>{if(!$('drift').hidden)return;if(S.phase==='busy'){skip();return}if(e.target.tagName==='BUTTON'&&e.key===' ')return;const n='12345'.indexOf(e.key);if(n>=0)toggle(n);if(e.key==='Enter'&&!$('act').disabled)$('act').click()});
 
@@ -12065,7 +12168,7 @@ for(let i=0;i<5;i++){const el=$('c'+i);if(!el)continue;
   el.addEventListener('pointerdown',e=>{if(e.button>0||window._ccActive)return;if(S.phase!=='hold'&&S.phase!=='dblPick')return;el._pd=Date.now();toggle(i)});
   el.onclick=()=>{if(Date.now()-(el._pd||0)<900)return;toggle(i)}}
 /* 指が 少し ずれて クリックが 消えた ときも 拾う */
-{let st=null,scrolled=false;const SEL='button,[role=button],a,.card,.synIt,.synSlot,.srow,[data-ab],[data-syn],[data-eo],[data-o],[data-holy],[data-t],.bubble,.chip,.stab,label';
+{let st=null,scrolled=false;const SEL='[data-a],button,[role=button],a,.card,.synIt,.synSlot,.srow,[data-ab],[data-syn],[data-eo],[data-o],[data-holy],[data-t],.bubble,.chip,.stab,label';
   addEventListener('touchstart',e=>{if(e.touches.length!==1){st=null;return}const q=e.changedTouches[0];st={x:q.clientX,y:q.clientY,t:Date.now(),el:e.target};scrolled=false},{capture:true,passive:true});
   addEventListener('scroll',()=>{if(st)scrolled=true},true);
   addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest(SEL);if(e.isTrusted&&b&&Date.now()-(b._synt||0)<400){e.stopImmediatePropagation();e.preventDefault()}},true);
@@ -12090,4 +12193,497 @@ for(let i=0;i<5;i++){const el=$('c'+i);if(!el)continue;
     if(w)setTimeout(()=>evToast(w),400);if(w2)setTimeout(sh2,w?3900:400)},true)}
 </script>
 
+
+
+<!--NXJS-START-->
+<script>
+/* ========== v250 新しい 装備・球・たからもの システム（core） ========== */
+const NXS=window.NXS=(()=>{
+const RR=['N','R','SR','SSR','UR','LG'],RNM={N:'N',R:'R',SR:'SR',SSR:'SSR',UR:'UR',LG:'伝説'};
+const RCOL={N:'#b9bfd0',R:'#6fb6ff',SR:'#c48bff',SSR:'#ffc400',UR:'#ff6fae',LG:'#ff6fae'};
+const MAXLV={N:10,R:20,SR:30,SSR:40,UR:50,LG:60},BASE={N:.6,R:1,SR:1.5,SSR:2.2,UR:3.2,LG:4.5};
+const COST={N:300,R:1000,SR:4000,SSR:15000,UR:60000,LG:250000};
+const SLOTS={N:1,R:2,SR:3,SSR:4,UR:5,LG:6},MAXEQ=3;
+const OSELL={N:600,R:3000,SR:18000,SSR:120000,UR:900000,LG:9000000},ESELL={N:900,R:4500,SR:30000,SSR:240000,UR:1800000,LG:18000000};
+const OPRICE={N:2000,R:10000,SR:60000,SSR:400000,UR:3000000,LG:30000000},EPRICE={N:3000,R:15000,SR:100000,SSR:800000,UR:6000000,LG:60000000};
+const EL={sea:['🌊','海'],sun:['☀️','陽'],moon:['🌙','月'],star:['⭐','星']},ELK=Object.keys(EL);
+const R0=(a,b)=>a+Math.random()*(b-a),pk=a=>a[Math.random()*a.length|0],f1=v=>Math.round(v*10)/10;
+const rollR=(boost=0)=>{const w={N:45,R:32,SR:15,SSR:6,UR:1.8,LG:.2};let T=0;const ww=RR.map((r,i)=>{const v=w[r]*Math.pow(1+boost,i);T+=v;return v});let x=Math.random()*T;for(let i=0;i<RR.length;i++){x-=ww[i];if(x<0)return RR[i]}return 'N'};
+const rUp=r=>RR[Math.min(RR.length-1,RR.indexOf(r)+1)];
+const night=()=>{try{const h=GH();return h>=19||h<5}catch(e){return false}},day=()=>{try{const h=GH();return h>=7&&h<17}catch(e){return false}};
+/* ---- 能力 ---- */
+const normK=()=>Object.keys(EQK).filter(k=>!k.startsWith('g_')&&k!=='gift'&&!(typeof STARK!=='undefined'?STARK:[]).includes(k)&&EQK[k]&&EQK[k][2]);
+const starK=()=>(typeof STARK!=='undefined'?STARK:[]).filter(k=>EQK[k]);
+const abilFor=r=>((r==='UR'||r==='LG')&&Math.random()<.12&&starK().length)?pk(starK()):pk(normK());
+/* ---- サポート・危険・呪い ---- */
+const SUP={amp:['🔆','増幅の 球',lv=>`となりの 球の 効果 ×${f1(1.3+.01*lv)}`],guide:['🧭','導きの 球',(lv,o)=>`同じ 装備の ${EL[o.el][0]}${EL[o.el][1]}の 球 +${Math.round(20+.5*lv)}%`],
+  copy:['👯','写し鏡の 球',lv=>`となり（左が 優先）の 能力を ${Math.round(40+.6*lv)}% の 強さで コピー`],focus:['🎯','集中の 球',lv=>`装備に ほかの 球が 1つ だけなら その 球 ×${f1(2+.02*lv)}`],
+  harmony:['🌈','調和の 球',lv=>`装備の 球（3つ 以上）の 属性が 全部 ちがうと 全部 +${Math.round(30+.5*lv)}%`],senpai:['📈','先輩の 球',lv=>`となりの 球を 育てる 費用 −${Math.min(60,Math.round(20+.5*lv))}%`]};
+const DNG={bomb:['💣','爆弾の 球','効果 ×3','負けるたびに 3% で 砕けて なくなる'],gamble:['🎲','賭博の 球','くばる たびに 効果が ×0〜×5 の どれか','安定しない'],
+  hour:['⏳','砂時計の 球','効果 ×4','50回 くばると 消える（進化させると 50回に 戻る）'],sac:['🩸','生贄の 球','同じ 装備の ほかの 球 全部 ×2（自分は ふつう）','毎日 となりの 球の Lv を 1 吸う'],
+  fire:['🔥','燃える 球','連勝 1つ ごとに +50%','ダブルアップで 負けると Lv −1']};
+/* ---- 才能 ---- */
+const TAL={
+ w_pow:['w','💪 力持ち','効果 +20%'],w_day:['w','☀️ 朝型','昼は 効果 ×1.5'],w_night:['w','🌙 夜型','夜は 効果 ×1.5'],w_left:['w','⬅️ 左はし 好き','左はしに いると ×1.4'],
+ w_mid:['w','⏺️ 真ん中 好き','真ん中に いると ×1.4'],w_right:['w','➡️ 右はし 好き','右はしに いると ×1.4'],w_cheap:['w','💰 節約家','育てる 費用 −20%'],w_spin:['w','🎰 ツキ','ルーレットの 大当たり率 ×1.5'],
+ w_streak:['w','🚩 勢い','連勝中は 効果 +25%'],w_dbl:['w','🃏 勝負師','ダブルアップ中は 効果 ×1.3'],
+ g_pow:['g','💪 怪力','効果 +50%'],g_share:['g','🤝 おすそわけ','となりの 球の 効果 +25%'],g_spin:['g','🎰 強運','ルーレットの 大当たり率 ×2'],g_cheap:['g','💰 倹約家','育てる 費用 −40%'],
+ g_alone:['g','🐺 一匹狼','装備に ひとり だけなら ×2.5'],g_evo:['g','🦋 自力進化','進化に 同じ 能力の 球が いらない（費用は かかる）'],
+ r_x2:['r','✨ 天才','効果 ×2'],r_allel:['r','🌈 全属性','全部の 属性 あつかいに なる'],r_safe:['r','🛡️ 無傷','危険な 球の 代償が なくなる'],r_grow:['r','📈 大器','Lv が 1 上がる ごとの 伸びが +10% → +15%'],r_aura:['r','👑 カリスマ','となり 2つ（両どなり）×1.5'],
+ b_absorb:['b','🕳️ 独占','同じ 装備の ほかの 球の 力を 全部 吸う（ほかは 0、自分は 1つ ごと +80%）'],b_inf:['b','♾️ 無限成長','最大 Lv が なくなる。どこまでも 育つ'],
+ b_twin:['b','👥 双子','効果が 2回 かかる（×2）'],b_tycoon:['b','💎 大富豪','持ちコイン 100万枚 ごとに +10%（最大 ×5）'],
+ b_fate:['b','📜 運命の 書き換え','1日 1回、ダブルアップの 負けを 復活で ひっくり返す'],b_chain:['b','⛓️ 連鎖','役が できる たびに +5% ずつ 永遠に 積み上がる（負けると 0 に）']};
+const TT={w:['ふつう','白'],g:['レア','金'],r:['伝説','虹'],b:['バランスブレイカー','黒']};
+/* ---- 装備の 特性 ---- */
+const TRT={t_all:['✨','輝き','全部の 球 +15%',0],t_sea:['🌊','潮騒','🌊海の 球 ×1.5',0],t_sun:['☀️','陽だまり','☀️陽の 球 ×1.5',0],t_moon:['🌙','月影','🌙月の 球 ×1.5',0],t_star:['⭐','星屑','⭐星の 球 ×1.5',0],
+ t_same:['👯','なかよし','同じ 能力の 球が 2つ 以上で それぞれ +30%',1],t_day:['🌞','昼の 光','昼は 全部 ×1.6',1],t_cheap:['💰','お得','この 装備の 球を 育てる 費用 −25%',1],
+ t_night:['🌙','夜の 帳','夜は 全部 ×2',2],t_mid:['⏺️','中心','真ん中の 球 ×2',2],t_spin:['🍀','幸運','この 装備の 球の ルーレット 大当たり率 ×2',2],
+ t_lone:['🐺','孤高','球が 1つ だけなら ×3',3],t_safe:['🛡️','守護','危険な 球の 代償が なくなる',3],t_sup:['🤝','共鳴','サポート球の 効果 ×1.5',3]};
+const trPool=r=>{const lv=RR.indexOf(r);return Object.keys(TRT).filter(k=>TRT[k][3]<=Math.min(3,lv))};
+/* ---- 状態 ---- */
+let D=null;
+const st=()=>D;
+function blank(){return{v:1,seq:1,orbs:[],eqs:[],on:[],holy:0,free:0,offer:0,buf:{},disp:[],shop:null,vis:null,fateDay:-1,lastDay:-1,stat:{}}}
+function load(){try{const d=JSON.parse(localStorage.getItem('hoshipoker')||'{}');if(d.nx&&d.nx.v===1)return d.nx}catch(e){}return null}
+const id=p=>p+(D.seq++);
+function mkOrb(r,o={}){r=r||rollR();const x={id:id('o'),kind:o.kind||'n',r,lv:o.lv||1,el:o.el||pk(ELK),tal:[],sb:0};
+  if(x.kind==='sup')x.s=o.s||pk(Object.keys(SUP));else x.k=o.k||abilFor(r);
+  if(x.kind==='dng'){x.d=o.d||pk(Object.keys(DNG));if(x.d==='hour')x.left=50;if(x.d==='gamble')x.gm=1}
+  if(x.kind==='cur')x.c=o.c||pk(Object.keys(typeof CURSE!=='undefined'?CURSE:{c_gold:1}));
+  if(x.k&&x.k.startsWith('g_')&&typeof genReg==='function')genReg(x.k);return x}
+function mkEq(r,b){r=r||rollR();const bb=b&&EQB[b]?b:pk(EQBK.filter(k=>EQB[k]));return{id:id('e'),b:bb,r,tr:pk(trPool(r)),s:Array(SLOTS[r]).fill(null)}}
+const oGet=i=>D.orbs.find(o=>o.id===i),eGet=i=>D.eqs.find(e=>e.id===i);
+const eqOf=o=>D.eqs.find(e=>e.s.includes(o.id))||null;
+const isOn=e=>D.on.includes(e.id);
+const has=(o,t)=>o.tal.includes(t);
+const maxLv=o=>has(o,'b_inf')?9999:MAXLV[o.r];
+const orbIcon=o=>o.kind==='sup'?SUP[o.s][0]:(EQK[o.k]||['❔'])[0];
+const orbName=o=>o.kind==='sup'?SUP[o.s][1]:o.kind==='dng'?`${DNG[o.d][0]} ${(EQK[o.k]||['',''])[1]}`:o.kind==='cur'?`🩸呪いの ${(EQK[o.k]||['',''])[1]}`:(EQK[o.k]||['','？'])[1];
+const eqName=e=>({N:'',R:'みがいた ',SR:'かがやく ',SSR:'星の ',UR:'伝説の ',LG:'神話の '}[e.r]||'')+(EQB[e.b]||['','装備'])[1];
+const eqIcon=e=>(EQB[e.b]||['🎒'])[0];
+const baseV=o=>BASE[o.r]*(1+(has(o,'r_grow')?.15:.1)*(o.lv-1));
+const elIs=(o,e)=>o.el===e||has(o,'r_allel');
+/* ---- 効果の 計算 ---- */
+function evalEq(e){const n=e.s.length,os=e.s.map(i=>i?oGet(i):null),idx=os.map((o,i)=>o?i:-1).filter(i=>i>=0),cnt=idx.length,res=[];if(!cnt)return res;
+  const mid=i=>n%2?i===(n-1)/2:(i===n/2-1||i===n/2),nb=i=>[os[i-1],os[i+1]].filter(Boolean);
+  const safe=e.tr==='t_safe';const supM=e.tr==='t_sup'?1.5:1;const hasSac=os.some(o=>o&&o.kind==='dng'&&o.d==='sac');
+  const absorb=os.find(o=>o&&has(o,'b_absorb'));
+  const allEl=cnt>=3&&new Set(os.filter(Boolean).map(o=>has(o,'r_allel')?'*'+o.id:o.el)).size===cnt;
+  const mul=os.map(()=>1);
+  os.forEach((o,i)=>{if(!o)return;let m=1;
+    if(e.tr==='t_all')m*=1.15;if(e.tr==='t_sea'&&elIs(o,'sea'))m*=1.5;if(e.tr==='t_sun'&&elIs(o,'sun'))m*=1.5;if(e.tr==='t_moon'&&elIs(o,'moon'))m*=1.5;if(e.tr==='t_star'&&elIs(o,'star'))m*=1.5;
+    if(e.tr==='t_same'&&o.k&&os.filter(x=>x&&x.k===o.k).length>=2)m*=1.3;if(e.tr==='t_day'&&day())m*=1.6;if(e.tr==='t_night'&&night())m*=2;if(e.tr==='t_mid'&&mid(i))m*=2;if(e.tr==='t_lone'&&cnt===1)m*=3;
+    if(has(o,'w_pow'))m*=1.2;if(has(o,'g_pow'))m*=1.5;if(has(o,'r_x2'))m*=2;if(has(o,'b_twin'))m*=2;
+    if(has(o,'w_day')&&day())m*=1.5;if(has(o,'w_night')&&night())m*=1.5;if(has(o,'w_left')&&i===0)m*=1.4;if(has(o,'w_right')&&i===n-1)m*=1.4;if(has(o,'w_mid')&&mid(i))m*=1.4;
+    if(has(o,'w_streak')&&(S.streak||0)>0)m*=1.25;if(has(o,'w_dbl')&&S.phase==='dblPick')m*=1.3;if(has(o,'g_alone')&&cnt===1)m*=2.5;
+    if(has(o,'b_tycoon'))m*=Math.min(5,1+.1*Math.floor((S.coins||0)/1e6));if(has(o,'b_chain'))m*=1+.05*(o.ch||0);
+    nb(i).forEach(x=>{if(has(x,'g_share'))m*=1.25;if(has(x,'r_aura'))m*=1.5;if(x.kind==='sup'&&x.s==='amp')m*=1+(.3+.01*x.lv)*supM});
+    os.forEach(x=>{if(!x||x===o||x.kind!=='sup')return;if(x.s==='guide'&&elIs(o,x.el))m*=1+(.2+.005*x.lv)*supM;if(x.s==='focus'&&cnt===2)m*=1+(1+.02*x.lv)*supM});
+    if(allEl&&os.some(x=>x&&x.kind==='sup'&&x.s==='harmony')){const h=os.find(x=>x&&x.kind==='sup'&&x.s==='harmony');m*=1+(.3+.005*h.lv)*supM}
+    if(o.kind==='dng'){if(o.d==='bomb')m*=3;if(o.d==='gamble')m*=o.gm??1;if(o.d==='hour')m*=4;if(o.d==='fire')m*=1+.5*(S.streak||0)}
+    if(hasSac&&!(o.kind==='dng'&&o.d==='sac'))m*=2;if(o.kind==='cur')m*=1.5;if(o.pure)m*=1.1;
+    if(absorb&&o!==absorb)m=0;if(absorb&&o===absorb)m*=1+.8*(cnt-1);
+    mul[i]=m});
+  os.forEach((o,i)=>{if(!o||o.kind==='sup')return;res.push({o,k:o.k,v:baseV(o)*mul[i]})});
+  os.forEach((o,i)=>{if(!o||o.kind!=='sup'||o.s!=='copy')return;const t=[os[i-1],os[i+1]].find(x=>x&&x.kind!=='sup');if(!t)return;const r=res.find(q=>q.o===t);if(r)res.push({o,k:t.k,v:r.v*(.4+.006*o.lv)*supM*(absorb&&o!==absorb?0:1)})});
+  return res}
+function sums(){const s={};if(!D)return s;D.on.forEach(i=>{const e=eGet(i);if(!e)return;evalEq(e).forEach(r=>{if(r.k&&EQK[r.k])s[r.k]=(s[r.k]||0)+r.v})});for(const k in s)s[k]=Math.round(s[k]*100)/100;return s}
+function orbEff(o){const e=eqOf(o);if(!e)return null;const r=evalEq(e).find(q=>q.o===o);return r?r:null}
+function dangerSafe(o){const e=eqOf(o);return has(o,'r_safe')||(e&&e.tr==='t_safe')}
+/* ---- 呪いを 今の 仕組みに つなぐ（装備中の 呪いの 球 → 古い 判定用の 器） ---- */
+function syncCurse(){if(!D)return;const cs=[...new Set(D.on.map(eGet).filter(Boolean).flatMap(e=>e.s.map(oGet).filter(o=>o&&o.kind==='cur').map(o=>o.c)))];
+  S.eq=S.eq||{};S.eq.bag=cs.map(c=>({id:'nxc_'+c,curse:c,fx:{},v2:1,sl:0,rar:'N',b:'omamori'}));S.eq.on=S.eq.bag.map(x=>x.id)}
+function apply(){syncCurse();try{eqApply()}catch(e){}}
+/* ---- 古い 仕組みから 来た 球・装備を 変換 ---- */
+function sweep(){if(!D)return;let ch=false;
+  if(Array.isArray(S.balls)&&S.balls.length){S.balls.forEach(b=>{const r=b.r==='LG'?'LG':RR.includes(b.r)?b.r:'N';give(mkOrb(r,{k:EQK[b.k]?b.k:undefined}),null,true)});S.balls=[];ch=true}
+  if(S.eq&&Array.isArray(S.eq.bag)){const L=S.eq.bag.filter(x=>!String(x.id).startsWith('nxc_'));if(L.length){L.forEach(x=>{const r=RR.includes(x.rar)?x.rar:'R';if(x.curse)give(mkOrb(r,{kind:'cur',c:x.curse}),null,true);else giveEq(mkEq(r,x.b),null,true)});ch=true;syncCurse()}}
+  if(ch){save();try{window.NXUI&&NXUI.refresh()}catch(e){}}}
+function give(o,src,quiet){if(D.orbs.length>=200){const v=sellO(o);S.coins+=v;evToast(`🫧 球が いっぱい… ${orbName(o)} は ${v.toLocaleString()}枚に`);return null}D.orbs.push(o);if(!quiet&&src)announce(orbIcon(o),orbName(o),o.r,src);markNew();return o}
+function giveEq(e,src,quiet){if(D.eqs.length>=40){const v=ESELL[e.r];S.coins+=v;evToast(`🎒 装備が いっぱい… ${v.toLocaleString()}枚に`);return null}D.eqs.push(e);if(!quiet&&src)announce(eqIcon(e),eqName(e),e.r,src);markNew();return e}
+function announce(e,n,r,sub){try{showGet({e,n,r:r==='LG'?'UR':r,sub})}catch(er){evToast(`${e} <b>${n}</b>（${RNM[r]}）<br><small>${sub}</small>`)}}
+function markNew(){try{const b=$('nxBtn');if(b)b.classList.add('hot')}catch(e){}}
+const sellO=o=>Math.round(OSELL[o.r]*(1+.04*(o.lv-1))),sellE=e=>ESELL[e.r];
+/* ---- 育てる（ルーレット） ---- */
+const SEG=[[1,55],[2,25],[3,13],[5,6],[10,1]];
+function spinCost(o){let c=COST[o.r]*Math.pow(1.12,o.lv-1);const e=eqOf(o);if(has(o,'w_cheap'))c*=.8;if(has(o,'g_cheap'))c*=.6;if(e&&e.tr==='t_cheap')c*=.75;
+  if(e){const i=e.s.indexOf(o.id);[e.s[i-1],e.s[i+1]].map(x=>x&&oGet(x)).forEach(x=>{if(x&&x.kind==='sup'&&x.s==='senpai')c*=1-Math.min(.6,.2+.005*x.lv)})}return Math.max(10,Math.round(c/10)*10)}
+function spinLuck(o){let m=1;const e=eqOf(o);if(has(o,'w_spin'))m*=1.5;if(has(o,'g_spin'))m*=2;if(e&&e.tr==='t_spin')m*=2;return m}
+function rollSeg(o){const m=spinLuck(o),w=SEG.map(([v,p])=>v>=5?p*m:p);let x=Math.random()*w.reduce((a,b)=>a+b,0);for(let i=0;i<SEG.length;i++){x-=w[i];if(x<0)return i}return 0}
+/* 1回 回す：結果 index、上がった Lv、開花した 回数 を 返す（コインは 呼ぶ側） */
+function grow(o,seg){const add=SEG[seg][0],mx=maxLv(o);let up=0,bl=0;for(let n=0;n<add&&o.lv<mx;n++){o.lv++;up++;o.sb=(o.sb||0)+1;if(Math.random()<.12||o.sb>=15){o.sb=0;bl++}}return{up,bl}}
+/* ---- 才能 ---- */
+function rollTier(boost){const r=Math.random();const b=boost||0;const pb=.01+b*.01,pr=.07+b*.03,pg=.22+b*.05;return r<pb?'b':r<pb+pr?'r':r<pb+pr+pg?'g':'w'}
+function bloomChoices(o){const own=new Set(o.tal),out=[];const off=D.offer||0;D.offer=0;
+  for(let i=0;i<3;i++){let t=rollTier(off);if(i===0&&off>=4&&(t==='w'||t==='g'))t='r';else if(i===0&&off>=3&&t==='w')t='g';
+    let pool=Object.keys(TAL).filter(k=>TAL[k][0]===t&&!own.has(k)&&!out.includes(k));if(o.kind==='sup')pool=pool.filter(k=>!['b_absorb','b_chain','w_pow','g_pow','r_x2','b_twin'].includes(k)||t==='b');
+    if(!pool.length)pool=Object.keys(TAL).filter(k=>!own.has(k)&&!out.includes(k));if(pool.length)out.push(pk(pool))}return out}
+/* ---- 進化 ---- */
+const sameKind=(a,b)=>a!==b&&a.kind===b.kind&&(a.kind==='sup'?a.s===b.s:a.k===b.k)&&(a.kind!=='dng'||a.d===b.d);
+function evoFodder(o){return D.orbs.filter(x=>sameKind(o,x))}
+function evolve(o,fid){if(o.r==='LG'||o.lv<maxLv(o)&&!has(o,'b_inf'))return false;if(fid){const f=oGet(fid);if(!f||!sameKind(o,f))return false;const e=eqOf(f);if(e)e.s[e.s.indexOf(f.id)]=null;D.orbs=D.orbs.filter(x=>x!==f)}
+  o.r=rUp(o.r);if(o.kind==='dng'&&o.d==='hour')o.left=50;return true}
+const evoCost=o=>Math.round(COST[o.r]*40/10)*10;
+/* ---- 装備の 付けはずし ---- */
+function place(e,slot,oid){const o=oGet(oid);if(!o)return;const prev=eqOf(o);if(prev)prev.s[prev.s.indexOf(o.id)]=null;e.s[slot]=o.id}
+function unplace(o){const e=eqOf(o);if(e)e.s[e.s.indexOf(o.id)]=null}
+function moveSlot(e,i,d){const j=i+d;if(j<0||j>=e.s.length)return;[e.s[i],e.s[j]]=[e.s[j],e.s[i]]}
+function toggleOn(e){if(isOn(e)){D.on=D.on.filter(i=>i!==e.id);return true}if(D.on.length>=MAXEQ)return false;D.on.push(e.id);return true}
+/* ---- 保存 ---- */
+{const _sv=save;save=function(){_sv.apply(this,arguments);try{if(!D)return;const d=JSON.parse(localStorage.getItem('hoshipoker')||'{}');d.nx=D;localStorage.setItem('hoshipoker',JSON.stringify(d))}catch(e){}}}
+/* ---- 初期化（新しく 始める） ---- */
+function init(){D=load();if(!D){D=blank();const holy=(S.eq&&S.eq.holy)||0;D.holy=holy;
+    S.balls=[];S.eq={bag:[],on:[],slots:3,seq:1,day:-1,stock:[],last:null};S.deco={};S.unlocked={};S.lb={};S.lbStone=0;S.shard=0;
+    const e=mkEq('R','omamori');e.tr='t_all';D.eqs.push(e);D.on.push(e.id);const a=mkOrb('N',{k:'pay'}),b=mkOrb('N');D.orbs.push(a,b);e.s[0]=a.id;e.s[1]=b.id;
+    D.fresh=1;save()}
+  S.balls=[];syncCurse();apply()}
+return{RR,RNM,RCOL,MAXLV,BASE,COST,SLOTS,MAXEQ,OSELL,ESELL,OPRICE,EPRICE,EL,SUP,DNG,TAL,TT,TRT,SEG,
+  st,init,mkOrb,mkEq,oGet,eGet,eqOf,isOn,has,maxLv,orbIcon,orbName,eqName,eqIcon,baseV,evalEq,sums,orbEff,dangerSafe,apply,sweep,give,giveEq,sellO,sellE,
+  spinCost,rollSeg,grow,bloomChoices,evoFodder,evolve,evoCost,place,unplace,moveSlot,toggleOn,rollR,rUp,night,day}})();
+NXS.init();
+/* 効果の 合計は 新しい 仕組みから */
+eqSum=function(){return NXS.sums()};
+NXS.apply();
+setInterval(()=>{try{NXS.sweep()}catch(e){}},500);
+setInterval(()=>{try{if(!document.hidden)NXS.apply()}catch(e){}},3000);
+
+/* ========== v250 新システム：ゲームへの 影響（危険な 球・才能・バフ） ========== */
+(()=>{const X=NXS,D=()=>X.st();
+const onOrbs=()=>D().on.map(X.eGet).filter(Boolean).flatMap(e=>e.s.map(X.oGet).filter(Boolean));
+const kill=(o,why)=>{X.unplace(o);D().orbs=D().orbs.filter(x=>x!==o);evToast(`${why}<br><small>${X.orbName(o)}（${X.RNM[o.r]}）が なくなった…</small>`);try{tone(180,.5,'sawtooth',.04);noise(.5,{v:.1,type:'lowpass',f:600})}catch(e){}};
+/* くばる：賭博の 球の 振り直し・砂時計・ジョーカー バフ */
+{const _nd=newDeck;newDeck=function(){const d=_nd.apply(this,arguments);try{if(window._nxJoker){window._nxJoker=0;const j=d.findIndex(c=>c.j);if(j>=0){const[c]=d.splice(j,1);d.splice(Math.random()*5|0,0,c)}}}catch(e){}return d}}
+{const _dl=deal;deal=async function(){const ok=(S.phase==='bet'||S.phase==='won')&&S.coins>0;try{if(ok){const B=D().buf;if(B.joker>0){B.joker--;window._nxJoker=1}
+   onOrbs().forEach(o=>{if(o.kind!=='dng')return;if(o.d==='gamble')o.gm=[0,.5,1,1,1.5,2,3,5][Math.random()*8|0];
+     if(o.d==='hour'&&!X.dangerSafe(o)){o.left=(o.left??50)-1;if(o.left<=0)kill(o,'⏳ 砂時計の 砂が 落ちきった…')}});X.apply();save()}}catch(e){}return _dl.apply(this,arguments)}}
+/* 役の 結果：配当 バフ・飾り ボーナス・連鎖・爆弾 */
+{const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase===p0)return r;const won=S.phase==='won'&&S.win>0;const B=D().buf;
+  if(won){let m=1;const ts=[];if(B.pay&&B.pay.n>0){m*=1+B.pay.m;B.pay.n--;ts.push(`🃏 +${Math.round(B.pay.m*100)}%（のこり ${B.pay.n}回）`)}
+    if(B.mul>0){m*=2;B.mul--;ts.push('🃏 ×2')}const dp=window.NXT?NXT.dispBonus():0;if(dp>0){m*=1+dp;ts.push(`🏖️ 飾り +${f1(dp*100)}%`)}
+    if(m>1){const b0=S.win;S.win=Math.ceil(S.win*m);const el=$('msgIn')||$('msg');if(el)el.innerHTML=el.innerHTML.replace(/配当 <b>[\d,]+<\/b>/,`配当 <b>${S.win.toLocaleString()}</b>`);ui();setTimeout(()=>evToast(`${ts.join('・')} <b>+${(S.win-b0).toLocaleString()}</b>枚`),1100)}
+    onOrbs().forEach(o=>{if(X.has(o,'b_chain'))o.ch=(o.ch||0)+1})}
+  else{onOrbs().forEach(o=>{if(X.has(o,'b_chain'))o.ch=0;if(o.kind==='dng'&&o.d==='bomb'&&!X.dangerSafe(o)&&Math.random()<.03)kill(o,'💣 爆弾の 球が 砕けた！')})}
+  X.apply();save()}catch(e){}return r}}
+/* ダブルアップ：運命の 書き換え・守り バフ・倍率 バフ・燃える 球・爆弾 */
+{const _pd=pickDouble;pickDouble=async function(i){const s0=S.streak,w0=S.win,B=D().buf,rp=REVIVE_P;let force=null;
+  try{const fate=onOrbs().some(o=>X.has(o,'b_fate'))&&D().fateDay!==(S.gday||0);if(B.guard>0)force='guard';else if(fate)force='fate';if(force&&S.dbl){S.dbl.bell=true;REVIVE_P=1}}catch(e){}
+  let r;try{r=await _pd.apply(this,arguments)}finally{REVIVE_P=rp}
+  try{const won=S.streak>s0;if(force&&S.revived){if(force==='guard')B.guard--;else D().fateDay=S.gday||0;evToast(force==='guard'?'🛡️ たからものの 守りが 負けを はね返した！':'📜 運命の 書き換え… 負けが 消えた！')}
+    if(won&&B.dblX&&B.dblX.n>0){const add=Math.ceil(S.win*B.dblX.m);S.win+=add;B.dblX.n--;ui();evToast(`🎲 たからものの 力 +${add.toLocaleString()}枚`)}
+    if(!won&&S.phase!=='dblPick'&&!(S.win>0)){onOrbs().forEach(o=>{if(o.kind!=='dng'||X.dangerSafe(o))return;if(o.d==='fire'&&o.lv>1){o.lv--;evToast(`🔥 燃える 球が 弱まった… Lv${o.lv}`)}if(o.d==='bomb'&&Math.random()<.03)kill(o,'💣 爆弾の 球が 砕けた！')})}
+    X.apply();save()}catch(e){}return r}}
+/* 毎日：生贄の 球が となりの Lv を 吸う */
+setInterval(()=>{try{const d=D();if(!d)return;const g=S.gday||0;if(d.lastDay===g)return;const first=d.lastDay<0;d.lastDay=g;if(first){save();return}
+  d.on.map(X.eGet).filter(Boolean).forEach(e=>e.s.forEach((id,i)=>{const o=id&&X.oGet(id);if(!o||o.kind!=='dng'||o.d!=='sac'||X.dangerSafe(o))return;const t=[e.s[i-1],e.s[i+1]].map(x=>x&&X.oGet(x)).find(x=>x&&x.lv>1);if(t){t.lv--;evToast(`🩸 生贄の 球が ${X.orbName(t)} の Lv を 吸った…（Lv${t.lv}）`)}}));X.apply();save()}catch(e){}},2000);
+/* 清めの 羽根 */
+holyGet=function(src){D().holy=(D().holy||0)+1;save();setTimeout(()=>{evToast(`🕊️ <b>清めの 羽根</b> を 見つけた！<br><small>${src||''} ・ 呪いの 球の 詳細から 呪いを 解ける（×${D().holy}）</small>`);try{[1319,1568,2093].forEach((f,k)=>tone(f,.4,'sine',.03,k*.12))}catch(e){}},1200)};
+const f1=v=>Math.round(v*10)/10;
+})();
+
+/* ========== v250 新システム：アイテム画面 ========== */
+const NXUI=window.NXUI=(()=>{const X=NXS,D=()=>X.st();
+let tab='eq',flt='all',selSlot=-1,curEq=null;
+const P=document.createElement('div');P.id='nxP';P.hidden=true;document.body.appendChild(P);
+const M=document.createElement('div');M.id='nxM';M.hidden=true;document.body.appendChild(M);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fc=v=>Math.round(v).toLocaleString();
+const busy=()=>S.phase==='busy'||S.phase==='dblPick';
+const rtag=r=>`<span class="nxTag r" style="background:${r==='LG'?'linear-gradient(90deg,#ff9fc4,#ffe066,#9ff5d6,#a8c4ff)':X.RCOL[r]}">${X.RNM[r]}</span>`;
+function orbH(o,sz){if(!o)return `<span class="nxOrb ${sz||''} empty">＋</span>`;const kd=o.kind==='sup'?'🤝':o.kind==='dng'?'⚠️':o.kind==='cur'?'🩸':'';
+  return `<span class="nxOrb ${sz||''} r-${o.r}" style="--rc:${X.RCOL[o.r]}"><s class="el" style="text-decoration:none">${X.EL[o.el][0]}</s>${kd?`<s class="kd" style="text-decoration:none">${kd}</s>`:''}${X.orbIcon(o)}<span class="lv">Lv${o.lv}</span></span>`}
+function effTxt(o,v){if(o.kind==='sup'){const S2=X.SUP[o.s];return S2[2](o.lv,o)}const K=EQK[o.k];return K?K[2](v??X.baseV(o)):''}
+/* ---- 画面の 外枠 ---- */
+function open(t){if(t)tab=t;P.hidden=false;render();try{$('nxBtn').classList.remove('hot');sfx.pickCard&&sfx.pickCard()}catch(e){}}
+function close(){P.hidden=true;M.hidden=true;try{X.apply();ui()}catch(e){}}
+function render(){if(P.hidden)return;const T=[['eq','🎒 装備'],['orb','🔮 球'],['tre','🐚 たからもの'],['disp','🏖️ 飾った']];
+  const sc=P.querySelector('.nxBody')?.scrollTop||0;
+  P.innerHTML=`<div class="nxBox"><div class="nxHead"><h2>🎒 アイテム</h2><span class="nxCoin">🪙 ${fc(S.coins)}</span><button class="nxX" data-a="close" aria-label="とじる">✕</button></div>
+  <div class="nxTabs">${T.map(([k,n])=>`<button class="${tab===k?'on':''}" data-a="tab" data-t="${k}">${n}</button>`).join('')}</div><div class="nxBody">${body()}</div></div>`;
+  const b=P.querySelector('.nxBody');if(b)b.scrollTop=sc}
+function body(){if(tab==='eq')return eqList();if(tab==='orb')return orbList();if(tab==='tre')return window.NXT?NXT.treList():'';return window.NXT?NXT.dispList():''}
+/* ---- 装備 ---- */
+function eqList(){const d=D();const L=d.eqs.slice().sort((a,b)=>(X.isOn(b)-X.isOn(a))||X.RR.indexOf(b.r)-X.RR.indexOf(a.r));
+  return `<p class="nxNote">🎒 装備は 球を はめる 器。同時に つけられるのは <b>${X.MAXEQ}つ</b>（いま ${d.on.length}/${X.MAXEQ}）。球は 左から 順番に 並び、となりや 真ん中で 効き方が 変わる。</p>`+
+   (L.length?L.map(e=>{const T=X.TRT[e.tr];return `<div class="nxRow${X.isOn(e)?' on':''}" data-a="eq" data-id="${e.id}"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div class="nxInfo"><b>${esc(X.eqName(e))} ${rtag(e.r)}${X.isOn(e)?' <span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</b><small>${T[0]} ${T[1]}：${T[2]}</small><div class="nxSlots" style="justify-content:flex-start">${e.s.map(i=>orbH(i&&X.oGet(i),'sm')).join('')}</div></div></div>`}).join(''):'<div class="nxEmpty">装備が ない。ショップや 宝箱で 手に 入る。</div>')}
+function eqDetail(id,slot){const e=X.eGet(id);if(!e){M.hidden=true;return}curEq=id;selSlot=slot??-1;const T=X.TRT[e.tr],res=X.evalEq(e);
+  const slots=e.s.map((i,n)=>{const o=i&&X.oGet(i);return `<div class="nxSlot${selSlot===n?' sel':''}" data-a="slot" data-i="${n}">${orbH(o)}<small>${n===0?'左はし':n===e.s.length-1?'右はし':''}${e.s.length%2&&n===(e.s.length-1)/2&&e.s.length>1?'真ん中':''}</small></div>`}).join('');
+  let act='';if(selSlot>=0){const o=e.s[selSlot]&&X.oGet(e.s[selSlot]);act=o?`<div class="nxBtns"><button class="nxB" data-a="mv" data-d="-1" ${selSlot===0?'disabled':''}>◀ 左へ</button><button class="nxB" data-a="mv" data-d="1" ${selSlot===e.s.length-1?'disabled':''}>右へ ▶</button><button class="nxB" data-a="unslot">はずす</button><button class="nxB" data-a="orbD" data-id="${o.id}">くわしく</button><button class="nxB wide" data-a="pick">べつの 球に かえる</button></div>`:`<div class="nxBtns"><button class="nxB go wide" data-a="pick">🔮 箱から 球を えらぶ</button></div>`}
+  const effs=res.length?res.map(r=>`<div class="nxRow" style="cursor:default;margin:3px 0;padding:5px 8px">${orbH(r.o,'sm')}<div class="nxInfo"><b>${esc(X.orbName(r.o))}${r.o.kind==='sup'?'（コピー）':''}</b><small>${EQK[r.k]?EQK[r.k][2](r.v):''}</small></div></div>`).join(''):'<small>球を つけると ここに 効果が 出る</small>';
+  const sups=e.s.map(i=>i&&X.oGet(i)).filter(o=>o&&o.kind==='sup'&&o.s!=='copy').map(o=>`<small>🤝 ${X.SUP[o.s][1]}：${X.SUP[o.s][2](o.lv,o)}</small>`).join('<br>');
+  M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div><h3>${esc(X.eqName(e))}</h3><div class="nxTags">${rtag(e.r)}<span class="nxTag">球枠 ${e.s.length}</span>${X.isOn(e)?'<span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</div></div></div>
+   <div class="nxSec"><h4>${T[0]} 特性：${T[1]}</h4>${T[2]}</div>
+   <div class="nxSec"><h4>🔮 球（タップで えらぶ）</h4><div class="nxSlots">${slots}</div>${act}</div>
+   <div class="nxSec"><h4>✨ いまの 効果${X.isOn(e)?'':'（装備すると 効く）'}</h4>${effs}${sups?'<div style="margin-top:4px">'+sups+'</div>':''}</div>
+   <div class="nxBtns"><button class="nxB mint" data-a="toggle">${X.isOn(e)?'🎒 はずす':'🎒 装備する'}</button><button class="nxB red" data-a="sellE">売る（${fc(X.sellE(e))}枚）</button></div></div>`;M.hidden=false}
+function orbPicker(){const e=X.eGet(curEq);if(!e)return;const cur=e.s[selSlot];const L=D().orbs.filter(o=>o.id!==cur).sort((a,b)=>(!!X.eqOf(a)-!!X.eqOf(b))||X.RR.indexOf(b.r)-X.RR.indexOf(a.r)||b.lv-a.lv);
+  M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="back">✕</button><h3>🔮 どの 球を つける？</h3><p class="nxNote">ほかの 装備に ついている 球を えらぶと、そこから 移動する。</p>
+   ${L.length?L.map(o=>{const at=X.eqOf(o);return `<div class="nxRow" data-a="put" data-id="${o.id}">${orbH(o)}<div class="nxInfo"><b>${esc(X.orbName(o))} ${rtag(o.r)}</b><small>${esc(effTxt(o))}${at?` ・ 🎒 ${esc(X.eqName(at))} に ついている`:''}</small></div></div>`}).join(''):'<div class="nxEmpty">球を 持っていない</div>'}</div>`;M.hidden=false}
+/* ---- 球 ---- */
+function orbList(){const d=D();let L=d.orbs.slice();if(flt==='on')L=L.filter(o=>X.eqOf(o));if(flt==='box')L=L.filter(o=>!X.eqOf(o));
+  L.sort((a,b)=>X.RR.indexOf(b.r)-X.RR.indexOf(a.r)||b.lv-a.lv);
+  return `<p class="nxNote">🔮 球を タップして 🎰 コインで 育てる。Lv が 上がると ときどき 🌸 才能が 開花する。最大 Lv で 同じ 能力の 球と 合わせると ⬆️ 進化。${d.free?`<br>🎟️ 無料で 回せる 券：<b>${d.free}枚</b>`:''}</p>
+   <div class="nxFilter">${[['all','すべて'],['on','つけている'],['box','箱']].map(([k,n])=>`<button class="${flt===k?'on':''}" data-a="flt" data-t="${k}">${n}</button>`).join('')}<span style="margin-left:auto;font-size:.72rem;color:#8a6a40">${d.orbs.length}個</span></div>
+   ${L.length?`<div class="nxGrid">${L.map(o=>`<div class="nxCard${X.eqOf(o)?' on':''}" data-a="orbD" data-id="${o.id}">${X.eqOf(o)?'<span class="nxBadge">装備中</span>':''}${orbH(o)}<b style="margin-top:6px">${esc(X.orbName(o))}</b><small>${X.RNM[o.r]} ・ Lv${o.lv}/${X.has(o,'b_inf')?'∞':X.MAXLV[o.r]}</small></div>`).join('')}</div>`:'<div class="nxEmpty">球が ない</div>'}`}
+function orbDetail(id){const o=X.oGet(id);if(!o){M.hidden=true;return}const e=X.eqOf(o),r=X.orbEff(o),mx=X.maxLv(o),cost=X.spinCost(o),max=o.lv>=mx;const d=D();
+  let kind='';if(o.kind==='sup')kind=`<div class="nxSec"><h4>🤝 サポート球</h4>${X.SUP[o.s][2](o.lv,o)}<br><small>自分では 能力を 持たず、同じ 装備の 仲間を 強くする。Lv が 上がると 強くなる。</small></div>`;
+  if(o.kind==='dng'){const G=X.DNG[o.d];kind=`<div class="nxSec"><h4>⚠️ 危険な 球：${G[1]}</h4>◎ ${G[2]}<br>✖ ${G[3]}${o.d==='gamble'?`<br><small>いまの 倍率：×${o.gm??1}</small>`:''}${o.d==='hour'?`<br><small>のこり：${o.left??50}回</small>`:''}${X.dangerSafe(o)?'<br><b style="color:#1a7a5a">🛡️ いまは 代償なし</b>':''}</div>`}
+  if(o.kind==='cur'&&typeof CURSE!=='undefined'&&CURSE[o.c]){const C=CURSE[o.c];kind=`<div class="nxSec" style="background:#f6e8ff;border-radius:10px;padding:8px"><h4>${C.ico} 呪い：${C.nm}</h4>◎ ${C.good}<br>✖ ${C.bad}<br><small>装備に つけている 間だけ。能力も ×1.5。</small><button class="nxB wide" style="margin-top:6px" data-a="purify" ${d.holy?'':'disabled'}>🕊️ 清めの 羽根で 呪いを 解く（のこり ${d.holy||0}）<small>${d.holy?'呪いが 消えて ふつうの 球に（効果 +10%）':'ショップや 来訪者の 店で 手に 入る'}</small></button></div>`}
+  const desc=o.kind!=='sup'&&typeof ABD!=='undefined'&&ABD[o.k]?ABD[o.k]:'';
+  const tal=o.tal.length?o.tal.map(t=>{const T=X.TAL[t];return `<div class="nxTal t-${T[0]}"><b>${T[1]}</b><span>${T[2]}</span></div>`}).join(''):'<small>まだ ない（Lv が 上がると ときどき 開花）</small>';
+  const evoOk=max&&o.r!=='LG',fod=X.evoFodder(o),self=X.has(o,'g_evo');
+  M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop">${orbH(o,'lg')}<div style="min-width:0"><h3>${esc(X.orbName(o))}</h3><div class="nxTags">${rtag(o.r)}<span class="nxTag">${X.EL[o.el][0]} ${X.EL[o.el][1]}属性</span>${e?`<span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">🎒 ${esc(X.eqName(e))}</span>`:'<span class="nxTag">📦 箱の 中</span>'}</div></div></div>
+   ${o.kind!=='sup'?`<div class="nxSec"><h4>✨ 効果</h4><b style="font-size:1.05rem;color:#2a5aa8">${esc(effTxt(o))}</b>${r&&X.isOn(e)?`<br><small>装備で 強化 → <b>${esc(EQK[o.k]?EQK[o.k][2](r.v):'')}</b></small>`:e?'<br><small>（この 装備を つけると 効く）</small>':'<br><small>（装備に つけると 効く）</small>'}${desc?`<br><small>${desc}</small>`:''}</div>`:''}
+   ${kind}
+   <div class="nxSec"><h4>📈 レベル</h4><div class="nxLvBar"><i style="width:${Math.min(100,o.lv/Math.min(mx,9999)*100)}%"></i><span>Lv${o.lv} / ${mx>=9999?'∞':mx}</span></div></div>
+   <div class="nxSec"><h4>🌸 才能</h4>${tal}</div>
+   <div class="nxBtns">${max&&!X.has(o,'b_inf')?'<button class="nxB wide" disabled>最大 Lv！ 進化で もっと 育つ</button>':`<button class="nxB go" data-a="spin" data-n="1" ${S.coins>=cost||d.free?'':'disabled'}>🎰 育てる<small>${d.free?'🎟️ 無料券を 使う':fc(cost)+'枚'}</small></button><button class="nxB go" data-a="spin" data-n="10" ${S.coins>=cost?'':'disabled'}>🎰 10回 まとめて<small>1回 ${fc(cost)}枚〜</small></button>`}
+   ${evoOk?`<button class="nxB mint wide" data-a="evo" ${(fod.length||self)&&S.coins>=X.evoCost(o)?'':'disabled'}>⬆️ 進化する（${X.RNM[o.r]} → ${X.RNM[X.rUp(o.r)]}）<small>${self?'🦋 自力進化：':fod.length?`同じ 能力の 球 1つ（${fod.length}個 あり）＋ `:'同じ 能力の 球が 必要 ・ '}${fc(X.evoCost(o))}枚</small></button>`:''}
+   ${e?'<button class="nxB" data-a="unorb">📦 はずして 箱に</button>':'<button class="nxB" data-a="toEq">🎒 装備に つける</button>'}<button class="nxB red" data-a="sellO">売る（${fc(X.sellO(o))}枚）</button></div></div>`;M.hidden=false;M.dataset.orb=id}
+function eqChoose(oid){const L=D().eqs.slice().sort((a,b)=>X.isOn(b)-X.isOn(a));M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="back2">✕</button><h3>🎒 どの 装備に つける？</h3>
+  ${L.map(e=>`<div class="nxRow${X.isOn(e)?' on':''}" data-a="eqPut" data-id="${e.id}"><span class="nxOrb" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div class="nxInfo"><b>${esc(X.eqName(e))} ${rtag(e.r)}</b><small>あき ${e.s.filter(x=>!x).length} / ${e.s.length}${X.isOn(e)?' ・ 装備中':''}</small></div></div>`).join('')}</div>`;M.dataset.orb=oid}
+function evoPicker(oid){const o=X.oGet(oid),L=X.evoFodder(o);M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="back2">✕</button><h3>⬆️ 合わせる 球を えらぶ</h3><p class="nxNote">えらんだ 球は なくなる。進化すると レア度が 1つ 上がって、最大 Lv が 伸びる。</p>
+  ${L.map(f=>`<div class="nxRow" data-a="evoGo" data-id="${f.id}">${orbH(f)}<div class="nxInfo"><b>${esc(X.orbName(f))} ${rtag(f.r)}</b><small>Lv${f.lv}${X.eqOf(f)?' ・ 装備中（はずれる）':''}${f.tal.length?' ・ 才能 '+f.tal.length+'つ（消える）':''}</small></div></div>`).join('')}</div>`}
+/* ---- ルーレット ---- */
+const SEGC=['#ff9a3c','#55b8ff','#3fdc9a','#ffd23f','#ff5c8a'];
+function wheelH(){let a=0;const tot=X.SEG.reduce((s,q)=>s+q[1],0);const parts=[],labels=[];X.SEG.forEach(([v,p],i)=>{const d=p/tot*360;parts.push(`${i===4?'#fff':SEGC[i]} ${a}deg ${a+d}deg`);if(d>12){const mid=(a+d/2)*Math.PI/180,rr=36;labels.push(`<span style="left:${50+Math.sin(mid)*rr}%;top:${50-Math.cos(mid)*rr}%;transform:translate(-50%,-50%)">${v>=5?'★':''}+${v}</span>`)}a+=d});
+  return `<div class="nxWheelW"><div class="nxPin"></div><div class="nxWheel" style="background:conic-gradient(${parts.join(',')})">${labels.join('')}</div><div class="nxHub">🎰</div></div>`}
+function segAngle(i){const tot=X.SEG.reduce((s,q)=>s+q[1],0);let a=0;for(let k=0;k<i;k++)a+=X.SEG[k][1]/tot*360;const d=X.SEG[i][1]/tot*360;return a+d*(.2+Math.random()*.6)}
+let spinning=false;
+async function spin(oid,n){const o=X.oGet(oid);if(!o||spinning)return;spinning=true;const d=D();let rot=0,blooms=0,total=0;const tally=[];
+  M.innerHTML=`<div class="nxDet" style="text-align:center"><h3>🎰 ${esc(X.orbName(o))} を 育てる</h3>${wheelH()}<div class="nxRes" id="nxRes">…</div><div class="nxTally" id="nxTally"></div><div id="nxLvT" style="font-size:.8rem;color:#8a6a40">Lv${o.lv}</div><button class="nxB wide" id="nxSpinOk" data-a="spinDone" data-id="${oid}" style="margin-top:8px" disabled>OK</button></div>`;M.hidden=false;
+  const W=M.querySelector('.nxWheel'),R=M.querySelector('#nxRes'),TL=M.querySelector('#nxTally');
+  for(let k=0;k<n;k++){if(o.lv>=X.maxLv(o))break;let paid=false;if(d.free>0&&n===1){d.free--;paid=true}else{const c=X.spinCost(o);if(S.coins<c)break;S.coins-=c;paid=true}
+    const seg=X.rollSeg(o);const fast=n>1;rot+=(fast?720:1440)+(360-segAngle(seg))-(rot%360);W.style.transition=`transform ${fast?.55:1.5}s cubic-bezier(.12,.75,.2,1)`;W.style.transform=`rotate(${rot}deg)`;
+    try{for(let t=0;t<(fast?4:9);t++)tone(900+t*40,.03,'square',.015,t*(fast?.1:.13))}catch(e){}
+    await new Promise(r=>setTimeout(r,fast?600:1550));const g=X.grow(o,seg);blooms+=g.bl;total+=g.up;const v=X.SEG[seg][0];
+    R.className='nxRes'+(v>=10?' rb':v>=5?' big':'');R.textContent=v>=10?'🌈 超大当たり +10！':v>=5?'★ 大当たり +5！':`+${v}`;TL.insertAdjacentHTML('beforeend',`<i class="${v>=10?'rb':v>=5?'b':''}">+${v}</i>`);M.querySelector('#nxLvT').textContent=`Lv${o.lv}${g.bl?' 🌸':''}`;
+    try{if(v>=10){sfx.fanfare(2);FX.burst(innerWidth/2,innerHeight*.45,90,'spark',{colors:['#ff5c8a','#ffd23f','#55e0b4','#7aa2ff','#fff'],speed:9,g:.03})}else if(v>=5){sfx.big();FX.burst(innerWidth/2,innerHeight*.45,50,'spark',{colors:['#ffd23f','#fff'],speed:7,g:.03})}else tone(1319,.12,'triangle',.03)}catch(e){}
+    ui();if(!fast&&k<n-1)await new Promise(r=>setTimeout(r,200))}
+  X.apply();save();spinning=false;const ok=M.querySelector('#nxSpinOk');if(ok){ok.disabled=false;ok.textContent=blooms?`🌸 才能が 開花しそう！（${blooms}）`:`OK（Lv +${total}）`;ok.dataset.bl=blooms}}
+function bloom(oid,left){const o=X.oGet(oid);if(!o||left<=0){orbDetail(oid);return}const ch=X.bloomChoices(o);if(!ch.length){orbDetail(oid);return}const dark=ch.some(t=>X.TAL[t][0]==='b');
+  M.innerHTML=`<div class="nxDet${dark?' dark':''}"><h3>🌸 ${esc(X.orbName(o))} の 才能が 開花！</h3><p class="nxNote" style="${dark?'background:#2a1020;color:#ffd6dc;border-color:#ff3b4f':''}">3つの うち 1つを えらぶ。えらび直しは できない。</p><div class="nxBloom">${ch.map((t,i)=>{const T=X.TAL[t];return `<button class="nxBl t-${T[0]}" style="animation-delay:${i*.12}s" data-a="pickTal" data-id="${oid}" data-t="${t}" data-left="${left-1}"><b><span class="tier">${X.TT[T[0]][1]}</span>${T[1]}</b><small>${T[2]}</small></button>`}).join('')}</div></div>`;M.hidden=false;
+  try{if(dark){document.body.classList.add('rBlack');setTimeout(()=>document.body.classList.remove('rBlack'),900);tone(80,1,'sawtooth',.05);sfx.cut&&sfx.cut(4)}else if(ch.some(t=>X.TAL[t][0]==='r'))sfx.fanfare(1);else sfx.chime()}catch(e){}}
+/* ---- タップ ---- */
+function confirm2(b,txt){if(b.dataset.arm)return true;b.dataset.arm=1;b.dataset.t0=b.innerHTML;b.innerHTML=txt;setTimeout(()=>{if(b.isConnected&&b.dataset.arm){delete b.dataset.arm;b.innerHTML=b.dataset.t0}},2500);return false}
+function act(b){const a=b.dataset.a,d=D();const need=()=>{if(busy()){evToast('勝負中は できない よ');return true}return false};
+  switch(a){
+  case 'close':return close();case 'mclose':M.hidden=true;return render();
+  case 'tab':tab=b.dataset.t;return render();case 'flt':flt=b.dataset.t;return render();
+  case 'eq':return eqDetail(b.dataset.id);
+  case 'slot':{const i=+b.dataset.i;return eqDetail(curEq,selSlot===i?-1:i)}
+  case 'mv':{if(need())return;const e=X.eGet(curEq);X.moveSlot(e,selSlot,+b.dataset.d);X.apply();save();render();return eqDetail(curEq,selSlot+ +b.dataset.d)}
+  case 'unslot':{if(need())return;const e=X.eGet(curEq);e.s[selSlot]=null;X.apply();save();render();return eqDetail(curEq,selSlot)}
+  case 'pick':return orbPicker();case 'back':return eqDetail(curEq,selSlot);
+  case 'put':{if(need())return;const e=X.eGet(curEq);X.place(e,selSlot,b.dataset.id);X.apply();save();render();try{sfx.hold()}catch(er){}return eqDetail(curEq,selSlot)}
+  case 'toggle':{if(need())return;const e=X.eGet(curEq);if(!X.toggleOn(e)){evToast(`装備は ${X.MAXEQ}つまで。どれかを はずしてね`);return}X.apply();save();render();try{sfx.hold()}catch(er){}return eqDetail(curEq,selSlot)}
+  case 'sellE':{if(need())return;const e=X.eGet(curEq);if(!confirm2(b,'本当に 売る？<small>ついている 球は 箱に もどる</small>'))return;d.on=d.on.filter(i=>i!==e.id);d.eqs=d.eqs.filter(x=>x!==e);const v=X.sellE(e);S.coins+=v;X.apply();save();ui();M.hidden=true;render();try{getCoin(v,'🎒 装備を 売った')}catch(er){}return}
+  case 'orbD':return orbDetail(b.dataset.id);
+  case 'spin':{const o=X.oGet(M.dataset.orb);if(o)spin(o.id,+b.dataset.n);return}
+  case 'spinDone':{render();const n=+b.dataset.bl||0;return n?bloom(b.dataset.id,n):orbDetail(b.dataset.id)}
+  case 'pickTal':{const o=X.oGet(b.dataset.id);if(!o)return;const t=b.dataset.t;if(!o.tal.includes(t))o.tal.push(t);X.apply();save();const T=X.TAL[t];try{if(T[0]==='b'){flash('#ff3b4f');shake();sfx.big()}else sfx.chime();rTxt(T[1],T[0]==='b'?'red':T[0]==='r'?'rainbow':T[0]==='g'?'gold':'white',1300,'2rem').classList.add('stamp')}catch(er){}render();return bloom(o.id,+b.dataset.left)}
+  case 'evo':{const o=X.oGet(M.dataset.orb);if(!o)return;if(X.has(o,'g_evo')&&!X.evoFodder(o).length){return doEvo(o,null)}return evoPicker(o.id)}
+  case 'evoGo':{const o=X.oGet(M.dataset.orb);if(o)doEvo(o,b.dataset.id);return}
+  case 'back2':return orbDetail(M.dataset.orb);
+  case 'unorb':{if(need())return;const o=X.oGet(M.dataset.orb);X.unplace(o);X.apply();save();render();return orbDetail(o.id)}
+  case 'toEq':return eqChoose(M.dataset.orb);
+  case 'eqPut':{if(need())return;const o=X.oGet(M.dataset.orb),e=X.eGet(b.dataset.id);let i=e.s.indexOf(null);if(i<0){curEq=e.id;selSlot=0;return orbPicker()}X.place(e,i,o.id);X.apply();save();render();return orbDetail(o.id)}
+  case 'sellO':{if(need())return;const o=X.oGet(M.dataset.orb);if(!confirm2(b,'本当に 売る？'))return;X.unplace(o);d.orbs=d.orbs.filter(x=>x!==o);const v=X.sellO(o);S.coins+=v;X.apply();save();ui();M.hidden=true;render();try{getCoin(v,'🔮 球を 売った')}catch(er){}return}
+  case 'purify':{const o=X.oGet(M.dataset.orb);if(!o||!(d.holy>0))return;if(!confirm2(b,'もう一度 タップで 呪いを 解く'))return;const C=CURSE[o.c];o.kind='n';delete o.c;o.pure=1;d.holy--;X.apply();save();
+    try{const fx=document.createElement('div');fx.className='holyFx';document.body.appendChild(fx);setTimeout(()=>fx.remove(),1700);[1047,1319,1568,2093].forEach((f,k)=>tone(f,.6,'sine',.03,k*.1));rTxt('浄 化','white',1500,'3.4rem').classList.add('stamp')}catch(er){}evToast(`🕊️ <b>${C?C.nm:'呪い'}</b> が 解けた！`);render();return orbDetail(o.id)}
+  default:if(window.NXT&&NXT.act)return NXT.act(a,b)}}
+function doEvo(o,fid){const c=X.evoCost(o);if(S.coins<c){evToast('コインが たりない');return}const r0=o.r;if(!X.evolve(o,fid))return;S.coins-=c;X.apply();save();ui();
+  try{const fx=document.createElement('div');fx.className='holyFx';document.body.appendChild(fx);setTimeout(()=>fx.remove(),1700);sfx.fanfare(2);rTxt(`進化！ ${X.RNM[r0]} → ${X.RNM[o.r]}`,o.r==='LG'||o.r==='UR'?'rainbow':'gold',1600,'2.2rem').classList.add('stamp');FX.burst(innerWidth/2,innerHeight*.45,80,'spark',{colors:['#ffd23f','#fff','#ff9fd0'],speed:8,g:.03})}catch(e){}render();orbDetail(o.id)}
+[P,M].forEach(el=>el.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&el.contains(b)){e.stopPropagation();if(b.disabled)return;act(b);return}if(e.target===P)close();if(e.target===M&&!spinning&&!M.querySelector('.nxBloom')){M.hidden=true;render()}}));
+/* ---- ボタン ---- */
+function mountBtn(){const w=$('window'),sb=$('shopBtn');if(!w||!sb||$('nxBtn'))return;const b=document.createElement('button');b.id='nxBtn';b.type='button';b.textContent='🎒 アイテム';w.appendChild(b);
+  const pos=()=>{b.style.right=(sb.offsetWidth+6)+'px'};pos();setTimeout(pos,500);addEventListener('resize',pos);b.addEventListener('click',e=>{e.stopPropagation();open()})}
+mountBtn();
+return{open,close,render,refresh:()=>{if(!P.hidden)render()},orbH,rtag,esc,fc,M,P,eqDetail,orbDetail}})();
+
+/* ========== v250 新システム：たからもの（売る・使う・飾る） ========== */
+/* 新しい 曲 */
+TRACKS.marimba={name:'マリンバ「潮だまりの おさんぽ」',bpm:104,chords:[[60,64,67],[57,60,64],[53,57,60],[55,59,62]],roots:[48,45,41,43],
+  play(st,t){const b=st>>4,s=st%16,c=this.chords[b%4],r=this.roots[b%4];if(s%2===0)I.pluck(c[(s/2)%3]+12+((s/2)%4===3?12:0),t,.05,.35,4200);if(s===0||s===8)I.bass(r,t,.45,.11);if(s%4===2)I.shaker(t,.012);if(s===6&&b%2)I.bell(c[2]+24,t,.02,.8)}};
+TRACKS.citypop={name:'シティポップ「夜明けの 海岸通り」',bpm:112,chords:[[65,69,72,76],[64,67,71,74],[62,65,69,72],[60,64,67,71]],roots:[41,40,38,36],init(){this.mel=motif(16,74,MAJ,8)},
+  play(st,t){const b=st>>4,s=st%16,c=this.chords[b%4],r=this.roots[b%4];if(s===4||s===12)c.forEach(n=>I.ep(n,t,.02,.5));if(s===0||s===10)I.kick(t,.16);if(s===4||s===12)I.snare(t,.03);if(s%2===0)I.hat(t,.01);
+   if([0,3,6,10,14].includes(s))I.bass(s===6||s===14?r+12:r,t,.25,.11);if(s%2===0&&b%2===1){const m=this.mel[(s/2+b*4)%16];if(m)I.bell(m,t,.026,.5)}if(b%8===7&&s===15)this.mel=motif(16,74,MAJ,8)}};
+TRACKS.lullaby={name:'子守歌「波の ゆりかご」',bpm:66,chords:[[60,64,67],[53,57,60],[55,59,62],[60,64,67]],init(){this.mel=motif(8,72,PENTA,7)},
+  play(st,t){const b=st>>4,s=st%16,c=this.chords[b%4];if(s%4===0)I.bell(c[(s/4)%3]+12,t,.024,1.6);if(s===0)I.pad(c[0]-12,t,4,.012);if(s%4===2&&Math.random()<.6){const m=this.mel[(s>>2)+(b%2)*4];if(m)I.flute(m,t,.9,.022)}}};
+TRACKS.chip8={name:'チップチューン「8ビット・サンセット」',bpm:140,chords:[[57,60,64],[53,57,60],[60,64,67],[55,59,62]],roots:[45,41,48,43],init(){this.mel=motif(16,72,[0,2,3,5,7,8,10],9)},
+  play(st,t){const b=st>>4,s=st%16,c=this.chords[b%4],r=this.roots[b%4];I.sq(c[s%3]+12,t,.07,.012);if(s%4===0)I.bass(r,t,.2,.1);if(s%8===0)I.kick(t,.14);if(s%4===2)I.hat(t,.012);
+   if(s%2===0){const m=this.mel[(s/2+(b%2)*8)%16];if(m)I.sq(m,t,.14,.03)}if(b%4===3&&s===15)this.mel=motif(16,72,[0,2,3,5,7,8,10],9)}};
+const NXT=window.NXT=(()=>{const X=NXS,D=()=>X.st(),U=()=>window.NXUI;
+const RI={N:0,R:1,SR:2,SSR:3,UR:4};
+const hsh=s=>{let h=0;for(const c of String(s))h=(h*131+c.charCodeAt(0))>>>0;return h};
+const prR=p=>p<2000?'N':p<20000?'R':p<150000?'SR':p<500000?'SSR':'UR',PRICE={N:120,R:900,SR:6000,SSR:45000,UR:400000};
+/* ---- 新しい たからもの（曲・イベント・鍵・飾り） ---- */
+const EXTRA=[];const add=t=>{t.src=t.src||'';t.p=t.p||PRICE[t.r];TRE.push(t);EXTRA.push(t)};
+SHOP.filter(i=>i.kind==='music').forEach(i=>add({id:'nmu_'+i.id,e:'📀',n:`レコード ${i.name.replace(/^[^「]*/,'')}`,r:prR(i.price*40),f:`使うと 浜辺に ${i.name} が 流れる`,use:{t:'music',track:i.track,sec:i.sec,name:i.name}}));
+[['marimba','R'],['citypop','SR'],['lullaby','R'],['chip8','SR']].forEach(([k,r])=>add({id:'nmu_'+k,e:'📀',n:`レコード ${TRACKS[k].name.replace(/^[^「]*/,'')}`,r,f:`使うと 浜辺に ${TRACKS[k].name} が 流れる（新曲）`,use:{t:'music',track:k,sec:150,name:TRACKS[k].name}}));
+const seenShow=new Set();SHOP.filter(i=>i.kind==='show').forEach(i=>{const key=i.show+'|'+i.name;if(seenShow.has(key))return;seenShow.add(key);add({id:'nev_'+i.id,e:i.ico||'🎆',n:`${i.name}の たね`,r:prR(i.price*30),f:`使うと 浜辺で「${i.name}」が はじまる`,use:{t:'event',id:i.id}})});
+[['nx_starrain','🌠','流星雨の たね','SR','空いっぱいに 流れ星が 降る'],['nx_coinstorm','🪙','黄金の 嵐の たね','SSR','金貨の 雨が 降って コインも もらえる'],['nx_aurora','🌌','極光の たね','SR','オーロラが 浜辺を つつむ'],['nx_festa','🎉','浜辺 大祭りの たね','UR','花火と 風船と 光が いっぺんに']]
+  .forEach(([k,e,n,r,f])=>add({id:'nev_'+k,e,n,r,f:`使うと ${f}（新イベント）`,use:{t:'event',id:k}}));
+ITUNLOCK.forEach(([k,p])=>add({id:'nky_'+k,e:'🗝️',n:`${ITEM[k]}の 鍵`,r:prR(p),f:`使うと ダブルアップの アイテム「${IICON[k]||''}${ITEM[k]}」が 解放される`,use:{t:'unlock',k}}));
+try{SCENE.decos().forEach(d=>add({id:'ndc_'+d.n,e:(typeof DECO_INFO!=='undefined'&&DECO_INFO[d.n]?DECO_INFO[d.n][0]:'🎁'),n:d.n,r:prR(d.c*25),f:'飾ると 浜辺に 置かれて、ときどき その 飾りの イベントが 起こる',use:{t:'deco',n:d.n}}))}catch(e){}
+/* ---- ふつうの たからものの 使い道 ---- */
+const POK=[.1,.2,.35,.6,1],DBX=[.2,.35,.5,.8,1.5],ORBP=[.15,.25,.4,.6,1];
+function useOf(t){if(t.use)return t.use;const h=hsh(t.id),c=h%100,ri=RI[t.r]||0,sub=(h>>>8)%3;
+  if(c<28)return sub===0&&ri<=1?{t:'joker'}:sub===1&&ri>=2?{t:'mul'}:{t:'pay',m:POK[ri]};
+  if(c<54)return sub===0?{t:'guard'}:{t:'dblX',m:DBX[ri]};
+  if(c<78)return{t:'offer',lv:ri+1};return{t:'orb',p:ORBP[ri]}}
+function useTxt(t){const u=useOf(t),ri=RI[t.r]||0;switch(u.t){
+  case 'music':return `🎵 ${u.name} が 流れる`;case 'event':{const it=SHOP.find(i=>i.id===u.id);return `🎆 ${it?it.name:t.n.replace(/の たね$/,'')} が はじまる`}
+  case 'unlock':return S.unlocked[u.k]?'🔓 もう 解放ずみ':`🔓 ダブルアップの アイテム「${ITEM[u.k]}」を 解放`;case 'deco':return '🏖️ 浜辺に 飾る 専用（使う＝飾る）';
+  case 'pay':return `🃏 次の 5回、役の 配当 +${Math.round(u.m*100)}%`;case 'joker':return '🃏 次に くばる 手札に ジョーカー 確定';case 'mul':return '🃏 次に 役が できたら 配当 ×2';
+  case 'guard':return '🎲 次の ダブルアップで 負けても 1回 復活';case 'dblX':return `🎲 次の ダブルアップで 勝つと さらに +${Math.round(u.m*100)}%`;
+  case 'offer':return `🌸 お供え：次の 才能 開花が 良くなる${u.lv>=5?'（虹 以上 1つ 確定）':u.lv>=4?'（金 以上 1つ 確定）':''}`;
+  case 'orb':return `🔮 ${Math.round(u.p*100)}% で 球が 生まれる（だめなら ルーレット 無料券）`}return ''}
+function canUse(t){const u=useOf(t);if(u.t==='unlock'&&S.unlocked[u.k])return false;if(u.t==='deco')return false;if((u.t==='event'||u.t==='music')&&S.phase==='busy')return false;return true}
+function useIt(t){const u=useOf(t),d=D(),B=d.buf,ri=RI[t.r]||0;if(!canUse(t)||!(S.tre[t.id]>0))return false;S.tre[t.id]--;
+  switch(u.t){
+  case 'music':{if(!S.sound){S.sound=true;try{$('snd').textContent='音: ON'}catch(e){}}startMusic(u.track,u.sec*2);try{say('musicStart',{n:2,ctx:{item:u.name},delay:800})}catch(e){}break}
+  case 'event':runEvent(u.id);break;
+  case 'unlock':S.unlocked[u.k]=1;try{sfx.fanfare(2)}catch(e){}evToast(`🔓 <b>${IICON[u.k]||''} ${ITEM[u.k]}</b> が 解放された！<br><small>これから 動物・イベント・釣り・漂着物から もらえる</small>`);break;
+  case 'pay':B.pay={n:5,m:Math.max(u.m,(B.pay&&B.pay.n>0?B.pay.m:0))};evToast(`🃏 次の 5回 配当 +${Math.round(B.pay.m*100)}%！`);break;
+  case 'joker':B.joker=(B.joker||0)+1;evToast('🃏 次の 手札に ジョーカーが 来る…！');break;
+  case 'mul':B.mul=(B.mul||0)+1;evToast('🃏 次の 役は 配当 ×2！');break;
+  case 'guard':B.guard=(B.guard||0)+1;evToast('🛡️ 次の ダブルアップは 負けても 1回 復活！');break;
+  case 'dblX':B.dblX={n:1,m:Math.max(u.m,(B.dblX&&B.dblX.n>0?B.dblX.m:0))};evToast(`🎲 次の ダブルアップで 勝つと +${Math.round(B.dblX.m*100)}%！`);break;
+  case 'offer':d.offer=Math.max(d.offer||0,u.lv);evToast(`🌸 ${t.e} ${t.n} を お供えした…<br><small>次の 才能 開花が 良くなる</small>`);break;
+  case 'orb':if(Math.random()<u.p){const r=['N','R','SR','SSR','UR'][Math.max(0,Math.min(4,ri+(Math.random()<.15?1:0)-(Math.random()<.3?1:0)))];X.give(X.mkOrb(r),`🐚 ${t.n} から 生まれた`)}else{d.free=(d.free||0)+1;evToast('🎟️ ルーレット 無料券を もらった！')}break}
+  try{sfx.chime()}catch(e){}save();ui();return true}
+/* ---- イベント ---- */
+function runEvent(id){const it=SHOP.find(i=>i.id===id);if(it){try{SCENE.show(it.show,it.sec)}catch(e){}if(it.show==='fest'){S.festUntil=Date.now()+it.sec*1000}
+   const GB={meteors:[['luck',1]],goldrain:[['pay',5]],mstorm:[['luck',5]],eclipse:[['dbl',5]],dragon:[['luck',3],['dbl',3],['pay',3]]}[it.show];if(GB){GB.forEach(([b,n])=>S.buffs[b]=(S.buffs[b]||0)+n);setTimeout(()=>{try{say('blessing',{ctx:{bless:GB.map(g=>BUFF[g[0]]).join('と')}})}catch(e){}},6000)}
+   if(it.show==='goldrain'){try{FX.rain('coin',140,{spread:240})}catch(e){}}if(it.show==='drones')window._droneTheme=it.theme||'mix';try{applyShowBoost(it)}catch(e){}try{say('sh_'+it.show,{n:2,origin:'beach',delay:1200,gap:1500})}catch(e){}evToast(`${it.ico} <b>${it.name}</b> スタート！`);save();return}
+  if(id==='nx_starrain'){for(let k=0;k<24;k++)later(()=>FX.meteor(),k*260);try{sfx.chime()}catch(e){}evToast('🌠 <b>流星雨</b>！ 願い事 し放題');S.buffs.luck=(S.buffs.luck||0)+2}
+  else if(id==='nx_coinstorm'){const g=Math.max(500,(S.bet||1)*60);try{FX.rain('coin',260,{spread:280});sfx.fanfare(1)}catch(e){}S.coins+=g;try{getCoin(g,'🪙 黄金の 嵐')}catch(e){}}
+  else if(id==='nx_aurora'){try{NX.aurora('green');later(()=>NX.aurora('rainbow'),2600);later(()=>NX.aurora('gold'),5200)}catch(e){}evToast('🌌 <b>オーロラ</b> が 浜辺を つつむ…')}
+  else if(id==='nx_festa'){try{SCENE.show(DK()>.6?'fireworks':'balloons',40)}catch(e){}try{FX.rain('coin',120,{spread:240});NX.aurora('rainbow');fxConfetti()}catch(e){}S.buffs.pay=(S.buffs.pay||0)+3;S.buffs.luck=(S.buffs.luck||0)+3;evToast('🎉 <b>浜辺 大祭り</b>！ 配当と 運が しばらく アップ')}
+  save();ui()}
+/* ---- 飾る ---- */
+const DB=[.003,.006,.01,.02,.04],MAXD=10;
+function dispBonus(){const d=D();if(!d)return 0;return d.disp.reduce((s,id)=>{const t=TRE.find(x=>x.id===id);return s+(t?DB[RI[t.r]||0]:0)},0)}
+function displayIt(t){const d=D();const u=useOf(t);if(!(S.tre[t.id]>0))return false;
+  if(u.t==='deco'){if(hasDeco(u.n)){evToast('もう 飾ってある');return false}S.tre[t.id]--;S.deco[u.n]=1;try{register();SCENE.update(S.coins);say('decoBuy',{n:2,delay:900,gap:1200,ctx:{item:u.n}})}catch(e){}
+    setTimeout(()=>{try{if(decoUse())runDeco(u.n)}catch(e){}},9000)}
+  else{if(d.disp.length>=MAXD){evToast(`飾れるのは ${MAXD}個まで`);return false}S.tre[t.id]--;d.disp.push(t.id)}
+  evToast(`🏖️ ${t.e} <b>${t.n}</b> を 浜辺に 飾った！`);save();ui();drawDisp();return true}
+function undisplay(kind,key,sell){const d=D();let t;if(kind==='d'){const i=d.disp.indexOf(key);if(i<0)return;d.disp.splice(i,1);t=TRE.find(x=>x.id===key)}else{if(!hasDeco(key))return;delete S.deco[key];try{SCENE.update(S.coins)}catch(e){}t=TRE.find(x=>x.id==='ndc_'+key)}
+  if(!t)return;if(sell){const v=sellPrice(t);S.coins+=v;try{getCoin(v,`${t.n}を 売った`)}catch(e){}}else S.tre[t.id]=(S.tre[t.id]||0)+1;save();ui();drawDisp()}
+/* 浜辺の 砂の 上に 絵文字で 並べる */
+const DL=document.createElement('div');DL.id='nxDisp';
+function drawDisp(){const w=$('window');if(!w)return;if(!DL.isConnected)w.prepend(DL);const d=D();if(!d||!d.disp.length){DL.innerHTML='';return}
+  let r;try{const g=SCENE.dbg(),wr=w.getBoundingClientRect();r={x0:g.WL-wr.left,w:g.WW,y:g.shore+16*g.k-wr.top-scrollY}}catch(e){r={x0:0,w:w.clientWidth,y:w.clientHeight*.62}}
+  DL.style.top='0';DL.style.height='100%';DL.innerHTML=d.disp.map((id,i)=>{const t=TRE.find(x=>x.id===id);if(!t)return '';const x=r.x0+r.w*(.08+.84*((i*.618+.13)%1)),y=r.y+((i*37)%3)*10;return `<i class="${RI[t.r]>=3?'hi':''}" style="left:${x}px;top:${y}px;animation-delay:${i*.3}s">${t.e}</i>`}).join('')}
+addEventListener('resize',()=>setTimeout(drawDisp,300));setTimeout(drawDisp,800);
+/* ---- 画面 ---- */
+let tf='all',selT=null;
+const TF=[['all','すべて'],['use','使える'],['deco','飾り'],['key','鍵'],['mus','曲・イベント']];
+function treList(){const UI=U();const own=TRE.filter(t=>S.tre[t.id]>0).filter(t=>{const u=useOf(t);return tf==='all'||(tf==='deco'&&u.t==='deco')||(tf==='key'&&u.t==='unlock')||(tf==='mus'&&(u.t==='music'||u.t==='event'))||(tf==='use'&&canUse(t))}).sort((a,b)=>(RI[b.r]-RI[a.r])||a.n.localeCompare(b.n));
+  return `<p class="nxNote">🐚 たからものの 役目は <b>売る・使う・飾る</b>。使うと 曲が 流れたり、イベントが 起きたり、ポーカーや ダブルアップが 有利に なったりする。${D().offer?`<br>🌸 お供え中（次の 開花が 良くなる）`:''}</p>
+  <div class="nxFilter" style="flex-wrap:wrap">${TF.map(([k,n])=>`<button class="${tf===k?'on':''}" data-a="tf" data-t="${k}">${n}</button>`).join('')}</div>
+  ${own.length?`<div class="nxGrid">${own.map(t=>`<div class="nxCard" data-a="treD" data-id="${t.id}"><span style="font-size:1.8rem">${t.e}</span><b>${UI.esc(t.n)}</b><small>${t.r} ・ ×${S.tre[t.id]}</small></div>`).join('')}</div>`:'<div class="nxEmpty">たからものが ない。浜辺の イベントや 釣り、動物から 手に 入る。</div>'}
+  <div class="nxBtns"><button class="nxB wide" data-a="zukan">📖 たからもの 図鑑</button></div>`}
+function treDetail(id){const UI=U(),t=TRE.find(x=>x.id===id);if(!t||!(S.tre[t.id]>0)){UI.M.hidden=true;UI.render();return}const u=useOf(t),ok=canUse(t);
+  UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3rem">${t.e}</span><div><h3>${UI.esc(t.n)}</h3><div class="nxTags"><span class="nxTag">${t.r}</span><span class="nxTag">×${S.tre[t.id]}</span></div></div></div>
+   <div class="nxSec"><small>${UI.esc(t.f||'')}</small></div><div class="nxSec"><h4>✨ 使うと</h4>${useTxt(t)}</div>
+   <div class="nxBtns">${u.t==='deco'?'':`<button class="nxB go" data-a="treUse" data-id="${t.id}" ${ok?'':'disabled'}>✨ 使う</button>`}<button class="nxB mint" data-a="treDisp" data-id="${t.id}">🏖️ 飾る<small>${u.t==='deco'?'浜辺に 置く':`配当 +${(DB[RI[t.r]||0]*100).toFixed(1)}%`}</small></button><button class="nxB red" data-a="treSell" data-id="${t.id}">売る（${UI.fc(sellPrice(t))}枚）</button></div></div>`;UI.M.hidden=false}
+function dispList(){const UI=U(),d=D();const decos=Object.keys(S.deco||{}).filter(n=>S.deco[n]);
+  const rows=d.disp.map(id=>{const t=TRE.find(x=>x.id===id);return t?{k:'d',key:id,t}:null}).filter(Boolean).concat(decos.map(n=>({k:'s',key:n,t:TRE.find(x=>x.id==='ndc_'+n)||{e:'🎁',n,r:'N',p:100}})));
+  return `<p class="nxNote">🏖️ 浜辺に 飾った もの。たからものは 1つ ごとに 配当が 少し 上がる（${d.disp.length}/${MAXD}、いま +${(dispBonus()*100).toFixed(1)}%）。飾りの アイテムは 浜辺に 置かれて ときどき イベントが 起こる。</p>`+
+   (rows.length?rows.map(r=>`<div class="nxRow" style="cursor:default"><span style="font-size:1.8rem">${r.t.e}</span><div class="nxInfo"><b>${UI.esc(r.t.n)}</b><small>${r.k==='d'?`配当 +${(DB[RI[r.t.r]||0]*100).toFixed(1)}%`:'浜辺の 飾り'}</small></div><button class="nxB" style="flex:0 0 auto" data-a="undisp" data-k="${r.k}" data-key="${UI.esc(r.key)}">片付ける</button><button class="nxB red" style="flex:0 0 auto" data-a="dispSell" data-k="${r.k}" data-key="${UI.esc(r.key)}">売る</button></div>`).join(''):'<div class="nxEmpty">まだ 何も 飾っていない。たからものの 画面から 飾れる。</div>')}
+function act(a,b){const UI=U();switch(a){
+  case 'tf':tf=b.dataset.t;return UI.render();case 'treD':return treDetail(b.dataset.id);
+  case 'treUse':{const t=TRE.find(x=>x.id===b.dataset.id);if(t&&useIt(t)){UI.M.hidden=true;UI.render()}return}
+  case 'treDisp':{const t=TRE.find(x=>x.id===b.dataset.id);if(t&&displayIt(t)){UI.M.hidden=true;UI.render()}return}
+  case 'treSell':{const t=TRE.find(x=>x.id===b.dataset.id);if(!t||!(S.tre[t.id]>0))return;const v=sellPrice(t);S.tre[t.id]--;S.coins+=v;save();ui();try{getCoin(v,`${t.n}を 売った`)}catch(e){}return S.tre[t.id]>0?treDetail(t.id):(UI.M.hidden=true,UI.render())}
+  case 'undisp':undisplay(b.dataset.k,b.dataset.key,false);return UI.render();
+  case 'dispSell':if(!b.dataset.arm){b.dataset.arm=1;b.textContent='本当に？';return}undisplay(b.dataset.k,b.dataset.key,true);return UI.render();
+  case 'zukan':{UI.close();try{zukanOpen()}catch(e){try{S.shopTab='sell';$('shop').hidden=false;buildShop();const z=document.querySelector('#shop [data-zk],#shop .zkOpen');if(z)z.click()}catch(er){}}return}}}
+return{useOf,useTxt,canUse,useIt,runEvent,dispBonus,displayIt,undisplay,drawDisp,treList,treDetail,dispList,act,EXTRA}})();
+
+/* ========== v250 新システム：ショップ（買うだけ）・福袋・たまに 来る お店 ========== */
+const NXSHOP=window.NXSHOP=(()=>{const X=NXS,D=()=>X.st(),U=()=>NXUI;
+const pk=a=>a[Math.random()*a.length|0];
+const HOLYP=250000,FUKU=[['s','🛍️','小さな 福袋',5000,1,0],['m','🎁','福袋',50000,2,.5],['l','💝','大きな 福袋',500000,3,1.2]];
+/* ---- 品物 ---- */
+function orbItem(r,o){const ob=X.mkOrb(r,o||{});const p=Math.round(X.OPRICE[r]*(ob.kind==='n'?1:1.5));return{type:'orb',o:ob,p}}
+function eqItem(r,tr){const e=X.mkEq(r);if(tr)e.tr=tr;return{type:'eq',e,p:X.EPRICE[r]}}
+function roll(){const L=[];for(let i=0;i<3;i++){const r=X.rollR(.15),sp=Math.random();L.push(orbItem(r,sp<.15?{kind:'sup'}:sp<.22?{kind:'dng'}:{}))}for(let i=0;i<2;i++)L.push(eqItem(X.rollR(.15)));L.push({type:'holy',p:HOLYP});return L}
+function stock(){const d=D(),g=S.gday||0;if(!d.shop||d.shop.day!==g){d.shop={day:g,items:roll()};save()}return d.shop.items}
+function itemH(it,i,src){const UI=U();let ico,nm,sub;
+  if(it.type==='orb'){ico=UI.orbH(it.o);nm=`${UI.esc(X.orbName(it.o))} ${UI.rtag(it.o.r)}`;sub=it.o.kind==='sup'?X.SUP[it.o.s][2](1,it.o):it.o.kind==='dng'?`${X.DNG[it.o.d][2]} ／ ✖ ${X.DNG[it.o.d][3]}`:it.o.kind==='cur'&&typeof CURSE!=='undefined'?`◎ ${CURSE[it.o.c].good} ／ ✖ ${CURSE[it.o.c].bad}`:(EQK[it.o.k]?EQK[it.o.k][2](X.baseV(it.o)):'')}
+  else if(it.type==='eq'){const T=X.TRT[it.e.tr];ico=`<span class="nxOrb" style="--rc:${X.RCOL[it.e.r]};background:#fff7e0">${X.eqIcon(it.e)}</span>`;nm=`${UI.esc(X.eqName(it.e))} ${UI.rtag(it.e.r)}`;sub=`球枠 ${it.e.s.length} ・ ${T[0]} ${T[1]}：${T[2]}`}
+  else if(it.type==='tre'){ico=`<span style="font-size:1.9rem">${it.t.e}</span>`;nm=`${UI.esc(it.t.n)} <span class="nxTag">${it.t.r}</span>`;sub=(window.NXT?NXT.useTxt(it.t):'')}
+  else if(it.type==='holy'){ico='<span style="font-size:1.9rem">🕊️</span>';nm='清めの 羽根';sub=`呪いの 球の 呪いを 解く（いま ${D().holy||0}本）`}
+  else{ico=`<span style="font-size:1.9rem">${it.e}</span>`;nm=it.n;sub=it.d}
+  const can=!it.sold&&S.coins>=it.p&&S.phase!=='busy';
+  return `<div class="nxRow" style="cursor:default${it.sold?';opacity:.5':''}">${ico}<div class="nxInfo"><b>${nm}</b><small>${sub}</small></div><button class="nxB go" style="flex:0 0 auto;min-width:86px" data-a="buy" data-src="${src}" data-i="${i}" ${can?'':'disabled'}>${it.sold?'売り切れ':U().fc(it.p)+'枚'}</button></div>`}
+function fukuItems(){return FUKU.map(([k,e,n,p,c])=>({type:'fuku',k,e,n,p,d:`中身は おたのしみ（${c}つ）：球・装備・たからもの…`}))}
+/* ---- ショップ画面（古い ショップの 中身を 差しかえ） ---- */
+function shopHTML(){const L=stock(),F=fukuItems();const vis=window.NXVIS&&NXVIS.cur();
+  return `<div class="spanel nxShop" style="color:#4a2a0a"><p class="nxNote">🛒 ショップは <b>買うだけ</b>。品ぞろえは 毎日 かわる。持ち物の 確認・育成・売却は <button class="nxB mint" style="display:inline-block;min-height:0;padding:2px 8px;font-size:.72rem" data-a="openItems">🎒 アイテム</button> から。${vis?`<br>✨ いま 浜辺に <b>${vis.who[0]} ${vis.who[1]}</b> が 来ている！`:''}</p>
+   <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🔮 球</h3>${L.map((it,i)=>it.type==='orb'?itemH(it,i,'s'):'').join('')}
+   <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🎒 装備</h3>${L.map((it,i)=>it.type==='eq'?itemH(it,i,'s'):'').join('')}
+   <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🕊️ 特別な もの</h3>${L.map((it,i)=>it.type==='holy'?itemH(it,i,'s'):'').join('')}
+   <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🛍️ 福袋</h3>${F.map((it,i)=>itemH(it,i,'f')).join('')}</div>`}
+{const _bs=buildShop;buildShop=function(){if(!['music','show','deco','fuku'].includes(S.shopTab))S.shopTab='music';const r=_bs.apply(this,arguments);try{const B=$('shopBody');if(!B)return r;
+   B.querySelectorAll('.stabsW,.spanel,.sinv').forEach(x=>x.remove());const g=B.querySelector('.gintro');if(g)g.innerHTML='🛒 <b>浜辺の ショップ</b> ── 今日の 品ぞろえ';B.insertAdjacentHTML('beforeend',shopHTML())}catch(e){console.error(e)}return r}}
+function openFuku(k,big){const F=big?['x','🎁','特大 福袋',3000000,4,2]:FUKU.find(f=>f[0]===k);const[,,n,,c,bo]=F;const got=[];
+  for(let i=0;i<c;i++){const r=Math.random();if(r<.45){const sp=Math.random();got.push(X.give(X.mkOrb(X.rollR(bo),sp<.1?{kind:'sup'}:sp<.16?{kind:'dng'}:sp<.2&&bo>=1?{kind:'cur'}:{}),`${n}から`))}
+    else if(r<.7)got.push(X.giveEq(X.mkEq(X.rollR(bo)),`${n}から`));else{const t=rollTre(bo*1.5);if(t)addTre(t,`${n}から`)}}save();ui()}
+function buy(src,i){const L=src==='s'?stock():src==='f'?fukuItems():(window.NXVIS?NXVIS.items():[]);const it=L[+i];if(!it||it.sold||S.coins<it.p||S.phase==='busy')return false;S.coins-=it.p;
+  if(it.type==='orb')X.give(it.o,'🛒 買った');else if(it.type==='eq')X.giveEq(it.e,'🛒 買った');else if(it.type==='holy'){D().holy=(D().holy||0)+1;evToast('🕊️ <b>清めの 羽根</b> を 買った！')}
+  else if(it.type==='tre')addTre(it.t,'🛒 買った');else if(it.type==='fuku'){openFuku(it.k,it.k==='x')}
+  if(it.type!=='fuku')it.sold=1;try{sfx.coin()}catch(e){}X.apply();save();ui();return true}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#shop [data-a]');if(!b)return;e.stopPropagation();e.preventDefault();if(b.disabled)return;
+  if(b.dataset.a==='openItems'){$('shop').hidden=true;NXUI.open('eq');return}if(b.dataset.a==='buy'){if(buy(b.dataset.src,b.dataset.i))buildShop()}},true);
+/* アイテム画面の 中の 来訪者の 店の ボタン */
+const _act=NXT.act;NXT.act=function(a,b){if(a==='buy'){if(buy(b.dataset.src,b.dataset.i)&&window.NXVIS)NXVIS.openShop();return}if(a==='visOpen'){return NXVIS.openShop()}return _act.apply(this,arguments)};
+return{stock,buy,itemH,openFuku}})();
+/* ---- たまに 来る お店（現実の 時間で 1日 2〜3回・約20分） ---- */
+const NXVIS=window.NXVIS=(()=>{const X=NXS,D=()=>X.st(),U=()=>NXUI;const pk=a=>a[Math.random()*a.length|0];
+const WHO={ufo:['🛸','UFO','宇宙から 来た 不思議な お店'],pirate:['🏴‍☠️','海賊船','あやしい 品物ばかり'],mermaid:['🧜','人魚の 行商','海の 底の 宝もの'],merchant:['🐫','旅の 商人','めずらしい 装備と 特大 福袋']};
+const STAY=20*60000;
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`};
+function sched(){const d=D();if(d.vis&&d.vis.date===today())return d.vis;const now=Date.now(),end=new Date();end.setHours(23,30,0,0);const st=Math.max(now+3*60000,new Date().setHours(9,0,0,0));
+  const n=2+(Math.random()<.5?1:0),ks=Object.keys(WHO).sort(()=>Math.random()-.5),list=[];if(end-st>STAY){for(let i=0;i<n;i++)list.push({t:st+Math.random()*(end-st-STAY),k:ks[i%ks.length]});list.sort((a,b)=>a.t-b.t)}
+  d.vis={date:today(),list,seen:{}};save();return d.vis}
+function cur(){const v=sched(),now=Date.now();const e=v.list.find(x=>now>=x.t&&now<x.t+STAY);return e?Object.assign(e,{who:WHO[e.k]}):null}
+function mkStock(k){const T=k==='ufo'?[()=>{const it={type:'orb',o:X.mkOrb(pk(['SR','SSR','UR']),{k:pk((typeof STARK!=='undefined'?STARK:[]).filter(q=>EQK[q]).concat(['pay']))})};it.p=X.OPRICE[it.o.r]*2;return it},()=>{const it={type:'orb',o:X.mkOrb(pk(['SSR','UR']),{k:pk((typeof STARK!=='undefined'?STARK:[]).filter(q=>EQK[q]).concat(['pay']))})};it.p=X.OPRICE[it.o.r]*2;return it},()=>{const t=rollTre(3);return{type:'tre',t,p:Math.round(t.p*3)}}]
+  :k==='pirate'?[()=>({type:'orb',o:X.mkOrb(pk(['SR','SSR','UR']),{kind:'cur'}),p:0}),()=>({type:'orb',o:X.mkOrb(pk(['R','SR','SSR']),{kind:'dng'}),p:0}),()=>{const e=X.mkEq(pk(['UR','LG']));return{type:'eq',e,p:X.EPRICE[e.r]}}]
+  :k==='mermaid'?[()=>({type:'orb',o:X.mkOrb(pk(['SR','SSR']),{kind:'sup'}),p:0}),()=>({type:'orb',o:X.mkOrb(pk(['R','SR','SSR']),{kind:'sup'}),p:0}),()=>{const t=rollTre(4);return{type:'tre',t,p:Math.round(t.p*2.5)}},()=>({type:'holy',p:200000})]
+  :[()=>{const e=X.mkEq(pk(['SR','SSR','UR']));e.tr=pk(['t_lone','t_mid','t_safe','t_sup','t_spin','t_night']);return{type:'eq',e,p:X.EPRICE[e.r]*1.5}},()=>{const e=X.mkEq(pk(['SSR','UR']));e.tr=pk(['t_lone','t_mid','t_safe','t_sup']);return{type:'eq',e,p:X.EPRICE[e.r]*1.5}},()=>({type:'fuku',k:'x',e:'🎁',n:'特大 福袋',p:3000000,d:'中身は おたのしみ（4つ）：とても いい ものが 出やすい'})];
+  return T.map(f=>{const it=f();if(it.type==='orb'&&!it.p)it.p=Math.round(X.OPRICE[it.o.r]*1.8);it.p=Math.round(it.p);return it})}
+function items(){const e=cur();if(!e)return[];if(!e.stock){e.stock=mkStock(e.k);save()}return e.stock}
+function openShop(){const e=cur(),UI=U();if(!e){evToast('もう 帰って しまった…');UI.M.hidden=true;return}const L=items(),left=Math.max(1,Math.round((e.t+STAY-Date.now())/60000));if(UI.P.hidden){UI.open('eq')}
+  UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3rem">${e.who[0]}</span><div><h3>${e.who[1]}の お店</h3><div class="nxTags"><span class="nxTag">${e.who[2]}</span><span class="nxTag" style="background:#ffe0e4;color:#8a1a10">あと 約${left}分で 帰る</span></div></div></div>
+   <div class="nxSec">${L.map((it,i)=>NXSHOP.itemH(it,i,'v')).join('')}</div><p class="nxNote">ここで しか 買えない ものばかり。🪙 ${UI.fc(S.coins)}枚</p></div>`;UI.M.hidden=false}
+/* 浜辺の アイコンと お知らせ */
+let btn=null,lastK=null;
+function tick(){try{const e=cur(),w=$('window');if(!w)return;if(e){if(!btn){btn=document.createElement('button');btn.id='nxVis';btn.type='button';btn.addEventListener('click',ev=>{ev.stopPropagation();openShop()});w.appendChild(btn)}
+    const left=Math.max(1,Math.round((e.t+STAY-Date.now())/60000));btn.innerHTML=`<b>${e.who[0]}</b>${e.who[1]}<small style="font-size:.55rem">あと${left}分</small>`;
+    const v=D().vis;if(!v.seen[e.t]){v.seen[e.t]=1;save();try{say('nxVis_'+e.k,{n:2,delay:300,gap:1400})}catch(er){}setTimeout(()=>evToast(`${e.who[0]} <b>${e.who[1]}</b> が 浜辺に やって来た！<br><small>${e.who[2]} ・ 約20分で 帰る（右上の アイコンから）</small>`),1200);try{sfx.chime()}catch(er){}}}
+  else if(btn){btn.remove();btn=null}}catch(er){}}
+Object.assign(MUMS,{nxVis_ufo:['なんか 光ってる！？','UFO や！','宇宙人の お店…？','ピコピコ いうてる'],nxVis_pirate:['海賊船 来た！','あやしい 船…','ヨーホー！','呪われた 品が ありそう'],
+  nxVis_mermaid:['人魚さん！？','海の 底の 宝もの…','きれいな 歌声','人魚の お店や'],nxVis_merchant:['旅の 商人さん','ラクダ！？','めずらしい 装備 あるかな','特大 福袋！？']});
+Object.assign(EMO,{nxVis_ufo:['🛸'],nxVis_pirate:['🏴‍☠️'],nxVis_mermaid:['🧜'],nxVis_merchant:['🐫']});
+setInterval(tick,5000);setTimeout(tick,1500);
+return{cur,items,openShop,tick,sched}})();
+/* 古い ショップの 入荷（音楽・海辺など）は もう ない */
+arrDeliver=function(){return null};
+setInterval(()=>{try{const b=$('nxBtn'),sb=$('shopBtn');if(b&&sb)b.style.right=(sb.offsetParent&&getComputedStyle(sb).display!=='none'?sb.offsetWidth+6:0)+'px'}catch(e){}},1500);
+if(NXS.st().fresh){delete NXS.st().fresh;save();setTimeout(()=>{try{evToast('🎒 <b>装備と 球が 新しく なりました！</b><br><small>右上の「🎒 アイテム」から 球を 育てたり、装備に つけたり できる。ショップは 買うだけに なった。</small>')}catch(e){}},4500)}
+/* あそびかたの 説明を 新しい 仕組みに */
+try{const ul=document.querySelector('#rules ul:last-of-type');if(ul){[...ul.querySelectorAll('li')].forEach(li=>{const t=(li.querySelector('b')||{}).textContent||'';if(/装備|素材の 力|球（能力）|属性と 共鳴/.test(t))li.remove()});
+  ul.insertAdjacentHTML('beforeend','<li><b>🎒 アイテム</b>：右上の「🎒 アイテム」で 装備・球・たからもの・飾った ものを 見て、育てたり 付けはずし したり 売ったり できる。</li>'+
+   '<li><b>🔮 球</b>：コインで ルーレットを 回して 育てる（+1〜🌈+10）。Lv が 上がると ときどき 🌸 才能が 開花（3つから 1つ。白・金・虹・黒）。最大 Lv で 同じ 能力の 球と 合わせると ⬆️ 進化して レア度が 上がる。</li>'+
+   '<li><b>🎒 装備</b>：球を はめる 器。球枠の 数と 特性を 持つ。同時に 3つまで。球は 左から 並び、となり・真ん中・はしで 効き方が 変わる。</li>'+
+   '<li><b>🤝 ⚠️ 🩸 特別な 球</b>：サポート球は 仲間を 強くする。危険な 球は とても 強いけど 代償が ある。呪いの 球は 呪いの 力と 代償を 持ち、🕊️ 清めの 羽根で 解ける。</li>'+
+   '<li><b>🐚 たからもの</b>：売る・使う・飾る。使うと 曲が 流れる・イベント・アイテムの 解放・ポーカーや ダブルアップが 有利に・才能の お供え・球が 生まれる など。飾ると 浜辺に 置かれる。</li>'+
+   '<li><b>🛸 来訪者の お店</b>：1日に 2〜3回、UFO・海賊船・人魚・旅の 商人が 約20分 やって来て、そこでしか 買えない ものを 売る。</li>')}}catch(e){}
+
+</script>
+<!--NXJS-END-->
 </body></html>
