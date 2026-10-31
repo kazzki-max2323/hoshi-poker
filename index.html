@@ -147,17 +147,30 @@ html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.
 .nxFilter button{border:1.5px solid #d9a35a;background:#fff;border-radius:999px;padding:3px 10px;font-size:.72rem;font-weight:800;color:#7a4a10;cursor:pointer}
 .nxFilter button.on{background:#7a4a10;color:#fff}
 /* ルーレット */
-.nxWheelW{position:relative;width:min(260px,70vw);aspect-ratio:1;margin:8px auto 4px}
-.nxWheel{position:absolute;inset:0;border-radius:50%;border:6px solid #4a2a0a;box-shadow:0 0 0 4px #ffd23f,0 6px 18px rgba(0,0,0,.3);transition:transform 1.4s cubic-bezier(.12,.75,.2,1)}
-.nxWheel span{position:absolute;left:50%;top:50%;font-family:var(--pixel);font-size:1rem;color:#fff;-webkit-text-stroke:2px #3a1a00;paint-order:stroke fill;white-space:nowrap}
-.nxPin{position:absolute;left:50%;top:-12px;transform:translateX(-50%);width:0;height:0;border:12px solid transparent;border-top:22px solid #e2475a;filter:drop-shadow(0 2px 0 #6a0f20);z-index:2}
-.nxHub{position:absolute;left:50%;top:50%;width:22%;height:22%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7c8,#ffd23f 50%,#b8860b);border:3px solid #4a2a0a;z-index:2;display:grid;place-items:center;font-size:1.2rem}
+.nxWheelW{position:relative;width:min(270px,72vw);aspect-ratio:1;margin:14px auto 6px;container-type:inline-size}
+.nxBulbs{position:absolute;inset:-4%;border-radius:50%;background:radial-gradient(circle,#5a2a0a 66%,#3a1a00 67%,#7a4a10 71%,#3a1a00 72%);box-shadow:0 8px 22px rgba(0,0,0,.35),0 0 0 3px #ffd23f}
+.nxBulbs i{position:absolute;left:50%;top:50%;width:4.2cqw;height:4.2cqw;margin:-2.1cqw;border-radius:50%;background:#fff3c4;box-shadow:0 0 6px #ffd23f}
+.nxBulbs i:nth-child(odd){background:#ffb347}
+.nxWheelW.nxSpn .nxBulbs i{animation:nxBulb .24s steps(2) infinite}.nxWheelW.nxSpn .nxBulbs i:nth-child(odd){animation-delay:.12s}
+@keyframes nxBulb{50%{background:#5a3a10;box-shadow:none}}
+.nxWheelW.nxHit .nxBulbs i{animation:nxBulb .16s steps(2) 6}.nxWheelW.nxHitB .nxBulbs i{animation:nxBulbR .2s steps(2) 12}
+@keyframes nxBulbR{0%{background:#ff5c8a;box-shadow:0 0 10px #ff5c8a}50%{background:#55e0b4;box-shadow:0 0 10px #55e0b4}}
+.nxWheel{position:absolute;inset:4%;border-radius:50%;border:1.6cqw solid #fff3c4;box-shadow:inset 0 0 0 1cqw rgba(0,0,0,.18),inset 0 0 20px rgba(0,0,0,.25);will-change:transform}
+.nxWlines{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.85) 0 .6deg,transparent .6deg 22.5deg)}
+.nxWheel::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.45),transparent 45%)}
+.nxWl{position:absolute;left:50%;top:50%;width:14cqw;margin-left:-7cqw;margin-top:-4cqw;text-align:center;font-family:var(--pixel);font-size:6.2cqw;line-height:8cqw;color:#fff;-webkit-text-stroke:.9cqw #3a1a00;paint-order:stroke fill;white-space:nowrap}
+.nxWl.hot{font-size:6.8cqw;color:#fffbe0}
+.nxPin{position:absolute;left:50%;top:-5%;width:12cqw;height:15cqw;margin-left:-6cqw;z-index:3;transform-origin:50% 20%;background:linear-gradient(#ff6b7d,#d01e3a);clip-path:polygon(50% 100%,0 25%,15% 0,85% 0,100% 25%);filter:drop-shadow(0 2px 0 #6a0f20)}
+.nxPin.tick{animation:nxTick .12s ease-out}@keyframes nxTick{40%{transform:rotate(-16deg)}}
+.nxHub{position:absolute;left:50%;top:50%;width:24%;height:24%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7c8,#ffd23f 50%,#b8860b);border:1.4cqw solid #4a2a0a;z-index:2;display:grid;place-items:center;font-size:9cqw;box-shadow:0 3px 8px rgba(0,0,0,.35)}
+.nxHub.nxHw{animation:nxHub .5s cubic-bezier(.2,1.8,.4,1)}@keyframes nxHub{40%{transform:translate(-50%,-50%) scale(1.3)}}
+.nxRes.nxPop{animation:bwpop .35s cubic-bezier(.2,1.8,.4,1)}
 .nxRes{text-align:center;font-family:var(--pixel);font-size:1.6rem;min-height:2.2rem;color:#b8500a}
-.nxRes.big{color:#e2265a;animation:bwpop .5s cubic-bezier(.2,1.8,.4,1)}
-.nxRes.rb{background:linear-gradient(90deg,#ff5c8a,#ffb347,#55e0b4,#3ea0ff,#c48bff);-webkit-background-clip:text;background-clip:text;color:transparent;animation:bwpop .5s cubic-bezier(.2,1.8,.4,1)}
+.nxRes.nxBig{color:#e2265a;animation:bwpop .5s cubic-bezier(.2,1.8,.4,1)}
+.nxRes.nxRb{background:linear-gradient(90deg,#ff5c8a,#ffb347,#55e0b4,#3ea0ff,#c48bff);-webkit-background-clip:text;background-clip:text;color:transparent;animation:bwpop .5s cubic-bezier(.2,1.8,.4,1)}
 .nxTally{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:4px 0}
 .nxTally i{font-style:normal;font-family:var(--pixel);font-size:.78rem;background:#fff1d0;border-radius:8px;padding:1px 6px}
-.nxTally i.b{background:#ffd23f}.nxTally i.rb{background:linear-gradient(90deg,#ff9fc4,#ffe066,#9ff5d6)}
+.nxTally i.nxTb{background:#ffd23f}.nxTally i.nxTr{background:linear-gradient(90deg,#ff9fc4,#ffe066,#9ff5d6)}
 /* 才能の 開花 */
 .nxBloom{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .nxBl{border:3px solid #ddd;border-radius:14px;padding:10px;background:#fff;cursor:pointer;text-align:left;font-family:var(--round);color:#4a2a0a;animation:bwpop .4s cubic-bezier(.2,1.5,.4,1) both}
@@ -12444,21 +12457,32 @@ function eqChoose(oid){const L=D().eqs.slice().sort((a,b)=>X.isOn(b)-X.isOn(a));
 function evoPicker(oid){const o=X.oGet(oid),L=X.evoFodder(o);M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="back2">✕</button><h3>⬆️ 合わせる 球を えらぶ</h3><p class="nxNote">えらんだ 球は なくなる。進化すると レア度が 1つ 上がって、最大 Lv が 伸びる。</p>
   ${L.map(f=>`<div class="nxRow" data-a="evoGo" data-id="${f.id}">${orbH(f)}<div class="nxInfo"><b>${esc(X.orbName(f))} ${rtag(f.r)}</b><small>Lv${f.lv}${X.eqOf(f)?' ・ 装備中（はずれる）':''}${f.tal.length?' ・ 才能 '+f.tal.length+'つ（消える）':''}</small></div></div>`).join('')}</div>`}
 /* ---- ルーレット ---- */
-const SEGC=['#ff9a3c','#55b8ff','#3fdc9a','#ffd23f','#ff5c8a'];
-function wheelH(){let a=0;const tot=X.SEG.reduce((s,q)=>s+q[1],0);const parts=[],labels=[];X.SEG.forEach(([v,p],i)=>{const d=p/tot*360;parts.push(`${i===4?'#fff':SEGC[i]} ${a}deg ${a+d}deg`);if(d>12){const mid=(a+d/2)*Math.PI/180,rr=36;labels.push(`<span style="left:${50+Math.sin(mid)*rr}%;top:${50-Math.cos(mid)*rr}%;transform:translate(-50%,-50%)">${v>=5?'★':''}+${v}</span>`)}a+=d});
-  return `<div class="nxWheelW"><div class="nxPin"></div><div class="nxWheel" style="background:conic-gradient(${parts.join(',')})">${labels.join('')}</div><div class="nxHub">🎰</div></div>`}
-function segAngle(i){const tot=X.SEG.reduce((s,q)=>s+q[1],0);let a=0;for(let k=0;k<i;k++)a+=X.SEG[k][1]/tot*360;const d=X.SEG[i][1]/tot*360;return a+d*(.2+Math.random()*.6)}
-let spinning=false;
-async function spin(oid,n){const o=X.oGet(oid);if(!o||spinning)return;spinning=true;const d=D();let rot=0,blooms=0,total=0;const tally=[];
-  M.innerHTML=`<div class="nxDet" style="text-align:center"><h3>🎰 ${esc(X.orbName(o))} を 育てる</h3>${wheelH()}<div class="nxRes" id="nxRes">…</div><div class="nxTally" id="nxTally"></div><div id="nxLvT" style="font-size:.8rem;color:#8a6a40">Lv${o.lv}</div><button class="nxB wide" id="nxSpinOk" data-a="spinDone" data-id="${oid}" style="margin-top:8px" disabled>OK</button></div>`;M.hidden=false;
-  const W=M.querySelector('.nxWheel'),R=M.querySelector('#nxRes'),TL=M.querySelector('#nxTally');
-  for(let k=0;k<n;k++){if(o.lv>=X.maxLv(o))break;let paid=false;if(d.free>0&&n===1){d.free--;paid=true}else{const c=X.spinCost(o);if(S.coins<c)break;S.coins-=c;paid=true}
-    const seg=X.rollSeg(o);const fast=n>1;rot+=(fast?720:1440)+(360-segAngle(seg))-(rot%360);W.style.transition=`transform ${fast?.55:1.5}s cubic-bezier(.12,.75,.2,1)`;W.style.transform=`rotate(${rot}deg)`;
-    try{for(let t=0;t<(fast?4:9);t++)tone(900+t*40,.03,'square',.015,t*(fast?.1:.13))}catch(e){}
-    await new Promise(r=>setTimeout(r,fast?600:1550));const g=X.grow(o,seg);blooms+=g.bl;total+=g.up;const v=X.SEG[seg][0];
-    R.className='nxRes'+(v>=10?' rb':v>=5?' big':'');R.textContent=v>=10?'🌈 超大当たり +10！':v>=5?'★ 大当たり +5！':`+${v}`;TL.insertAdjacentHTML('beforeend',`<i class="${v>=10?'rb':v>=5?'b':''}">+${v}</i>`);M.querySelector('#nxLvT').textContent=`Lv${o.lv}${g.bl?' 🌸':''}`;
-    try{if(v>=10){sfx.fanfare(2);FX.burst(innerWidth/2,innerHeight*.45,90,'spark',{colors:['#ff5c8a','#ffd23f','#55e0b4','#7aa2ff','#fff'],speed:9,g:.03})}else if(v>=5){sfx.big();FX.burst(innerWidth/2,innerHeight*.45,50,'spark',{colors:['#ffd23f','#fff'],speed:7,g:.03})}else tone(1319,.12,'triangle',.03)}catch(e){}
-    ui();if(!fast&&k<n-1)await new Promise(r=>setTimeout(r,200))}
+const WSL=[1,2,1,3,1,2,1,5,1,2,1,3,1,2,1,10],WA=360/WSL.length;
+const WCOL={1:['#ff9a3c','#ffb35c'],2:['#3f9cff','#3f9cff'],3:['#2fcf8c','#2fcf8c'],5:['#ffd23f','#ffd23f'],10:['#ff4fa0','#ff4fa0']};
+function wheelH(){let n1=0;const parts=WSL.map((v,i)=>{const c=v===1?WCOL[1][(n1++)%2]:WCOL[v][0];return `${c} ${i*WA}deg ${(i+1)*WA}deg`});
+  const labels=WSL.map((v,i)=>{const ang=i*WA+WA/2;return `<span class="nxWl${v>=5?' hot':''}" style="transform:rotate(${ang}deg) translateY(-37cqw) rotate(0deg)">${v===10?'🌈10':v===5?'★5':'+'+v}</span>`}).join('');
+  const bulbs=Array.from({length:24},(_,i)=>`<i style="transform:rotate(${i*15}deg) translateY(-48.5cqw)"></i>`).join('');
+  return `<div class="nxWheelW" id="nxWW"><div class="nxBulbs">${bulbs}</div><div class="nxPin" id="nxPin"></div><div class="nxWheel" style="background:conic-gradient(${parts.join(',')})"><div class="nxWlines"></div>${labels}</div><div class="nxHub" id="nxHub">🎰</div></div>`}
+let spinning=false,skipSpin=false;
+function spinTo(W,from,to,dur){return new Promise(res=>{const t0=performance.now(),pin=M.querySelector('#nxPin');let lastS=Math.floor(from/WA);
+  const ease=x=>{const c=1-x;return 1-c*c*c*c};
+  const f=now=>{let x=Math.min(1,(now-t0)/dur);if(skipSpin)x=1;const a=from+(to-from)*ease(x);W.style.transform=`rotate(${a}deg)`;
+    const sI=Math.floor(a/WA);if(sI!==lastS){lastS=sI;try{tone(1500-x*500,.025,'square',.012)}catch(e){}if(pin){pin.classList.remove('tick');void pin.offsetWidth;pin.classList.add('tick')}}
+    if(x<1)requestAnimationFrame(f);else res(a)};requestAnimationFrame(f)})}
+async function spin(oid,n){const o=X.oGet(oid);if(!o||spinning)return;spinning=true;skipSpin=false;const d=D();let rot=0,blooms=0,total=0;
+  M.innerHTML=`<div class="nxDet nxSpinBox" style="text-align:center"><h3>🎰 ${esc(X.orbName(o))} を 育てる</h3>${wheelH()}<div class="nxRes" id="nxRes">${n>1?'10回 まわすよ…':'まわれ〜！'}</div><div class="nxTally" id="nxTally"></div><div id="nxLvT" style="font-size:.8rem;color:#8a6a40">Lv${o.lv}</div><div style="font-size:.66rem;color:#a08060">タップで 早送り</div><button class="nxB wide" id="nxSpinOk" data-a="spinDone" data-id="${oid}" style="margin-top:8px" disabled>OK</button></div>`;M.hidden=false;
+  const WW=M.querySelector('#nxWW'),W=M.querySelector('.nxWheel'),R=M.querySelector('#nxRes'),TL=M.querySelector('#nxTally'),hub=M.querySelector('#nxHub');
+  M.querySelector('.nxSpinBox').addEventListener('click',e=>{if(spinning&&!e.target.closest('#nxSpinOk'))skipSpin=true});
+  for(let k=0;k<n;k++){if(o.lv>=X.maxLv(o))break;if(d.free>0&&n===1){d.free--}else{const c=X.spinCost(o);if(S.coins<c)break;S.coins-=c}ui();
+    const seg=X.rollSeg(o),v=X.SEG[seg][0],cand=WSL.map((q,i)=>q===v?i:-1).filter(i=>i>=0),idx=cand[Math.random()*cand.length|0];
+    const c=idx*WA+WA/2+(Math.random()-.5)*WA*.6,base=rot-(rot%360),turns=n>1?3:6,to=base+turns*360+((360-c)%360);
+    WW.classList.add('nxSpn');R.className='nxRes';R.textContent=n>1?`${k+1}回目…`:'…';try{sfx.whoosh()}catch(e){}
+    rot=await spinTo(W,rot,to,skipSpin?120:(n>1?1500:3600));WW.classList.remove('nxSpn');
+    const g=X.grow(o,seg);blooms+=g.bl;total+=g.up;
+    hub.classList.remove('nxHw');void hub.offsetWidth;hub.classList.add('nxHw');WW.classList.remove('nxHit','nxHitB');void WW.offsetWidth;WW.classList.add(v>=5?'nxHitB':'nxHit');
+    R.className='nxRes'+(v>=10?' nxRb':v>=5?' nxBig':' nxPop');R.textContent=v>=10?'🌈 超大当たり +10！':v>=5?'★ 大当たり +5！':`+${v}`;TL.insertAdjacentHTML('beforeend',`<i class="${v>=10?'nxTr':v>=5?'nxTb':''}">+${v}</i>`);M.querySelector('#nxLvT').textContent=`Lv${o.lv}${g.bl?' 🌸':''}`;
+    try{const r=WW.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top;if(v>=10){sfx.fanfare(2);flash('#ffffff');FX.burst(cx,cy+r.height/2,110,'spark',{colors:['#ff5c8a','#ffd23f','#55e0b4','#7aa2ff','#fff'],speed:10,g:.03})}else if(v>=5){sfx.big();FX.burst(cx,cy+r.height/2,60,'spark',{colors:['#ffd23f','#fff'],speed:8,g:.03})}else{tone(1319,.12,'triangle',.03);FX.burst(cx,cy,14,'spark',{colors:['#fff3c4','#ffd23f'],speed:4,g:.03})}}catch(e){}
+    await new Promise(r=>setTimeout(r,skipSpin?80:(n>1?380:500)))}
   X.apply();save();spinning=false;const ok=M.querySelector('#nxSpinOk');if(ok){ok.disabled=false;ok.textContent=blooms?`🌸 才能が 開花しそう！（${blooms}）`:`OK（Lv +${total}）`;ok.dataset.bl=blooms}}
 function bloom(oid,left){const o=X.oGet(oid);if(!o||left<=0){orbDetail(oid);return}const ch=X.bloomChoices(o);if(!ch.length){orbDetail(oid);return}const dark=ch.some(t=>X.TAL[t][0]==='b');
   M.innerHTML=`<div class="nxDet${dark?' dark':''}"><h3>🌸 ${esc(X.orbName(o))} の 才能が 開花！</h3><p class="nxNote" style="${dark?'background:#2a1020;color:#ffd6dc;border-color:#ff3b4f':''}">3つの うち 1つを えらぶ。えらび直しは できない。</p><div class="nxBloom">${ch.map((t,i)=>{const T=X.TAL[t];return `<button class="nxBl t-${T[0]}" style="animation-delay:${i*.12}s" data-a="pickTal" data-id="${oid}" data-t="${t}" data-left="${left-1}"><b><span class="tier">${X.TT[T[0]][1]}</span>${T[1]}</b><small>${T[2]}</small></button>`}).join('')}</div></div>`;M.hidden=false;
