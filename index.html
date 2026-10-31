@@ -12257,7 +12257,7 @@ const trPool=r=>{const lv=RR.indexOf(r);return Object.keys(TRT).filter(k=>TRT[k]
 let D=null;
 const st=()=>D;
 function blank(){return{v:1,seq:1,orbs:[],eqs:[],on:[],holy:0,free:0,offer:0,buf:{},disp:[],shop:null,vis:null,fateDay:-1,lastDay:-1,stat:{}}}
-function load(){try{const d=JSON.parse(localStorage.getItem('hoshipoker')||'{}');if(d.nx&&d.nx.v===1)return d.nx}catch(e){}return null}
+function load(){try{if(typeof BOOTSAVE!=='undefined'&&BOOTSAVE.nx&&BOOTSAVE.nx.v===1)return BOOTSAVE.nx;const d=JSON.parse(localStorage.getItem('hoshipoker')||'{}');if(d.nx&&d.nx.v===1)return d.nx}catch(e){}return null}
 const id=p=>p+(D.seq++);
 function mkOrb(r,o={}){r=r||rollR();const x={id:id('o'),kind:o.kind||'n',r,lv:o.lv||1,el:o.el||pk(ELK),tal:[],sb:0};
   if(x.kind==='sup')x.s=o.s||pk(Object.keys(SUP));else x.k=o.k||abilFor(r);
@@ -12408,7 +12408,7 @@ function effTxt(o,v){if(o.kind==='sup'){const S2=X.SUP[o.s];return S2[2](o.lv,o)
 /* ---- 画面の 外枠 ---- */
 function open(t){if(t)tab=t;P.hidden=false;render();try{$('nxBtn').classList.remove('hot');sfx.pickCard&&sfx.pickCard()}catch(e){}}
 function close(){P.hidden=true;M.hidden=true;try{X.apply();ui()}catch(e){}}
-function render(){if(P.hidden)return;const T=[['eq','🎒 装備'],['orb','🔮 球'],['tre','🐚 たからもの'],['disp','🏖️ 飾った']];
+function render(){if(P.hidden)return;const T=[['eq','🎒 装備'],['orb','🔮 球'],['tre','🐚 たからもの']];
   const sc=P.querySelector('.nxBody')?.scrollTop||0;
   P.innerHTML=`<div class="nxBox"><div class="nxHead"><h2>🎒 アイテム</h2><span class="nxCoin">🪙 ${fc(S.coins)}</span><button class="nxX" data-a="close" aria-label="とじる">✕</button></div>
   <div class="nxTabs">${T.map(([k,n])=>`<button class="${tab===k?'on':''}" data-a="tab" data-t="${k}">${n}</button>`).join('')}</div><div class="nxBody">${body()}</div></div>`;
@@ -12548,7 +12548,7 @@ const seenShow=new Set();SHOP.filter(i=>i.kind==='show').forEach(i=>{const key=i
 [['nx_starrain','🌠','流星雨の たね','SR','空いっぱいに 流れ星が 降る'],['nx_coinstorm','🪙','黄金の 嵐の たね','SSR','金貨の 雨が 降って コインも もらえる'],['nx_aurora','🌌','極光の たね','SR','オーロラが 浜辺を つつむ'],['nx_festa','🎉','浜辺 大祭りの たね','UR','花火と 風船と 光が いっぺんに']]
   .forEach(([k,e,n,r,f])=>add({id:'nev_'+k,e,n,r,f:`使うと ${f}（新イベント）`,use:{t:'event',id:k}}));
 ITUNLOCK.forEach(([k,p])=>add({id:'nky_'+k,e:'🗝️',n:`${ITEM[k]}の 鍵`,r:prR(p),f:`使うと ダブルアップの アイテム「${IICON[k]||''}${ITEM[k]}」が 解放される`,use:{t:'unlock',k}}));
-try{SCENE.decos().forEach(d=>add({id:'ndc_'+d.n,e:(typeof DECO_INFO!=='undefined'&&DECO_INFO[d.n]?DECO_INFO[d.n][0]:'🎁'),n:d.n,r:prR(d.c*25),f:'飾ると 浜辺に 置かれて、ときどき その 飾りの イベントが 起こる',use:{t:'deco',n:d.n}}))}catch(e){}
+try{SCENE.decos().forEach(d=>add({id:'ndc_'+d.n,e:(typeof DECO_INFO!=='undefined'&&DECO_INFO[d.n]?DECO_INFO[d.n][0]:'🎁'),n:d.n,r:prR(d.c*25),f:'浜辺の 置きもの。売ると コインに なる',use:{t:'deco',n:d.n}}))}catch(e){}
 /* ---- ふつうの たからものの 使い道 ---- */
 const POK=[.1,.2,.35,.6,1],DBX=[.2,.35,.5,.8,1.5],ORBP=[.15,.25,.4,.6,1];
 function useOf(t){if(t.use)return t.use;const h=hsh(t.id),c=h%100,ri=RI[t.r]||0,sub=(h>>>8)%3;
@@ -12557,7 +12557,7 @@ function useOf(t){if(t.use)return t.use;const h=hsh(t.id),c=h%100,ri=RI[t.r]||0,
   if(c<78)return{t:'offer',lv:ri+1};return{t:'orb',p:ORBP[ri]}}
 function useTxt(t){const u=useOf(t),ri=RI[t.r]||0;switch(u.t){
   case 'music':return `🎵 ${u.name} が 流れる`;case 'event':{const it=SHOP.find(i=>i.id===u.id);return `🎆 ${it?it.name:t.n.replace(/の たね$/,'')} が はじまる`}
-  case 'unlock':return S.unlocked[u.k]?'🔓 もう 解放ずみ':`🔓 ダブルアップの アイテム「${ITEM[u.k]}」を 解放`;case 'deco':return '🏖️ 浜辺に 飾る 専用（使う＝飾る）';
+  case 'unlock':return S.unlocked[u.k]?'🔓 もう 解放ずみ':`🔓 ダブルアップの アイテム「${ITEM[u.k]}」を 解放`;case 'deco':return '💰 売って コインに する もの';
   case 'pay':return `🃏 次の 5回、役の 配当 +${Math.round(u.m*100)}%`;case 'joker':return '🃏 次に くばる 手札に ジョーカー 確定';case 'mul':return '🃏 次に 役が できたら 配当 ×2';
   case 'guard':return '🎲 次の ダブルアップで 負けても 1回 復活';case 'dblX':return `🎲 次の ダブルアップで 勝つと さらに +${Math.round(u.m*100)}%`;
   case 'offer':return `🌸 お供え：次の 才能 開花が 良くなる${u.lv>=5?'（虹 以上 1つ 確定）':u.lv>=4?'（金 以上 1つ 確定）':''}`;
@@ -12587,7 +12587,7 @@ function runEvent(id){const it=SHOP.find(i=>i.id===id);if(it){try{SCENE.show(it.
   save();ui()}
 /* ---- 飾る ---- */
 const DB=[.003,.006,.01,.02,.04],MAXD=10;
-function dispBonus(){const d=D();if(!d)return 0;return d.disp.reduce((s,id)=>{const t=TRE.find(x=>x.id===id);return s+(t?DB[RI[t.r]||0]:0)},0)}
+function dispBonus(){return 0;const d=D();if(!d)return 0;return d.disp.reduce((s,id)=>{const t=TRE.find(x=>x.id===id);return s+(t?DB[RI[t.r]||0]:0)},0)}
 function displayIt(t){const d=D();const u=useOf(t);if(!(S.tre[t.id]>0))return false;
   if(u.t==='deco'){if(hasDeco(u.n)){evToast('もう 飾ってある');return false}S.tre[t.id]--;S.deco[u.n]=1;try{register();SCENE.update(S.coins);say('decoBuy',{n:2,delay:900,gap:1200,ctx:{item:u.n}})}catch(e){}
     setTimeout(()=>{try{if(decoUse())runDeco(u.n)}catch(e){}},9000)}
@@ -12603,16 +12603,16 @@ function drawDisp(){const w=$('window');if(!w)return;if(!DL.isConnected)w.prepen
 addEventListener('resize',()=>setTimeout(drawDisp,300));setTimeout(drawDisp,800);
 /* ---- 画面 ---- */
 let tf='all',selT=null;
-const TF=[['all','すべて'],['use','使える'],['deco','飾り'],['key','鍵'],['mus','曲・イベント']];
+const TF=[['all','すべて'],['use','使える'],['key','鍵'],['mus','曲・イベント']];
 function treList(){const UI=U();const own=TRE.filter(t=>S.tre[t.id]>0).filter(t=>{const u=useOf(t);return tf==='all'||(tf==='deco'&&u.t==='deco')||(tf==='key'&&u.t==='unlock')||(tf==='mus'&&(u.t==='music'||u.t==='event'))||(tf==='use'&&canUse(t))}).sort((a,b)=>(RI[b.r]-RI[a.r])||a.n.localeCompare(b.n));
-  return `<p class="nxNote">🐚 たからものの 役目は <b>売る・使う・飾る</b>。使うと 曲が 流れたり、イベントが 起きたり、ポーカーや ダブルアップが 有利に なったりする。${D().offer?`<br>🌸 お供え中（次の 開花が 良くなる）`:''}</p>
+  return `<p class="nxNote">🐚 たからものの 役目は <b>売る・使う</b>。使うと 曲が 流れたり、イベントが 起きたり、ポーカーや ダブルアップが 有利に なったりする。${D().offer?`<br>🌸 お供え中（次の 開花が 良くなる）`:''}</p>
   <div class="nxFilter" style="flex-wrap:wrap">${TF.map(([k,n])=>`<button class="${tf===k?'on':''}" data-a="tf" data-t="${k}">${n}</button>`).join('')}</div>
   ${own.length?`<div class="nxGrid">${own.map(t=>`<div class="nxCard" data-a="treD" data-id="${t.id}"><span style="font-size:1.8rem">${t.e}</span><b>${UI.esc(t.n)}</b><small>${t.r} ・ ×${S.tre[t.id]}</small></div>`).join('')}</div>`:'<div class="nxEmpty">たからものが ない。浜辺の イベントや 釣り、動物から 手に 入る。</div>'}
   <div class="nxBtns"><button class="nxB wide" data-a="zukan">📖 たからもの 図鑑</button></div>`}
 function treDetail(id){const UI=U(),t=TRE.find(x=>x.id===id);if(!t||!(S.tre[t.id]>0)){UI.M.hidden=true;UI.render();return}const u=useOf(t),ok=canUse(t);
   UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3rem">${t.e}</span><div><h3>${UI.esc(t.n)}</h3><div class="nxTags"><span class="nxTag">${t.r}</span><span class="nxTag">×${S.tre[t.id]}</span></div></div></div>
    <div class="nxSec"><small>${UI.esc(t.f||'')}</small></div><div class="nxSec"><h4>✨ 使うと</h4>${useTxt(t)}</div>
-   <div class="nxBtns">${u.t==='deco'?'':`<button class="nxB go" data-a="treUse" data-id="${t.id}" ${ok?'':'disabled'}>✨ 使う</button>`}<button class="nxB mint" data-a="treDisp" data-id="${t.id}">🏖️ 飾る<small>${u.t==='deco'?'浜辺に 置く':`配当 +${(DB[RI[t.r]||0]*100).toFixed(1)}%`}</small></button><button class="nxB red" data-a="treSell" data-id="${t.id}">売る（${UI.fc(sellPrice(t))}枚）</button></div></div>`;UI.M.hidden=false}
+   <div class="nxBtns">${u.t==='deco'?'':`<button class="nxB go" data-a="treUse" data-id="${t.id}" ${ok?'':'disabled'}>✨ 使う</button>`}<button class="nxB red" data-a="treSell" data-id="${t.id}">売る（${UI.fc(sellPrice(t))}枚）</button></div></div>`;UI.M.hidden=false}
 function dispList(){const UI=U(),d=D();const decos=Object.keys(S.deco||{}).filter(n=>S.deco[n]);
   const rows=d.disp.map(id=>{const t=TRE.find(x=>x.id===id);return t?{k:'d',key:id,t}:null}).filter(Boolean).concat(decos.map(n=>({k:'s',key:n,t:TRE.find(x=>x.id==='ndc_'+n)||{e:'🎁',n,r:'N',p:100}})));
   return `<p class="nxNote">🏖️ 浜辺に 飾った もの。たからものは 1つ ごとに 配当が 少し 上がる（${d.disp.length}/${MAXD}、いま +${(dispBonus()*100).toFixed(1)}%）。飾りの アイテムは 浜辺に 置かれて ときどき イベントが 起こる。</p>`+
@@ -12705,11 +12705,15 @@ try{const ul=document.querySelector('#rules ul:last-of-type');if(ul){[...ul.quer
    '<li><b>🔮 球</b>：コインで ルーレットを 回して 育てる（+1〜🌈+10）。Lv が 上がると ときどき 🌸 才能が 開花（3つから 1つ。白・金・虹・黒）。最大 Lv で 同じ 能力の 球と 合わせると ⬆️ 進化して レア度が 上がる。</li>'+
    '<li><b>🎒 装備</b>：球を はめる 器。球枠の 数と 特性を 持つ。同時に 3つまで。球は 左から 並び、となり・真ん中・はしで 効き方が 変わる。</li>'+
    '<li><b>🤝 ⚠️ 🩸 特別な 球</b>：サポート球は 仲間を 強くする。危険な 球は とても 強いけど 代償が ある。呪いの 球は 呪いの 力と 代償を 持ち、🕊️ 清めの 羽根で 解ける。</li>'+
-   '<li><b>🐚 たからもの</b>：売る・使う・飾る。使うと 曲が 流れる・イベント・アイテムの 解放・ポーカーや ダブルアップが 有利に・才能の お供え・球が 生まれる など。飾ると 浜辺に 置かれる。</li>'+
+   '<li><b>🐚 たからもの</b>：売る・使う。使うと 曲が 流れる・イベント・アイテムの 解放・ポーカーや ダブルアップが 有利に・才能の お供え・球が 生まれる など。</li>'+
    '<li><b>🛸 来訪者の お店</b>：1日に 2〜3回、UFO・海賊船・人魚・旅の 商人が 約20分 やって来て、そこでしか 買えない ものを 売る。</li>')}}catch(e){}
 
 /* 最初から 全部 使える（ポーカーの 回数で 解放する しくみは なし） */
 try{S.prog=999;progApply();save()}catch(e){}
+/* 飾る 機能は なし：飾っていた ものは たからものに もどす・飾り専用の たからものは もう 出ない */
+setTimeout(()=>{try{const d=NXS.st();if(d.disp&&d.disp.length){d.disp.forEach(id=>{S.tre[id]=(S.tre[id]||0)+1});d.disp=[]}
+  Object.keys(S.deco||{}).forEach(n=>{if(S.deco[n]&&TRE.find(t=>t.id==='ndc_'+n))S.tre['ndc_'+n]=(S.tre['ndc_'+n]||0)+1});S.deco={};try{SCENE.update(S.coins)}catch(e){}NXT.drawDisp();save()}catch(e){}},2500);
+{const _rt=rollTre;rollTre=function(){let t;for(let n=0;n<20;n++){t=_rt.apply(this,arguments);if(!t||!String(t.id).startsWith('ndc_'))return t}return t}}
 </script>
 <!--NXJS-END-->
 </body></html>
