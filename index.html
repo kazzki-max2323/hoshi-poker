@@ -210,6 +210,18 @@ html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.
 #nxCstL{pointer-events:auto;display:inline-block;margin-top:2px;font-family:var(--pixel);font-size:.6rem;color:#e8ecff;background:rgba(10,12,40,.45);border:1px solid rgba(200,215,255,.35);border-radius:999px;padding:1px 8px;cursor:pointer;text-shadow:0 1px 2px #000}
 body.bright #nxCst{opacity:.45}
 @media (prefers-reduced-motion:reduce){#nxCst circle.on{animation:none}}
+
+#nxCas{position:absolute;z-index:1;width:96px;margin-left:-48px;pointer-events:none;transition:opacity 1.5s,transform 1.8s ease-in}
+#nxCas svg{width:100%;height:auto;display:block;overflow:visible;filter:drop-shadow(0 3px 2px rgba(60,30,0,.35))}
+#nxCas .pt{transform-box:fill-box;transform-origin:50% 100%}
+#nxCas .pt.new{animation:nxPart .7s cubic-bezier(.2,1.6,.4,1)}
+@keyframes nxPart{from{transform:scaleY(0);opacity:0}}
+#nxCas .flag{transform-box:fill-box;transform-origin:0 50%;animation:nxFlag 1.4s ease-in-out infinite}
+@keyframes nxFlag{50%{transform:skewY(8deg) scaleX(.9)}}
+#nxCas.wash{transform:translateY(14px) scaleY(.2);opacity:0}
+#nxCas.done svg{filter:drop-shadow(0 0 6px rgba(255,236,170,.9)) drop-shadow(0 3px 2px rgba(60,30,0,.35))}
+#nxCasL{pointer-events:auto;display:block;width:max-content;margin:2px auto 0;font-family:var(--pixel);font-size:.56rem;color:#5a3a10;background:rgba(255,246,220,.85);border:1px solid #d9a35a;border-radius:999px;padding:1px 7px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){#nxCas .flag{animation:none}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12790,6 +12802,39 @@ return{draw,light,info,st,C}})();
 {const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase!==p0&&S.phase==='won'&&S.win>0){const rk=evaluate(S.hand).rank;if(rk<=9)NXCST.light(rk)}}catch(e){}return r}}
 setTimeout(()=>NXCST.draw(),600);
 setInterval(()=>{try{const e=$('nxCst');if(e){const n=NXS.night();e.style.opacity=n?'':'0';e.style.visibility=n?'':'hidden'}}catch(er){}},1000);
+/* ========== 砂の城づくり（昼だけ。役を 作ると 城が 育つ。夕方の 波で 崩れる） ========== */
+const NXCAS=window.NXCAS=(()=>{const X=NXS,D=()=>X.st();const GOAL=20;
+const PTS=[10,10,10,10,6,4,3,3,2,1];/* 役の 強さ（rank）→ 砂の 量 */
+const STG=[[3,'mound','土台'],[6,'wall','城壁'],[10,'tl','左の 塔'],[14,'tr','右の 塔'],[17,'gate','門'],[20,'flag','旗']];
+const hr=()=>{try{return GH()}catch(e){return 12}};
+const build=()=>{const h=hr();return h>=5&&h<17};
+function st(){const d=D(),g=S.gday||0;if(!d.cas||d.cas.day!==g)d.cas={day:g,pts:0,done:false,washed:false};return d.cas}
+let el=null,shown=-1;
+function svg(p,newK){const has=k=>STG.find(x=>x[1]===k)[0]<=p,c=k=>`pt${newK===k?' new':''}`;const S1='#e9cc8e',S2='#c9a061',L='#a8803f';
+  return `<svg viewBox="0 0 100 80">${has('mound')?`<ellipse class="${c('mound')}" cx="50" cy="74" rx="46" ry="7" fill="${S2}"/>`:`<ellipse cx="50" cy="75" rx="30" ry="4" fill="rgba(201,160,97,.35)"/>`}
+   ${has('tl')?`<g class="${c('tl')}"><rect x="14" y="30" width="16" height="42" fill="${S1}" stroke="${L}"/><path d="M14 30v-6h4v6h4v-6h4v6h4v-6" fill="${S1}" stroke="${L}"/></g>`:''}
+   ${has('tr')?`<g class="${c('tr')}"><rect x="70" y="30" width="16" height="42" fill="${S1}" stroke="${L}"/><path d="M70 30v-6h4v6h4v-6h4v6h4v-6" fill="${S1}" stroke="${L}"/></g>`:''}
+   ${has('wall')?`<g class="${c('wall')}"><rect x="24" y="44" width="52" height="28" fill="${S1}" stroke="${L}"/><path d="M24 44v-5h6v5h6v-5h6v5h6v-5h6v5h6v-5h6v5h4v-5" fill="${S1}" stroke="${L}"/><circle cx="36" cy="54" r="1.5" fill="${L}"/><circle cx="64" cy="54" r="1.5" fill="${L}"/></g>`:''}
+   ${has('gate')?`<path class="${c('gate')}" d="M43 72v-12a7 7 0 0 1 14 0v12z" fill="#6b4a1e"/>`:''}
+   ${has('flag')?`<g class="${c('flag')}"><line x1="22" y1="24" x2="22" y2="6" stroke="#6b4a1e" stroke-width="1.5"/><path class="flag" d="M22 6l14 4-14 4z" fill="#e2475a"/><line x1="78" y1="24" x2="78" y2="10" stroke="#6b4a1e" stroke-width="1.5"/><path class="flag" d="M78 10l10 3-10 3z" fill="#3f9cff"/></g>`:''}</svg>`}
+function place(){const w=$('window');if(!w)return;if(!el){el=document.createElement('div');el.id='nxCas';w.appendChild(el)}
+  try{const g=SCENE.dbg(),wr=w.getBoundingClientRect();el.style.left=(g.WL-wr.left+g.WW*.74)+'px';el.style.top=(g.shore+6*g.k-wr.top-scrollY)+'px'}catch(e){el.style.left='80%';el.style.top='62%'}}
+function draw(newK){place();const c=st(),h=hr(),vis=h>=5&&h<17.5&&!c.washed;el.style.visibility=vis?'':'hidden';if(!vis)return;el.classList.toggle('done',c.done);el.classList.remove('wash');
+  const left=Math.max(0,17-h);el.innerHTML=svg(c.pts,newK)+`<span id="nxCasL">🏰 ${Math.min(c.pts,GOAL)}/${GOAL}${c.done?' 完成！':` ・ あと${Math.ceil(left)}時間`}</span>`;el.querySelector('#nxCasL').onclick=e=>{e.stopPropagation();info()};shown=c.pts}
+function info(){const c=st(),UI=NXUI;UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><h3>🏰 砂の城</h3><p class="nxNote">☀️ 昼（5時〜17時）だけ。役を 作ると 砂が 集まって 城が 育つ。夕方に なると 波で 崩れるので、それまでに 完成させよう。毎日 新しく 作れる。</p>
+  ${STG.map(([n,k,nm])=>`<div class="nxRow" style="cursor:default;padding:5px 10px;margin:4px 0"><span>${c.pts>=n?'✅':'⬜'}</span><div class="nxInfo"><b style="font-size:.8rem">${nm}</b><small>砂 ${n}</small></div></div>`).join('')}
+  <p class="nxNote">砂の 量：ツーペア 1 ・ スリーカード 2 ・ ストレート／フラッシュ 3 ・ フルハウス 4 ・ フォーカード 6 ・ それ以上 10<br>完成の ごほうび：コイン・たからもの・ときどき 球</p></div>`;UI.M.hidden=false}
+function add(rank){if(!build())return;const c=st();if(c.done||c.washed)return;const before=c.pts;c.pts=Math.min(GOAL,c.pts+(PTS[rank]||1));const nk=STG.filter(x=>x[0]>before&&x[0]<=c.pts).map(x=>x[1]).pop();
+  try{noise(.25,{v:.05,type:'lowpass',f:900});if(nk)tone(660,.15,'triangle',.02)}catch(e){}if(c.pts>=GOAL){c.done=true;setTimeout(complete,900)}draw(nk);save()}
+function complete(){const c=st();try{[659,784,988,1319].forEach((f,i)=>bell(f,.025,i*.2,1.6))}catch(e){}const coins=Math.round(Math.max(800,(S.bet||1)*80)/10)*10;S.coins+=coins;
+  const t=rollTre(1);if(t)setTimeout(()=>addTre(t,'🏰 砂の城の ごほうび'),2200);if(Math.random()<.35)setTimeout(()=>X.give(X.mkOrb(Math.random()<.3?'SR':'R'),'🏰 城の 中から 球が'),4000);
+  evToast(`🏰 <b>砂の城</b> が 完成した<br><small>🪙 ${coins.toLocaleString()}枚 ・ たからもの</small>`);ui();save();draw()}
+function tick(){try{const c=st(),h=hr();if(h>=17&&h<17.5&&!c.washed&&el&&el.style.visibility!=='hidden'){c.washed=true;save();try{sfx.wave()}catch(e){}el.classList.add('wash');
+    if(!c.done&&c.pts>0)setTimeout(()=>evToast('🌊 夕方の 波が 砂の城を さらっていった…<br><small>また 明日 作ろう</small>'),600);setTimeout(()=>{if(el)el.style.visibility='hidden'},1900);return}
+  if(!el||el.classList.contains('wash'))return;const vis=h>=5&&h<17.5&&!c.washed;if((el.style.visibility!=='hidden')!==vis||shown!==c.pts)draw();else place()}catch(e){}}
+setInterval(tick,1500);setTimeout(()=>draw(),700);addEventListener('resize',()=>setTimeout(place,300));
+return{add,draw,info,st,GOAL}})();
+{const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase!==p0&&S.phase==='won'&&S.win>0){const rk=evaluate(S.hand).rank;if(rk<=9)NXCAS.add(rk)}}catch(e){}return r}}
 </script>
 <!--NXJS-END-->
 </body></html>
