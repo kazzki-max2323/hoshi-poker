@@ -12776,10 +12776,10 @@ function draw(){const w=$('window');if(!w)return;if(!el){el=document.createEleme
   el.innerHTML=`<svg viewBox="0 0 100 86">${c.ln.map(([a,b])=>`<line class="${lit[a]&&lit[b]?'on':''}" x1="${c.st[a][0]}" y1="${c.st[a][1]}" x2="${c.st[b][0]}" y2="${c.st[b][1]}"/>`).join('')}${c.st.map(([x,y],i)=>`<circle class="${lit[i]?'on':''}${i===lastNew?' new':''}" cx="${x}" cy="${y}" r="${lit[i]?2.6:1.8}"/>`).join('')}</svg><span id="nxCstL">✨ ${c.n} ${lit.filter(Boolean).length}/${c.st.length}${s.cyc?` ・${s.cyc+1}周目`:''}</span>`;
   el.querySelector('#nxCstL').onclick=e=>{e.stopPropagation();info()};lastNew=-1}
 function info(){const c=cur(),s=st(),UI=NXUI;if(UI.P.hidden){}UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><h3>✨ ${c.n}${s.cyc?`（${s.cyc+1}周目）`:''}</h3>
-  <p class="nxNote">役を 作ると、その 役で 灯せる 星が 1つ 灯る。全部 灯ると 星座が 完成して ごほうび。完成した 星座: ${s.done||0}個</p>
+  <p class="nxNote">🌙 夜（19時〜5時）だけ。役を 作ると、その 役で 灯せる 星が 1つ 灯る。全部 灯ると 星座が 完成して ごほうび。完成した 星座: ${s.done||0}個</p>
   ${c.st.map((_,i)=>`<div class="nxRow" style="cursor:default;padding:5px 10px;margin:4px 0"><span style="font-size:1.1rem">${s.lit[i]?'⭐':'☆'}</span><div class="nxInfo"><b style="font-size:.8rem">${RQN(c.rq[i])}</b></div></div>`).join('')}
   <p class="nxNote">ごほうび：コイン・${['R','SR','SR','SSR','SSR','UR'][s.i%C.length]} 以上の 球・たからもの</p></div>`;UI.M.hidden=false}
-function light(rank){const c=cur(),s=st();let best=-1;c.rq.forEach((q,i)=>{if(s.lit[i]||rank>q)return;if(best<0||q<c.rq[best])best=i});if(best<0)return;
+function light(rank){if(!X.night())return;const c=cur(),s=st();let best=-1;c.rq.forEach((q,i)=>{if(s.lit[i]||rank>q)return;if(best<0||q<c.rq[best])best=i});if(best<0)return;
   s.lit[best]=true;lastNew=best;try{bell(1568+best*60,.02,0,1.6)}catch(e){}draw();
   if(c.st.every((_,i)=>s.lit[i]))setTimeout(complete,1400);save()}
 function complete(){const s=st(),c=cur(),k=s.i%C.length,m=1+s.cyc;try{el&&el.classList.add('done');[784,988,1175,1568].forEach((f,i)=>bell(f,.025,i*.25,2))}catch(e){}
@@ -12789,6 +12789,7 @@ function complete(){const s=st(),c=cur(),k=s.i%C.length,m=1+s.cyc;try{el&&el.cla
 return{draw,light,info,st,C}})();
 {const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase!==p0&&S.phase==='won'&&S.win>0){const rk=evaluate(S.hand).rank;if(rk<=9)NXCST.light(rk)}}catch(e){}return r}}
 setTimeout(()=>NXCST.draw(),600);
+setInterval(()=>{try{const e=$('nxCst');if(e){const n=NXS.night();e.style.opacity=n?'':'0';e.style.visibility=n?'':'hidden'}}catch(er){}},1000);
 </script>
 <!--NXJS-END-->
 </body></html>
