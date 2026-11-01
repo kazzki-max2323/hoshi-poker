@@ -12258,7 +12258,7 @@ const rollR=(boost=0)=>{const w={N:45,R:32,SR:15,SSR:6,UR:1.8,LG:.2};let T=0;con
 const rUp=r=>RR[Math.min(RR.length-1,RR.indexOf(r)+1)];
 const night=()=>{try{const h=GH();return h>=19||h<5}catch(e){return false}},day=()=>{try{const h=GH();return h>=7&&h<17}catch(e){return false}};
 /* ---- 能力 ---- */
-const normK=()=>Object.keys(EQK).filter(k=>!k.startsWith('g_')&&k!=='gift'&&!(typeof STARK!=='undefined'?STARK:[]).includes(k)&&EQK[k]&&EQK[k][2]);
+const OBSK=['arr','synUp','synFee','undoC'];const normK=()=>Object.keys(EQK).filter(k=>!k.startsWith('g_')&&k!=='gift'&&!OBSK.includes(k)&&!(typeof STARK!=='undefined'?STARK:[]).includes(k)&&EQK[k]&&EQK[k][2]);
 const starK=()=>(typeof STARK!=='undefined'?STARK:[]).filter(k=>EQK[k]);
 const abilFor=r=>((r==='UR'||r==='LG')&&Math.random()<.12&&starK().length)?pk(starK()):pk(normK());
 /* ---- サポート・危険・呪い ---- */
@@ -12659,7 +12659,7 @@ function act(a,b){const UI=U();switch(a){
   case 'treSell':{const t=TRE.find(x=>x.id===b.dataset.id);if(!t||!(S.tre[t.id]>0))return;const v=sellPrice(t);S.tre[t.id]--;S.coins+=v;save();ui();try{getCoin(v,`${t.n}を 売った`)}catch(e){}return S.tre[t.id]>0?treDetail(t.id):(UI.M.hidden=true,UI.render())}
   case 'undisp':undisplay(b.dataset.k,b.dataset.key,false);return UI.render();
   case 'dispSell':if(!b.dataset.arm){b.dataset.arm=1;b.textContent='本当に？';return}undisplay(b.dataset.k,b.dataset.key,true);return UI.render();
-  case 'zukan':{UI.close();try{zukanOpen()}catch(e){try{S.shopTab='sell';$('shop').hidden=false;buildShop();const z=document.querySelector('#shop [data-zk],#shop .zkOpen');if(z)z.click()}catch(er){}}return}}}
+  case 'zukan':{UI.close();try{openZukan()}catch(e){}return}}}
 return{useOf,useTxt,canUse,useIt,runEvent,dispBonus,displayIt,undisplay,drawDisp,treList,treDetail,dispList,act,EXTRA}})();
 
 /* ========== v250 新システム：ショップ（買うだけ）・福袋・たまに 来る お店 ========== */
@@ -12835,6 +12835,8 @@ function tick(){try{const c=st(),h=hr();if(h>=17&&h<17.5&&!c.washed&&el&&el.styl
 setInterval(tick,1500);setTimeout(()=>draw(),700);addEventListener('resize',()=>setTimeout(place,300));
 return{add,draw,info,st,GOAL}})();
 {const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase!==p0&&S.phase==='won'&&S.win>0){const rk=evaluate(S.hand).rank;if(rk<=9)NXCAS.add(rk)}}catch(e){}return r}}
+/* 合成・入荷が なくなったので、それに 関係する 能力の 球は 別の 能力に */
+try{const OB=['arr','synUp','synFee','undoC'];let ch=0;NXS.st().orbs.forEach(o=>{if(!o.k)return;const base=o.k.startsWith('g_')?o.k.split('_').pop():o.k;if(OB.includes(base)){const ks=Object.keys(EQK).filter(k=>!k.startsWith('g_')&&k!=='gift'&&!OB.includes(k)&&!(typeof STARK!=='undefined'&&STARK.includes(k)));o.k=ks[Math.random()*ks.length|0];ch++}});if(ch){NXS.apply();save()}}catch(e){}
 </script>
 <!--NXJS-END-->
 </body></html>
