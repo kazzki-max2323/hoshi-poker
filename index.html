@@ -189,6 +189,14 @@ html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.
 @keyframes nxShine{50%{transform:translate(-50%,-56%)}}
 @media (prefers-reduced-motion:reduce){#nxVis,#nxDisp i{animation:none}}
 
+
+.nxBoxS{display:flex;flex-wrap:wrap;gap:10px 8px;padding:10px 8px 12px;min-height:44px;border:2px dashed #e0c08a;border-radius:12px;background:#fffaf0}
+.nxBoxS.over{background:#ffe9c0;border-color:#d9580f}
+.nxDrg{cursor:pointer}
+#nxM [data-oid]{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+#nxM [data-oid].lift{opacity:.3}
+.nxSlot.over{background:#ffd98a;box-shadow:0 0 0 3px #f29a2a inset}
+#nxGhost{position:fixed;z-index:90;pointer-events:none;transform:translate(-50%,-60%) scale(1.25);filter:drop-shadow(0 8px 10px rgba(0,0,0,.35));transition:transform .12s}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12419,13 +12427,15 @@ function eqList(){const d=D();const L=d.eqs.slice().sort((a,b)=>(X.isOn(b)-X.isO
   return `<p class="nxNote">🎒 装備は 球を はめる 器。同時に つけられるのは <b>${X.MAXEQ}つ</b>（いま ${d.on.length}/${X.MAXEQ}）。球は 左から 順番に 並び、となりや 真ん中で 効き方が 変わる。</p>`+
    (L.length?L.map(e=>{const T=X.TRT[e.tr];return `<div class="nxRow${X.isOn(e)?' on':''}" data-a="eq" data-id="${e.id}"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div class="nxInfo"><b>${esc(X.eqName(e))} ${rtag(e.r)}${X.isOn(e)?' <span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</b><small>${T[0]} ${T[1]}：${T[2]}</small><div class="nxSlots" style="justify-content:flex-start">${e.s.map(i=>orbH(i&&X.oGet(i),'sm')).join('')}</div></div></div>`}).join(''):'<div class="nxEmpty">装備が ない。ショップや 宝箱で 手に 入る。</div>')}
 function eqDetail(id,slot){const e=X.eGet(id);if(!e){M.hidden=true;return}curEq=id;selSlot=slot??-1;const T=X.TRT[e.tr],res=X.evalEq(e);
-  const slots=e.s.map((i,n)=>{const o=i&&X.oGet(i);return `<div class="nxSlot${selSlot===n?' sel':''}" data-a="slot" data-i="${n}">${orbH(o)}<small>${n===0?'左はし':n===e.s.length-1?'右はし':''}${e.s.length%2&&n===(e.s.length-1)/2&&e.s.length>1?'真ん中':''}</small></div>`}).join('');
+  const slots=e.s.map((i,n)=>{const o=i&&X.oGet(i);return `<div class="nxSlot${selSlot===n?' sel':''}" data-a="slot" data-i="${n}"${o?` data-oid="${o.id}"`:''}>${orbH(o)}<small>${n===0?'左はし':n===e.s.length-1?'右はし':''}${e.s.length%2&&n===(e.s.length-1)/2&&e.s.length>1?'真ん中':''}</small></div>`}).join('');
   let act='';if(selSlot>=0){const o=e.s[selSlot]&&X.oGet(e.s[selSlot]);act=o?`<div class="nxBtns"><button class="nxB" data-a="mv" data-d="-1" ${selSlot===0?'disabled':''}>◀ 左へ</button><button class="nxB" data-a="mv" data-d="1" ${selSlot===e.s.length-1?'disabled':''}>右へ ▶</button><button class="nxB" data-a="unslot">はずす</button><button class="nxB" data-a="orbD" data-id="${o.id}">くわしく</button><button class="nxB wide" data-a="pick">べつの 球に かえる</button></div>`:`<div class="nxBtns"><button class="nxB go wide" data-a="pick">🔮 箱から 球を えらぶ</button></div>`}
   const effs=res.length?res.map(r=>`<div class="nxRow" style="cursor:default;margin:3px 0;padding:5px 8px">${orbH(r.o,'sm')}<div class="nxInfo"><b>${esc(X.orbName(r.o))}${r.o.kind==='sup'?'（コピー）':''}</b><small>${EQK[r.k]?EQK[r.k][2](r.v):''}</small></div></div>`).join(''):'<small>球を つけると ここに 効果が 出る</small>';
   const sups=e.s.map(i=>i&&X.oGet(i)).filter(o=>o&&o.kind==='sup'&&o.s!=='copy').map(o=>`<small>🤝 ${X.SUP[o.s][1]}：${X.SUP[o.s][2](o.lv,o)}</small>`).join('<br>');
-  M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div><h3>${esc(X.eqName(e))}</h3><div class="nxTags">${rtag(e.r)}<span class="nxTag">球枠 ${e.s.length}</span>${X.isOn(e)?'<span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</div></div></div>
+  const box=D().orbs.filter(o=>!X.eqOf(o)).sort((a,b)=>X.RR.indexOf(b.r)-X.RR.indexOf(a.r)||b.lv-a.lv);
+  M.innerHTML=`<div class="nxDet" data-eq="${e.id}"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div><h3>${esc(X.eqName(e))}</h3><div class="nxTags">${rtag(e.r)}<span class="nxTag">球枠 ${e.s.length}</span>${X.isOn(e)?'<span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</div></div></div>
    <div class="nxSec"><h4>${T[0]} 特性：${T[1]}</h4>${T[2]}</div>
-   <div class="nxSec"><h4>🔮 球（タップで えらぶ）</h4><div class="nxSlots">${slots}</div>${act}</div>
+   <div class="nxSec"><h4>🔮 球（タップで えらぶ・長押しで つかんで 動かせる）</h4><div class="nxSlots">${slots}</div>${act}</div>
+   <div class="nxSec"><h4>📦 箱の 球 <small style="font-weight:500;color:#8a6a40">長押しで つかんで 上の 枠へ ／ 枠の 球を ここへ 持ってくると はずれる</small></h4><div class="nxBoxS" data-drop="box">${box.length?box.map(o=>`<span class="nxDrg" data-a="orbD" data-id="${o.id}" data-oid="${o.id}">${orbH(o,'sm')}</span>`).join(''):'<small style="color:#a08060">箱は からっぽ</small>'}</div></div>
    <div class="nxSec"><h4>✨ いまの 効果${X.isOn(e)?'':'（装備すると 効く）'}</h4>${effs}${sups?'<div style="margin-top:4px">'+sups+'</div>':''}</div>
    <div class="nxBtns"><button class="nxB mint" data-a="toggle">${X.isOn(e)?'🎒 はずす':'🎒 装備する'}</button><button class="nxB red" data-a="sellE">売る（${fc(X.sellE(e))}枚）</button></div></div>`;M.hidden=false}
 function orbPicker(){const e=X.eGet(curEq);if(!e)return;const cur=e.s[selSlot];const L=D().orbs.filter(o=>o.id!==cur).sort((a,b)=>(!!X.eqOf(a)-!!X.eqOf(b))||X.RR.indexOf(b.r)-X.RR.indexOf(a.r)||b.lv-a.lv);
@@ -12714,6 +12724,27 @@ try{S.prog=999;progApply();save()}catch(e){}
 setTimeout(()=>{try{const d=NXS.st();if(d.disp&&d.disp.length){d.disp.forEach(id=>{S.tre[id]=(S.tre[id]||0)+1});d.disp=[]}
   Object.keys(S.deco||{}).forEach(n=>{if(S.deco[n]&&TRE.find(t=>t.id==='ndc_'+n))S.tre['ndc_'+n]=(S.tre['ndc_'+n]||0)+1});S.deco={};try{SCENE.update(S.coins)}catch(e){}NXT.drawDisp();save()}catch(e){}},2500);
 {const _rt=rollTre;rollTre=function(){let t;for(let n=0;n<20;n++){t=_rt.apply(this,arguments);if(!t||!String(t.id).startsWith('ndc_'))return t}return t}}
+/* ---- 球を 長押しで つかんで 付け替え ---- */
+(()=>{const X=NXS,M=NXUI.M;let st=null,drag=null,ghost=null,over=null,noClick=0;
+  const busy=()=>S.phase==='busy'||S.phase==='dblPick';
+  const target=(x,y)=>{const el=document.elementFromPoint(x,y);if(!el)return null;const sl=el.closest('#nxM .nxSlot');if(sl)return sl;return el.closest('#nxM [data-drop=box]')};
+  const setOver=t=>{if(over===t)return;if(over)over.classList.remove('over');over=t;if(over)over.classList.add('over')};
+  const end=()=>{clearTimeout(st&&st.tm);st=null;if(ghost){ghost.remove();ghost=null}setOver(null);if(drag&&drag.el)drag.el.classList.remove('lift');drag=null};
+  M.addEventListener('pointerdown',e=>{const el=e.target.closest('[data-oid]');if(!el||!M.contains(el)||e.button>0)return;const det=el.closest('.nxDet[data-eq]');if(!det)return;
+    st={x:e.clientX,y:e.clientY,el,eq:det.dataset.eq,oid:el.dataset.oid,from:el.classList.contains('nxSlot')?+el.dataset.i:-1,id:e.pointerId};
+    st.tm=setTimeout(()=>{if(!st)return;if(busy()){evToast('勝負中は できない よ');st=null;return}drag=st;st=null;noClick=Date.now();
+      ghost=document.createElement('div');ghost.id='nxGhost';const o=X.oGet(drag.oid);ghost.innerHTML=NXUI.orbH(o);document.body.appendChild(ghost);ghost.style.left=drag.x+'px';ghost.style.top=drag.y+'px';drag.el.classList.add('lift');
+      try{navigator.vibrate&&navigator.vibrate(15)}catch(er){}try{tone(880,.06,'triangle',.03)}catch(er){}},330)});
+  addEventListener('pointermove',e=>{if(st&&Math.hypot(e.clientX-st.x,e.clientY-st.y)>10){clearTimeout(st.tm);st=null}if(!drag)return;e.preventDefault();ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';setOver(target(e.clientX,e.clientY))},{passive:false});
+  addEventListener('touchmove',e=>{if(drag&&e.cancelable)e.preventDefault()},{passive:false,capture:true});
+  addEventListener('pointerup',e=>{if(st){clearTimeout(st.tm);st=null}if(!drag)return;const d=drag,t=target(e.clientX,e.clientY);noClick=Date.now();end();
+    const eq=X.eGet(d.eq),o=X.oGet(d.oid);if(!eq||!o||!t)return;
+    if(t.dataset.drop==='box'){if(d.from<0)return;X.unplace(o)}
+    else{const j=+t.dataset.i;if(j===d.from)return;const cur=eq.s[j];if(d.from>=0){eq.s[d.from]=cur||null;eq.s[j]=o.id}else X.place(eq,j,o.id)}
+    X.apply();save();try{sfx.hold()}catch(er){}NXUI.render();NXUI.eqDetail(eq.id)});
+  addEventListener('pointercancel',()=>{if(st){clearTimeout(st.tm);st=null}if(drag)end()});
+  M.addEventListener('click',e=>{if(Date.now()-noClick<450){e.stopPropagation();e.preventDefault()}},true);
+  M.addEventListener('contextmenu',e=>{if(e.target.closest('[data-oid]'))e.preventDefault()})})();
 </script>
 <!--NXJS-END-->
 </body></html>
