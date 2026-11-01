@@ -10537,7 +10537,7 @@ function curseFx(it){const C=CURSE[it.curse];const d=document.createElement('div
 /* ジャックポットの ★ に ルール改造も 混ざる（STARK に 追加済み） */
 /* ---------- 呟き ---------- */
 Object.assign(MUMS,{rule6:['6枚目！？','ずるい ルールや','入れかわった！'],rulePay:['役なしでも もらえた','ルール 改造、最高','壊れてる〜'],dblX3:['3倍！？','トリプル や！','倍どころか 3倍'],
- curseGet:['呪いの 装備…','なんか 寒気が する','強いけど 怖い','代償か…'],curseIdle:['呪い、効いてる…','背筋が ぞくっと','強さには 代償が つきもの']});
+ curseGet:['呪いの 球…','なんか 寒気が する','強いけど 怖い','代償か…'],curseIdle:['呪い、効いてる…','背筋が ぞくっと','強さには 代償が つきもの']});
 Object.assign(EMO,{rule6:['🃏'],rulePay:['👯'],dblX3:['🔺'],curseGet:['💀','🩸'],curseIdle:['💀']});
 setInterval(()=>{try{if(!document.hidden&&cursedAny()&&!curOn('c_silent')&&Math.random()<.12)say('curseIdle',{delay:0})}catch(e){}},200000);
 (()=>{const ul=document.querySelector('#rules ul:last-of-type');if(ul)ul.insertAdjacentHTML('beforeend','<li><b>🩸 呪いの 装備</b>：全部で 12種類。🕊️「清めの 羽根」（合成や 5連勝 以上で まれに 見つかる）を 使うと 呪いを 解ける。とても 強い かわりに 代償が ある 装備。宝箱や 入荷に まれに 出る。いつでも はずせる。</li><li><b>🃏 ルール改造</b>：ジャックポットで 手に入る ★能力の なかには、6枚目の カード・ジョーカー2枚・ワンペア配当・4枚フラッシュ・透視・3倍アップ など、ルールそのものを 変える ものが ある。</li>')})();
@@ -12894,6 +12894,11 @@ window.NXZK=t=>{const UI=NXUI,own=S.tre[t.id]||0,ok=own>0&&NXT.canUse(t),u=NXT.u
    <div class="nxSec"><h4>📍 見つかる 場所</h4>${where}</div>
    <div class="nxSec"><h4>💰 売ると</h4>${UI.fc(sellPrice(t))}枚 <small>（基本 ${t.p.toLocaleString()}枚・その日の 相場で 変わる）</small></div>
    ${own?`<div class="nxBtns">${u.t==='deco'?'':`<button class="nxB go" data-a="treUse" data-id="${t.id}" ${ok?'':'disabled'}>✨ 使う</button>`}<button class="nxB red" data-a="treSell" data-id="${t.id}">売る（${UI.fc(sellPrice(t))}枚）</button></div>`:''}</div>`;UI.M.hidden=false};
+
+/* ---- 宝箱の 呪いは「呪いの 球」として 届く（装備には 呪いが つかない） ---- */
+{const _cf=curseFx;curseFx=function(it){_cf.apply(this,arguments);try{const L=document.querySelectorAll('.awFx.curse'),d=L[L.length-1];if(d){const b=d.querySelector('b');if(b)b.textContent='呪いの 球…';const sp=d.querySelector('small span');if(sp)sp.textContent='（🩸 球の タブに 入った・🕊️ 清めの 羽根で 解ける）'}}catch(e){}}}
+{const _cg=chestGive;chestGive=function(o){if(o&&o.t==='eq'&&o.it&&o.it.curse){try{const X=NXS,it=o.it;X.give(X.mkOrb(X.RR.includes(it.rar)?it.rar:'R',{kind:'cur',c:it.curse}),'🏆 連勝の 宝箱');save();ui();setTimeout(()=>{curseFx(it);say('curseGet',{n:2,delay:400,gap:1100})},900);return}catch(e){}}return _cg.apply(this,arguments)}}
+{const _cr=chestRoll;chestRoll=function(){const o=_cr.apply(this,arguments);try{if(o&&o.t==='eq'&&o.it&&o.it.curse){o.n='🩸 呪いの 球';o.e='🔮'}}catch(e){}return o}}
 </script>
 <!--NXJS-END-->
 </body></html>
