@@ -5598,7 +5598,7 @@ function openZukan(){const d=$('zkPop'),got=TRE.filter(t=>S.zukan[t.id]).length;
   const L=TRE.filter(t=>zkTab==='all'||t.r===zkTab);d.querySelector('.zkGrid').innerHTML=L.map(t=>S.zukan[t.id]?`<button class="zk1 on" data-id="${t.id}" style="--rc:${RAR[t.r].c}">${t.e}</button>`:`<button class="zk1" data-id="${t.id}">？</button>`).join('');
   d.querySelectorAll('.zkTab').forEach(b=>b.onclick=()=>{zkTab=b.dataset.k;openZukan()});
   d.querySelectorAll('.zk1').forEach(b=>b.onclick=()=>{const t=TRE.find(x=>x.id===b.dataset.id),I=d.querySelector('.zkInfo');d.querySelectorAll('.zk1.sel').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');try{tone(1047,.05,'triangle',.02)}catch(e){}
-    I.innerHTML=S.zukan[t.id]?`<span class="zkE">${t.e}</span><b>${t.n}</b> <span class="rar" style="--rc:${RAR[t.r].c}">${t.r}</span><br><small>${t.f||''}${t.season?'（季節限定）':''}${(t.sk||t.syn)?'<br>✨ 合成すると '+treSkTxt(t):''}</small><br><small>持っている数：${S.tre[t.id]||0}　基本の 買取：${t.p.toLocaleString()}枚</small>`:`<b>？？？</b> <span class="rar" style="--rc:${RAR[t.r].c}">${t.r}</span><br><small>まだ 見つけていない たからもの。${t.src==='f'?'釣りで 見つかる かも…':t.season?'季節の 間だけ 見つかる らしい…':'浜辺の どこかに…'}</small>`});
+    I.innerHTML=S.zukan[t.id]?`<span class="zkE">${t.e}</span><b>${t.n}</b> <span class="rar" style="--rc:${RAR[t.r].c}">${t.r}</span><br><small>${t.f||''}${t.season?'（季節限定）':''}${window.NXT?'<br>✨ 使うと：'+NXT.useTxt(t):''}</small><br><small>持っている数：${S.tre[t.id]||0}</small>`:`<b>？？？</b> <span class="rar" style="--rc:${RAR[t.r].c}">${t.r}</span><br><small>まだ 見つけていない たからもの。${t.src==='f'?'釣りで 見つかる かも…':t.season?'季節の 間だけ 見つかる らしい…':'浜辺の どこかに…'}</small>`;if(S.zukan[t.id]&&window.NXZK)NXZK(t)});
   if(d.hidden){d.hidden=false;try{tone(880,.06,'triangle',.02);tone(1320,.08,'triangle',.02,.06)}catch(e){}}}
 {const _bs=buildShop;buildShop=function(){_bs.apply(this,arguments);try{if((S.shopTab||'music')==='sell'){const P=$('shopBody').querySelector('.spanel');if(P){const got=TRE.filter(t=>S.zukan[t.id]).length;P.insertAdjacentHTML('afterbegin',`<button class="b zkOpen">📖 たからもの 図鑑 <small>${got}/${TRE.length}</small></button>`);P.querySelector('.zkOpen').onclick=()=>{zkTab='all';openZukan()}}}}catch(e){}}}
 /* ---------- 呟き：名言・ことわざ・あるある・新喜劇ネタ ---------- */
@@ -12852,6 +12852,15 @@ return{add,draw,info,st,GOAL}})();
 {const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase!==p0&&S.phase==='won'&&S.win>0){const rk=evaluate(S.hand).rank;if(rk<=9)NXCAS.add(rk)}}catch(e){}return r}}
 /* 合成・入荷が なくなったので、それに 関係する 能力の 球は 別の 能力に */
 try{const OB=['arr','synUp','synFee','undoC'];let ch=0;NXS.st().orbs.forEach(o=>{if(!o.k)return;const base=o.k.startsWith('g_')?o.k.split('_').pop():o.k;if(OB.includes(base)){const ks=Object.keys(EQK).filter(k=>!k.startsWith('g_')&&k!=='gift'&&!OB.includes(k)&&!(typeof STARK!=='undefined'&&STARK.includes(k)));o.k=ks[Math.random()*ks.length|0];ch++}});if(ch){NXS.apply();save()}}catch(e){}
+/* 図鑑：たからものの 詳細 */
+window.NXZK=t=>{const UI=NXUI,own=S.tre[t.id]||0,ok=own>0&&NXT.canUse(t),u=NXT.useOf(t);
+  const where=t.src==='f'?'🎣 釣りで 見つかる':t.season?'🍂 季節の 間だけ 見つかる':t.id.startsWith('nmu_')||t.id.startsWith('nev_')||t.id.startsWith('nky_')?'🌊 浜辺の イベント・動物・漂着物から':'🏖️ 浜辺の イベント・動物・漂着物から';
+  UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3.2rem">${t.e}</span><div><h3>${UI.esc(t.n)}</h3><div class="nxTags"><span class="nxTag">${t.r}</span><span class="nxTag">持っている数 ×${own}</span></div></div></div>
+   <div class="nxSec"><small>${UI.esc(t.f||'')}</small></div>
+   <div class="nxSec"><h4>✨ 使うと</h4>${NXT.useTxt(t)}</div>
+   <div class="nxSec"><h4>📍 見つかる 場所</h4>${where}</div>
+   <div class="nxSec"><h4>💰 売ると</h4>${UI.fc(sellPrice(t))}枚 <small>（基本 ${t.p.toLocaleString()}枚・その日の 相場で 変わる）</small></div>
+   ${own?`<div class="nxBtns">${u.t==='deco'?'':`<button class="nxB go" data-a="treUse" data-id="${t.id}" ${ok?'':'disabled'}>✨ 使う</button>`}<button class="nxB red" data-a="treSell" data-id="${t.id}">売る（${UI.fc(sellPrice(t))}枚）</button></div>`:''}</div>`;UI.M.hidden=false};
 </script>
 <!--NXJS-END-->
 </body></html>
