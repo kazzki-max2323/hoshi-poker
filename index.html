@@ -239,6 +239,27 @@ body:has(#nxP:not([hidden])) #toast,body:has(#nxM:not([hidden])) #toast,body:has
 #nxP .nxOrb.nxOver{box-shadow:0 0 0 3px #f29a2a}
 #nxP .nxRow.nxOver{background:#fff1cf}
 .nxSellT{display:block;font-size:.7rem;color:#9a6a20}
+#nxFlea{position:absolute;z-index:1;width:84px;margin-left:-42px;pointer-events:auto;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent}
+#nxFlea .its{position:relative;z-index:1;display:flex;justify-content:center;gap:3px;font-size:.95rem;line-height:1;margin-bottom:-9px;min-height:4px}
+#nxFlea .its b{font-weight:400;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
+#nxFlea .sh{height:16px;border-radius:3px;background:repeating-linear-gradient(90deg,#d9604f 0 8px,#fff2dc 8px 16px);transform:perspective(50px) rotateX(40deg);box-shadow:0 2px 3px rgba(0,0,0,.35);opacity:.92}
+#nxFlea .lb{display:inline-block;margin-top:2px;font-family:var(--pixel);font-size:.56rem;color:#5a3a10;background:rgba(255,246,220,.85);border:1px solid #d9a35a;border-radius:999px;padding:1px 7px;white-space:nowrap}
+#nxFlea.hot .lb{background:#fff1c4;border-color:#f29a2a}
+#nxFlea .cu{position:absolute;left:-22px;bottom:16px;font-size:1.45rem;line-height:1;animation:nxBob 2.4s ease-in-out infinite;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+#nxFlea .cu.by{animation:nxFlBye 4.5s ease-in forwards}
+@keyframes nxFlBye{0%,60%{opacity:1;transform:none}100%{opacity:0;transform:translateX(-30px)}}
+#nxFlea .bb{position:absolute;bottom:105%;left:0;white-space:nowrap;font-style:normal;font-family:var(--round);font-size:.62rem;font-weight:800;color:#4a2a0a;background:#fff;border-radius:10px;padding:2px 7px;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.nxFlSay{margin-top:10px;background:#fff6e0;border-radius:12px;padding:8px 10px;font-size:.9rem;font-weight:800;line-height:1.5}
+.nxFlSay small{display:block;font-size:.72rem;font-weight:600;color:#8a6a40;margin-top:2px}
+.nxFlDeal{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:stretch;margin-top:10px}
+.nxFlDeal .ar{align-self:center;font-size:1.3rem;color:#c8901f}
+.nxFlC{border:2px solid #ecd2a2;border-radius:12px;padding:6px;text-align:center;font-size:.72rem;background:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.nxFlC h5{margin:0;font-size:.62rem;color:#a0601a}.nxFlC .i{font-size:1.8rem;line-height:1.1}.nxFlC b{overflow-wrap:anywhere}.nxFlC small{color:#8a6a40;font-size:.64rem}
+.nxFlS{display:flex;align-items:center;gap:8px;width:100%;box-sizing:border-box;background:#fff;border:2px solid #ecd2a2;border-radius:12px;padding:6px 8px;margin:6px 0;text-align:left;font-family:var(--round);color:#4a2a0a}
+.nxFlS .i{font-size:1.6rem;width:34px;text-align:center}.nxFlS .nxInfo{flex:1;min-width:0}.nxFlS .nxInfo b{display:block;font-size:.8rem}.nxFlS .nxInfo small{display:block;font-size:.66rem;color:#8a6a40}
+.nxFlS .nxB{flex:0 0 auto;min-height:34px;font-size:.72rem}
+.nxFlS.add{justify-content:center;border-style:dashed;color:#c8901f;font-weight:800;font-size:.85rem;min-height:48px;cursor:pointer;background:#fffaf0}
+.nxFlS.pk{cursor:pointer}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12899,6 +12920,107 @@ window.NXZK=t=>{const UI=NXUI,own=S.tre[t.id]||0,ok=own>0&&NXT.canUse(t),u=NXT.u
 {const _cf=curseFx;curseFx=function(it){_cf.apply(this,arguments);try{const L=document.querySelectorAll('.awFx.curse'),d=L[L.length-1];if(d){const b=d.querySelector('b');if(b)b.textContent='呪いの 球…';const sp=d.querySelector('small span');if(sp)sp.textContent='（🩸 球の タブに 入った・🕊️ 清めの 羽根で 解ける）'}}catch(e){}}}
 {const _cg=chestGive;chestGive=function(o){if(o&&o.t==='eq'&&o.it&&o.it.curse){try{const X=NXS,it=o.it;X.give(X.mkOrb(X.RR.includes(it.rar)?it.rar:'R',{kind:'cur',c:it.curse}),'🏆 連勝の 宝箱');save();ui();setTimeout(()=>{curseFx(it);say('curseGet',{n:2,delay:400,gap:1100})},900);return}catch(e){}}return _cg.apply(this,arguments)}}
 {const _cr=chestRoll;chestRoll=function(){const o=_cr.apply(this,arguments);try{if(o&&o.t==='eq'&&o.it&&o.it.curse){o.n='🩸 呪いの 球';o.e='🔮'}}catch(e){}return o}}
+/* ========== 🧺 浜辺の フリマ（並べた 物を お客さんが 買う・交換を 持ちかける・交渉できる） ========== */
+const NXFL=window.NXFL=(()=>{const X=NXS,D=()=>X.st(),U=()=>NXUI,pk=a=>a[Math.random()*a.length|0],R=(a,b)=>a+Math.random()*(b-a);
+const MAXN=3,PER_DAY=8,WAIT=240;
+const RI=r=>Math.max(0,X.RR.indexOf(r)),up=(r,n)=>X.RR[Math.min(X.RR.length-1,RI(r)+n)];
+const rnd=v=>{v=Math.max(1,v);const p=Math.pow(10,Math.max(0,Math.floor(Math.log10(v))-1));return Math.round(v/p)*p};
+const fc=v=>Math.round(v).toLocaleString();
+function st(){const d=D();if(!d.flea)d.flea={items:[],day:-1,n:0,acc:0,next:600,vseen:{}};const f=d.flea;if(f.day!==(S.gday||0)){f.day=S.gday||0;f.n=0}if(!f.vseen)f.vseen={};return f}
+function info(it){if(it.t==='eq')return{ico:X.eqIcon(it.e),nm:X.eqName(it.e),r:it.e.r,v:X.sellE(it.e)};
+  if(it.t==='orb')return{ico:X.orbIcon(it.o),nm:X.orbName(it.o)+' Lv'+it.o.lv,r:it.o.r,v:X.sellO(it.o)};
+  if(it.t==='holy')return{ico:'🕊️',nm:'清めの 羽根',r:'SR',v:0};
+  const t=TRE.find(x=>x.id===it.id);return{ico:t?t.e:'❔',nm:t?t.n:'？',r:t?t.r:'N',v:t?sellPrice(t):1}}
+const icoH=it=>it.t==='orb'?U().orbH(it.o,'sm'):`<span class="i">${info(it).ico}</span>`;
+/* お客さん */
+const PPL=[{e:'🧑',n:'散歩の お兄さん',ty:'norm'},{e:'👵',n:'やさしい おばあちゃん',ty:'gen'},{e:'🧒',n:'近所の こども',ty:'stingy'},{e:'🧐',n:'球の コレクター',ty:'col'},
+  {e:'👩‍🎨',n:'絵描きさん',ty:'art'},{e:'🎣',n:'釣り人',ty:'norm'},{e:'🏄',n:'サーファー',ty:'gen'},{e:'🧳',n:'旅行の 人',ty:'stingy'}];
+const ANI=[{e:'🐕',n:'犬',cry:'ワン、ワン！',yes:'ワン！',no:'……クゥーン',br:'くわえて きた',nt:0},{e:'🐈',n:'ねこ',cry:'にゃーん',yes:'にゃっ！',no:'……プイッ',br:'くわえて きた',nt:1},
+  {e:'🦀',n:'カニ',cry:'チョキ、チョキ',yes:'チョキン！',no:'……カサカサ',br:'はさんで きた',nt:1},{e:'🐢',n:'ウミガメ',cry:'……',yes:'……',no:'……',br:'せなかに のせて きた',nt:1},
+  {e:'🦭',n:'アザラシ',cry:'キュー、キュー',yes:'キュッ！',no:'……キュゥ',br:'口に くわえて きた',nt:1},{e:'🐦',n:'カモメ',cry:'ミャア、ミャア',yes:'ミャア！',no:'……バサバサ',br:'くちばしで 運んで きた',nt:0}];
+const VIS={ufo:{cry:'ピコ…ピコ… ソレ、ホシイ',buy:1.8,ex:'orbUp'},pirate:{cry:'ヨーホー！ そいつを ゆずって くれ',buy:2,ex:'cur'},mermaid:{cry:'海の 底の 宝と 交換 しない？',buy:1.4,ex:'sup'},merchant:{cry:'旅の みやげに ほしいな',buy:1.6,ex:'eqUp'}};
+const FAC={gen:[1.1,1.5],norm:[.9,1.2],stingy:[.6,.85],col:[1,1.35],art:[.9,1.3]},CP={gen:.7,norm:.5,stingy:.3,col:.55,art:.5};
+let cur=null,bye=null,el=null;
+function gift(kind,r){if(kind==='holy')return{t:'holy'};
+  if(kind==='tre'){const tr=['N','R','SR','SSR','UR'][Math.min(4,RI(r)+(Math.random()<.25?1:0))];let pool=TRE.filter(t=>t.r===tr&&!/^(ndc_|sz_)/.test(t.id));if(!pool.length)pool=TRE.filter(t=>t.r==='N');return{t:'tre',id:pk(pool).id}}
+  if(kind==='eqUp')return{t:'eq',e:X.mkEq(up(r,1))};
+  if(kind==='sup')return{t:'orb',o:X.mkOrb(X.RR[Math.min(4,RI(r))],{kind:'sup'})};
+  if(kind==='cur')return{t:'orb',o:X.mkOrb(up(r,1),{kind:'cur'})};
+  return{t:'orb',o:X.mkOrb(kind==='orbUp'?up(r,1):up(r,Math.random()<.2?1:0))}}
+function offer(c){const I=info(c.want);
+  if(c.kind==='vis'){const V=VIS[c.k]||VIS.merchant;c.off=Math.random()<.5?{ty:'buy',p:rnd(I.v*V.buy*R(.9,1.1))}:{ty:'ex',g:gift(V.ex,I.r),b:0};return}
+  if(c.kind==='ani'){c.off={ty:'ex',g:gift(RI(I.r)>=2&&Math.random()<.06?'holy':Math.random()<.65?'tre':'orb',I.r),b:0};return}
+  if(Math.random()<.65){const f=FAC[c.ty]||FAC.norm;c.off={ty:'buy',p:rnd(I.v*R(f[0],f[1])*(c.ty==='col'&&c.want.t==='orb'?1.2:1))}}
+  else c.off={ty:'ex',g:gift(c.ty==='col'?'orb':c.ty==='art'?'tre':Math.random()<.6?'tre':'orb',I.r),b:0}}
+function spawn(){const f=st();if(!f.items.length)return;let c;const v=window.NXVIS&&NXVIS.cur();
+  if(v&&!f.vseen[v.t]){f.vseen[v.t]=1;c={kind:'vis',k:v.k,e:v.who[0],n:v.who[1]}}
+  else{if(f.n>=PER_DAY)return;const night=DK()>.6;if(Math.random()<(night?.65:.4))c=Object.assign({kind:'ani'},pk(ANI.filter(a=>!night||a.nt)));else c=Object.assign({kind:'ppl'},pk(PPL));f.n++}
+  let L=f.items;if(c.ty==='col'&&L.some(x=>x.t==='orb'))L=L.filter(x=>x.t==='orb');if(c.ty==='art'&&L.some(x=>x.t==='tre'))L=L.filter(x=>x.t==='tre');
+  c.want=pk(L);c.left=WAIT;c.cnt=0;c.line=null;offer(c);cur=c;bye=null;save();draw();
+  try{[660,880].forEach((q,i)=>tone(q,.18,'sine',.018,i*.14))}catch(e){}}
+function leave(txt){if(!cur)return;bye={e:cur.e,txt};cur=null;draw();setTimeout(()=>{bye=null;draw()},4500)}
+/* 浜辺の シート */
+function place(){const w=$('window');if(!w)return;if(!el){el=document.createElement('div');el.id='nxFlea';w.appendChild(el);el.addEventListener('click',e=>{e.stopPropagation();cur?deal():manage()});el.addEventListener('pointerdown',e=>e.stopPropagation())}
+  try{const g=SCENE.dbg(),wr=w.getBoundingClientRect();el.style.left=(g.WL-wr.left+g.WW*.27)+'px';el.style.top=(g.shore+10*g.k-wr.top-scrollY)+'px'}catch(e){el.style.left='27%';el.style.top='66%'}}
+function draw(){place();const f=st();const its=f.items.map(it=>`<b>${info(it).ico}</b>`).join('');
+  const cu=cur?`<div class="cu">${cur.e}<i class="bb">${cur.kind==='ani'?cur.cry:cur.kind==='vis'?'…ちょっと いい？':'これ、いいな…'}</i></div>`:bye?`<div class="cu by">${bye.e}<i class="bb">${bye.txt}</i></div>`:'';
+  el.innerHTML=`${cu}<div class="its">${its}</div><div class="sh"></div><span class="lb">🧺 フリマ${f.items.length?` ${f.items.length}/${MAXN}`:''}</span>`;el.classList.toggle('hot',!!cur)}
+/* 交渉の 画面 */
+function card(it,h){const I=info(it);return `<div class="nxFlC"><h5>${h}</h5>${icoH(it)}<b>${U().esc(I.nm)}</b>${it.t!=='holy'?U().rtag(I.r):''}${I.v&&h==='ほしい 物'?`<small>売値 ${fc(I.v)}枚</small>`:''}</div>`}
+function offCard(c){const o=c.off;if(o.ty==='buy')return `<div class="nxFlC"><h5>出す と 言っている</h5><span class="i">🪙</span><b>${fc(o.p)}枚</b><small>売値の ${Math.round(o.p/Math.max(1,info(c.want).v)*100)}%</small></div>`;
+  return card(o.g,'かわりに').replace('</div>',(o.b?`<small>＋ おまけ 🪙 ${fc(o.b)}枚</small>`:'')+'</div>')}
+function sayLine(c){const I=info(c.want),o=c.off;if(c.line)return c.line;
+  if(c.kind==='ani'){return {s:c.cry,t:`${I.nm} が ほしい みたい。${o.g?info(o.g).nm+' を '+c.br:''}`}}
+  if(c.kind==='vis'){const V=VIS[c.k]||VIS.merchant;return {s:V.cry+'。'+(o.ty==='buy'?`🪙 ${fc(o.p)}枚 出す`:`${info(o.g).nm} と 交換 しよう`)}}
+  if(o.ty==='buy')return {s:{gen:`すてき！ 🪙 ${fc(o.p)}枚で ゆずって もらえる？`,norm:`これ、🪙 ${fc(o.p)}枚で どう？`,stingy:`うーん… 🪙 ${fc(o.p)}枚なら 買う けど`,col:`いい ものだね。🪙 ${fc(o.p)}枚で どうかな`,art:`絵の モデルに したいな。🪙 ${fc(o.p)}枚で どう？`}[c.ty]||`🪙 ${fc(o.p)}枚で どう？`};
+  return {s:`この ${info(o.g).nm} と 交換 しない？`}}
+function deal(){const c=cur,UI=U();if(!c)return manage();const L=sayLine(c),left=Math.max(1,Math.ceil(c.left/60));
+  UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3rem">${c.e}</span><div><h3>${c.n}</h3><div class="nxTags"><span class="nxTag">あと 約${left}分 待って くれる</span>${c.kind==='vis'?'<span class="nxTag" style="background:#efe4ff;color:#5a2a9a">来訪者</span>':''}</div></div></div>
+   <div class="nxFlSay">「${L.s}」${L.t?`<small>（${L.t}）</small>`:''}</div>
+   <div class="nxFlDeal">${card(c.want,'ほしい 物')}<span class="ar">⇄</span>${offCard(c)}</div>
+   <div class="nxBtns"><button class="nxB go" data-fl="ok">🤝 受ける</button>${c.cnt<2&&!c.noMore?'<button class="nxB" data-fl="ctr">💬 言い返す<small>もう少し いい 条件に</small></button>':''}<button class="nxB red wide" data-fl="no">ことわる</button></div></div>`;UI.M.hidden=false}
+function accept(){const c=cur,f=st();if(!c)return;const k=f.items.indexOf(c.want);if(k<0){leave('…');U().M.hidden=true;return}f.items.splice(k,1);const o=c.off,src='🧺 フリマで 交換';
+  if(o.ty==='buy'){S.coins+=o.p;try{getCoin(o.p,'🧺 フリマで 売れた')}catch(e){}}
+  else{const g=o.g;if(g.t==='tre'){const t=TRE.find(x=>x.id===g.id);if(t)addTre(t,src)}else if(g.t==='orb')X.give(g.o,src);else if(g.t==='eq')X.giveEq(g.e,src);else if(g.t==='holy')holyGet(src);
+    if(o.b){S.coins+=o.b;setTimeout(()=>{try{getCoin(o.b,'🧺 おまけ')}catch(e){}},1600)}}
+  try{sfx.coin()}catch(e){}X.apply();save();ui();U().M.hidden=true;U().refresh();leave(c.kind==='ani'?c.yes:'ありがとう！')}
+function counter(){const c=cur;if(!c||c.cnt>=2||c.noMore)return;const I=info(c.want);const p=(c.kind==='ani'?.5:c.kind==='vis'?.5:(CP[c.ty]||.5))-.15*c.cnt;c.cnt++;
+  if(Math.random()<p){if(c.off.ty==='buy'){c.off.p=rnd(c.off.p*R(1.15,1.35));c.line=c.kind==='vis'?{s:`…いいだろう。🪙 ${fc(c.off.p)}枚 だ`}:{s:`うーん… じゃあ 🪙 ${fc(c.off.p)}枚！`}}
+    else if(c.kind==='ani'){const g=c.off.g;c.off.g=g.t==='holy'?g:gift(g.t==='orb'?'orbUp':'tre',up(I.r,1));c.line={s:c.yes,t:`もっと いい 物を ${c.br}。${info(c.off.g).nm} と 交換 したい みたい`}}
+    else{c.off.b=(c.off.b||0)+rnd(I.v*R(.2,.4));c.line={s:`じゃあ おまけに 🪙 ${fc(c.off.b)}枚 つける よ`}}
+    try{tone(990,.12,'triangle',.02)}catch(e){}return deal()}
+  if(Math.random()<.5){U().M.hidden=true;try{tone(330,.2,'sine',.02)}catch(e){}return leave(c.kind==='ani'?c.no:'それなら やめとくね')}
+  c.noMore=true;c.line=c.kind==='ani'?{s:c.no.replace('……','')||'……',t:'これ以上は ゆずらない みたい'}:{s:'これ以上は むり〜'};deal()}
+function refuse(){const c=cur;if(!c)return;U().M.hidden=true;leave(c.kind==='ani'?c.no:pk(['そっか、また 来るね','ざんねん…','また 今度 ね']))}
+/* 並べる・ひっこめる */
+let ptab='eq';
+function manage(){const f=st(),UI=U();const slots=[0,1,2].map(i=>{const it=f.items[i];if(!it)return `<button class="nxFlS add" data-fl="pick">＋ 並べる</button>`;const I=info(it);
+    return `<div class="nxFlS">${icoH(it)}<div class="nxInfo"><b>${UI.esc(I.nm)} ${UI.rtag(I.r)}</b><small>売値の 目安 ${fc(I.v)}枚</small></div><button class="nxB" data-fl="un" data-i="${i}">ひっこめる</button></div>`}).join('');
+  UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><h3>🧺 浜辺の フリマ</h3>
+   <p class="nxNote">並べて おくと、ときどき お客さんが 来て「買いたい」「交換 しない？」と 声を かけて くる。<b>受ける・言い返す・ことわる</b> から えらぼう。<br>アプリを 開いて いる 間だけ ・ 1日 ${PER_DAY}人 くらい（来訪者も 寄って くれる）</p>
+   ${slots}<p class="nxNote" style="text-align:center">今日 来た お客さん：${f.n}人${cur?` ・ いま ${cur.e} が 来て いる！`:''}</p>${cur?'<div class="nxBtns"><button class="nxB go wide" data-fl="deal">💬 お客さんと 話す</button></div>':''}</div>`;UI.M.hidden=false}
+function picker(){const UI=U(),d=D();let rows='';
+  if(ptab==='eq'){const L=d.eqs.filter(e=>!X.isOn(e));rows=L.map(e=>`<button class="nxFlS pk" data-fl="add" data-k="eq" data-id="${e.id}"><span class="i">${X.eqIcon(e)}</span><div class="nxInfo"><b>${UI.esc(X.eqName(e))} ${UI.rtag(e.r)}</b><small>売値 ${fc(X.sellE(e))}枚${e.s.some(Boolean)?' ・ 中の 球は 箱に もどる':''}</small></div></button>`).join('')||'<div class="nxEmpty">並べられる 装備が ない（装備中の 物は 出せない）</div>'}
+  else if(ptab==='orb'){const L=d.orbs.filter(o=>!X.eqOf(o)).slice().sort((a,b)=>RI(b.r)-RI(a.r));rows=L.map(o=>`<button class="nxFlS pk" data-fl="add" data-k="orb" data-id="${o.id}">${UI.orbH(o,'sm')}<div class="nxInfo"><b>${UI.esc(X.orbName(o))} ${UI.rtag(o.r)}</b><small>売値 ${fc(X.sellO(o))}枚</small></div></button>`).join('')||'<div class="nxEmpty">箱に 球が ない（装備に 入って いる 球は 出せない）</div>'}
+  else{const L=TRE.filter(t=>S.tre[t.id]>0);rows=L.map(t=>`<button class="nxFlS pk" data-fl="add" data-k="tre" data-id="${t.id}"><span class="i">${t.e}</span><div class="nxInfo"><b>${UI.esc(t.n)} ${UI.rtag(t.r)} ×${S.tre[t.id]}</b><small>売値 ${fc(sellPrice(t))}枚</small></div></button>`).join('')||'<div class="nxEmpty">たからものが ない</div>'}
+  UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-fl="back">←</button><h3>🧺 何を 並べる？</h3><div class="nxFilter" style="margin-top:8px">${[['eq','🎒 装備'],['orb','🔮 球'],['tre','🐚 たからもの']].map(([k,n])=>`<button class="${ptab===k?'on':''}" data-fl="pt" data-k="${k}">${n}</button>`).join('')}</div>${rows}</div>`;UI.M.hidden=false}
+function add(k,id){const f=st(),d=D();if(f.items.length>=MAXN){evToast('シートに 並べられるのは 3つまで');return manage()}
+  if(k==='eq'){const e=X.eGet(id);if(!e||X.isOn(e))return;e.s=e.s.map(()=>null);d.eqs=d.eqs.filter(x=>x!==e);f.items.push({t:'eq',e})}
+  else if(k==='orb'){const o=X.oGet(id);if(!o||X.eqOf(o))return;d.orbs=d.orbs.filter(x=>x!==o);f.items.push({t:'orb',o})}
+  else{if(!(S.tre[id]>0))return;S.tre[id]--;f.items.push({t:'tre',id})}
+  if(f.next-f.acc>240)f.next=f.acc+R(90,240);X.apply();save();ui();U().refresh();draw();manage()}
+function un(i){const f=st(),d=D(),it=f.items[i];if(!it)return;f.items.splice(i,1);if(it.t==='eq')d.eqs.push(it.e);else if(it.t==='orb')d.orbs.push(it.o);else S.tre[it.id]=(S.tre[it.id]||0)+1;
+  if(cur&&cur.want===it){U().M.hidden=true;leave(cur.kind==='ani'?cur.no:'あ… ひっこめちゃった')}save();U().refresh();draw();manage()}
+U().M.addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b||!U().M.contains(b))return;e.stopPropagation();const a=b.dataset.fl;
+  if(a==='pick')return picker();if(a==='back')return manage();if(a==='pt'){ptab=b.dataset.k;return picker()}if(a==='add')return add(b.dataset.k,b.dataset.id);if(a==='un')return un(+b.dataset.i);
+  if(a==='deal')return deal();if(a==='ok')return accept();if(a==='ctr')return counter();if(a==='no')return refuse()});
+/* 時間（アプリを 開いて いる 間だけ 進む） */
+setInterval(()=>{try{if(document.hidden)return;const f=st();if(cur){const open=!U().M.hidden&&U().M.querySelector('[data-fl=ok]');if(!open){cur.left-=5;if(cur.left<=0)leave(cur.kind==='ani'?cur.no:'…帰って いった')}}
+  else if(f.items.length){f.acc+=5;const v=window.NXVIS&&NXVIS.cur();if((v&&!f.vseen[v.t])||(f.n<PER_DAY&&f.acc>=f.next)){f.next=f.acc+R(900,1800);spawn()}}
+  place()}catch(e){}},5000);
+setTimeout(draw,900);addEventListener('resize',()=>setTimeout(place,300));
+try{const ul=document.querySelector('#rules ul:last-of-type');if(ul)ul.insertAdjacentHTML('beforeend','<li><b>🧺 浜辺の フリマ</b>：浜辺の シートに 装備・球・たからものを 3つまで 並べると、お客さんや 動物が 来て「買いたい」「交換 しない？」と 持ちかけて くる。受ける・言い返す・ことわる から えらぶ。アプリを 開いて いる 間だけ、1日 8人 くらい。</li>')}catch(e){}
+return{st,spawn,draw,manage,deal,get cur(){return cur}}})();
 </script>
 <!--NXJS-END-->
 </body></html>
