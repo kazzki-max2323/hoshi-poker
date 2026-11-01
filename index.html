@@ -197,6 +197,19 @@ html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.
 #nxM [data-oid].lift{opacity:.3}
 .nxSlot.over{background:#ffd98a;box-shadow:0 0 0 3px #f29a2a inset}
 #nxGhost{position:fixed;z-index:90;pointer-events:none;transform:translate(-50%,-60%) scale(1.25);filter:drop-shadow(0 8px 10px rgba(0,0,0,.35));transition:transform .12s}
+
+#nxCst{position:absolute;left:2px;top:34px;width:min(46%,210px);z-index:1;pointer-events:none;transition:opacity 2s}
+#nxCst svg{width:100%;height:auto;overflow:visible;display:block}
+#nxCst line{stroke:rgba(200,215,255,.28);stroke-width:.8;stroke-dasharray:2 2}
+#nxCst line.on{stroke:rgba(255,240,190,.75);stroke-dasharray:none;stroke-width:1}
+#nxCst circle{fill:rgba(190,200,240,.35)}
+#nxCst circle.on{fill:#fff6d0;filter:drop-shadow(0 0 3px #ffe9a0);animation:nxTw 3.2s ease-in-out infinite}
+#nxCst circle.new{animation:nxLit 1.6s ease-out}
+@keyframes nxTw{50%{opacity:.6}}@keyframes nxLit{0%{r:7;fill:#fff}100%{}}
+#nxCst.done line{stroke:rgba(255,236,170,.95);stroke-width:1.4;filter:drop-shadow(0 0 3px #ffe08a)}
+#nxCstL{pointer-events:auto;display:inline-block;margin-top:2px;font-family:var(--pixel);font-size:.6rem;color:#e8ecff;background:rgba(10,12,40,.45);border:1px solid rgba(200,215,255,.35);border-radius:999px;padding:1px 8px;cursor:pointer;text-shadow:0 1px 2px #000}
+body.bright #nxCst{opacity:.45}
+@media (prefers-reduced-motion:reduce){#nxCst circle.on{animation:none}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12745,6 +12758,37 @@ setTimeout(()=>{try{const d=NXS.st();if(d.disp&&d.disp.length){d.disp.forEach(id
   addEventListener('pointercancel',()=>{if(st){clearTimeout(st.tm);st=null}if(drag)end()});
   M.addEventListener('click',e=>{if(Date.now()-noClick<450){e.stopPropagation();e.preventDefault()}},true);
   M.addEventListener('contextmenu',e=>{if(e.target.closest('[data-oid]'))e.preventDefault()})})();
+/* ========== 星座を 灯す（役を 作ると 夜空の 星が 灯る） ========== */
+const NXCST=window.NXCST=(()=>{const X=NXS,D=()=>X.st();
+const C=[
+ {n:'こぐま座',st:[[10,20],[28,26],[44,24],[58,34],[74,30],[88,44],[76,52]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]],rq:[9,9,9,8,9,8,7]},
+ {n:'カシオペヤ座',st:[[8,22],[28,46],[48,28],[68,48],[90,24]],ln:[[0,1],[1,2],[2,3],[3,4]],rq:[9,8,8,7,6]},
+ {n:'はくちょう座',st:[[50,6],[50,30],[50,50],[50,72],[18,34],[82,26]],ln:[[0,1],[1,2],[2,3],[4,1],[1,5]],rq:[9,8,7,7,6,5]},
+ {n:'オリオン座',st:[[18,8],[80,12],[38,40],[50,44],[62,48],[22,80],[78,76]],ln:[[0,2],[1,4],[2,3],[3,4],[2,5],[4,6]],rq:[8,7,7,6,6,5,4]},
+ {n:'さそり座',st:[[90,10],[78,22],[66,30],[54,40],[46,54],[40,68],[28,76],[14,70]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]],rq:[8,7,6,6,5,5,4,3]},
+ {n:'りゅう座',st:[[10,60],[24,40],[40,30],[58,34],[70,20],[86,12],[92,30],[78,40]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,4]],rq:[7,6,5,5,4,4,3,2]}];
+const RQN=r=>r>=9?'どんな 役でも':`${HANDS[r].n} 以上`;
+function st(){const d=D();if(!d.cst)d.cst={i:0,lit:[],cyc:0};return d.cst}
+const cur=()=>C[st().i%C.length];
+let el=null,lastNew=-1;
+function draw(){const w=$('window');if(!w)return;if(!el){el=document.createElement('div');el.id='nxCst';w.appendChild(el)}const c=cur(),s=st(),lit=s.lit,all=c.st.every((_,i)=>lit[i]);
+  el.className=all?'done':'';
+  el.innerHTML=`<svg viewBox="0 0 100 86">${c.ln.map(([a,b])=>`<line class="${lit[a]&&lit[b]?'on':''}" x1="${c.st[a][0]}" y1="${c.st[a][1]}" x2="${c.st[b][0]}" y2="${c.st[b][1]}"/>`).join('')}${c.st.map(([x,y],i)=>`<circle class="${lit[i]?'on':''}${i===lastNew?' new':''}" cx="${x}" cy="${y}" r="${lit[i]?2.6:1.8}"/>`).join('')}</svg><span id="nxCstL">✨ ${c.n} ${lit.filter(Boolean).length}/${c.st.length}${s.cyc?` ・${s.cyc+1}周目`:''}</span>`;
+  el.querySelector('#nxCstL').onclick=e=>{e.stopPropagation();info()};lastNew=-1}
+function info(){const c=cur(),s=st(),UI=NXUI;if(UI.P.hidden){}UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><h3>✨ ${c.n}${s.cyc?`（${s.cyc+1}周目）`:''}</h3>
+  <p class="nxNote">役を 作ると、その 役で 灯せる 星が 1つ 灯る。全部 灯ると 星座が 完成して ごほうび。完成した 星座: ${s.done||0}個</p>
+  ${c.st.map((_,i)=>`<div class="nxRow" style="cursor:default;padding:5px 10px;margin:4px 0"><span style="font-size:1.1rem">${s.lit[i]?'⭐':'☆'}</span><div class="nxInfo"><b style="font-size:.8rem">${RQN(c.rq[i])}</b></div></div>`).join('')}
+  <p class="nxNote">ごほうび：コイン・${['R','SR','SR','SSR','SSR','UR'][s.i%C.length]} 以上の 球・たからもの</p></div>`;UI.M.hidden=false}
+function light(rank){const c=cur(),s=st();let best=-1;c.rq.forEach((q,i)=>{if(s.lit[i]||rank>q)return;if(best<0||q<c.rq[best])best=i});if(best<0)return;
+  s.lit[best]=true;lastNew=best;try{bell(1568+best*60,.02,0,1.6)}catch(e){}draw();
+  if(c.st.every((_,i)=>s.lit[i]))setTimeout(complete,1400);save()}
+function complete(){const s=st(),c=cur(),k=s.i%C.length,m=1+s.cyc;try{el&&el.classList.add('done');[784,988,1175,1568].forEach((f,i)=>bell(f,.025,i*.25,2))}catch(e){}
+  const coins=Math.round(Math.max(1000,(S.bet||1)*120)*(k+1)*m/10)*10;S.coins+=coins;const r=['R','SR','SR','SSR','SSR','UR'][k];X.give(X.mkOrb(m>1&&r!=='UR'?X.rUp(r):r),`✨ ${c.n} の 星から`);const t=rollTre(1+k*.4);if(t)setTimeout(()=>addTre(t,`✨ ${c.n} の ごほうび`),2500);
+  evToast(`✨ <b>${c.n}</b> が 完成した<br><small>🪙 ${coins.toLocaleString()}枚 ・ 球 ・ たからもの</small>`);s.done=(s.done||0)+1;
+  setTimeout(()=>{s.i++;if(s.i%C.length===0)s.cyc=(s.cyc||0)+1;s.lit=[];draw();save()},4200);ui();save()}
+return{draw,light,info,st,C}})();
+{const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase!==p0&&S.phase==='won'&&S.win>0){const rk=evaluate(S.hand).rank;if(rk<=9)NXCST.light(rk)}}catch(e){}return r}}
+setTimeout(()=>NXCST.draw(),600);
 </script>
 <!--NXJS-END-->
 </body></html>
