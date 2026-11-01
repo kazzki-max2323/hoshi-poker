@@ -222,6 +222,16 @@ body.bright #nxCst{opacity:.45}
 #nxCas.done svg{filter:drop-shadow(0 0 6px rgba(255,236,170,.9)) drop-shadow(0 3px 2px rgba(60,30,0,.35))}
 #nxCasL{pointer-events:auto;display:block;width:max-content;margin:2px auto 0;font-family:var(--pixel);font-size:.56rem;color:#5a3a10;background:rgba(255,246,220,.85);border:1px solid #d9a35a;border-radius:999px;padding:1px 7px;cursor:pointer}
 @media (prefers-reduced-motion:reduce){#nxCas .flag{animation:none}}
+
+.nxSum{background:#fff;border:2px solid #9fd9c0;border-radius:14px;padding:8px 10px;margin:4px 0 10px}
+.nxSum h4{margin:0 0 6px;font-size:.8rem;color:#1a7a5a}
+.nxSumG{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px}
+.nxSumR{display:flex;align-items:center;gap:5px;font-size:.72rem;background:#f2fbf6;border-radius:8px;padding:4px 6px;cursor:pointer;min-width:0}
+.nxSumR b{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+.nxSumR i{font-style:normal;color:#2a5aa8;font-weight:800;white-space:nowrap}
+.nxSumR.cur{grid-column:1/-1;background:#f6e8ff;margin-top:4px;cursor:default;flex-wrap:wrap}.nxSumR.cur i{color:#6a2aa8;white-space:normal;font-weight:600}
+.nxSumN{display:block;margin-top:4px;color:#8a6a40;font-size:.62rem;text-align:right}
+@media (max-width:360px){.nxSumG{grid-template-columns:1fr}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12448,9 +12458,13 @@ function render(){if(P.hidden)return;const T=[['eq','🎒 装備'],['orb','🔮 
   const b=P.querySelector('.nxBody');if(b)b.scrollTop=sc}
 function body(){if(tab==='eq')return eqList();if(tab==='orb')return orbList();if(tab==='tre')return window.NXT?NXT.treList():'';return window.NXT?NXT.dispList():''}
 /* ---- 装備 ---- */
+function sumH(){const sm=X.sums(),ks=Object.keys(sm).filter(k=>EQK[k]&&sm[k]>0).sort((a,b)=>EQK[a][1].localeCompare(EQK[b][1]));
+  const cs=(S.eq&&S.eq.bag||[]).map(x=>x.curse).filter(c=>typeof CURSE!=='undefined'&&CURSE[c]);
+  return `<div class="nxSum"><h4>✨ いまの 効果（装備中 ${D().on.length}つの 合計）</h4>${ks.length?`<div class="nxSumG">${ks.map(k=>`<div class="nxSumR" data-a="ab" data-k="${k}"><span>${EQK[k][0]}</span><b>${esc(EQK[k][1])}</b><i>${esc(EQK[k][2](sm[k]))}</i></div>`).join('')}</div>`:'<small>装備に 球を つけると ここに 出る</small>'}
+   ${cs.map(c=>`<div class="nxSumR cur"><span>${CURSE[c].ico}</span><b>${CURSE[c].nm}</b><i>◎ ${CURSE[c].good} ／ ✖ ${CURSE[c].bad}</i></div>`).join('')}<small class="nxSumN">タップで 説明</small></div>`}
 function eqList(){const d=D();const L=d.eqs.slice().sort((a,b)=>(X.isOn(b)-X.isOn(a))||X.RR.indexOf(b.r)-X.RR.indexOf(a.r));
   return `<p class="nxNote">🎒 装備は 球を はめる 器。同時に つけられるのは <b>${X.MAXEQ}つ</b>（いま ${d.on.length}/${X.MAXEQ}）。球は 左から 順番に 並び、となりや 真ん中で 効き方が 変わる。</p>`+
-   (L.length?L.map(e=>{const T=X.TRT[e.tr];return `<div class="nxRow${X.isOn(e)?' on':''}" data-a="eq" data-id="${e.id}"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div class="nxInfo"><b>${esc(X.eqName(e))} ${rtag(e.r)}${X.isOn(e)?' <span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</b><small>${T[0]} ${T[1]}：${T[2]}</small><div class="nxSlots" style="justify-content:flex-start">${e.s.map(i=>orbH(i&&X.oGet(i),'sm')).join('')}</div></div></div>`}).join(''):'<div class="nxEmpty">装備が ない。ショップや 宝箱で 手に 入る。</div>')}
+   sumH()+(L.length?L.map(e=>{const T=X.TRT[e.tr];return `<div class="nxRow${X.isOn(e)?' on':''}" data-a="eq" data-id="${e.id}"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div class="nxInfo"><b>${esc(X.eqName(e))} ${rtag(e.r)}${X.isOn(e)?' <span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</b><small>${T[0]} ${T[1]}：${T[2]}</small><div class="nxSlots" style="justify-content:flex-start">${e.s.map(i=>orbH(i&&X.oGet(i),'sm')).join('')}</div></div></div>`}).join(''):'<div class="nxEmpty">装備が ない。ショップや 宝箱で 手に 入る。</div>')}
 function eqDetail(id,slot){const e=X.eGet(id);if(!e){M.hidden=true;return}curEq=id;selSlot=slot??-1;const T=X.TRT[e.tr],res=X.evalEq(e);
   const slots=e.s.map((i,n)=>{const o=i&&X.oGet(i);return `<div class="nxSlot${selSlot===n?' sel':''}" data-a="slot" data-i="${n}"${o?` data-oid="${o.id}"`:''}>${orbH(o)}<small>${n===0?'左はし':n===e.s.length-1?'右はし':''}${e.s.length%2&&n===(e.s.length-1)/2&&e.s.length>1?'真ん中':''}</small></div>`}).join('');
   let act='';if(selSlot>=0){const o=e.s[selSlot]&&X.oGet(e.s[selSlot]);act=o?`<div class="nxBtns"><button class="nxB" data-a="unslot">はずす</button><button class="nxB" data-a="orbD" data-id="${o.id}">くわしく</button><button class="nxB wide" data-a="pick">べつの 球に かえる</button></div>`:`<div class="nxBtns"><button class="nxB go wide" data-a="pick">🔮 箱から 球を えらぶ</button></div>`}
@@ -12529,6 +12543,7 @@ function act(b){const a=b.dataset.a,d=D();const need=()=>{if(busy()){evToast('�
   case 'close':return close();case 'mclose':M.hidden=true;return render();
   case 'tab':tab=b.dataset.t;return render();case 'flt':flt=b.dataset.t;return render();
   case 'eq':return eqDetail(b.dataset.id);
+  case 'ab':{const k=b.dataset.k;if(!EQK[k])return;M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><h3>${EQK[k][0]} ${esc(EQK[k][1])}</h3><div class="nxSec"><b style="font-size:1.1rem;color:#2a5aa8">${esc(EQK[k][2](X.sums()[k]||0))}</b></div><div class="nxSec">${typeof ABD!=='undefined'&&ABD[k]?ABD[k]:''}</div></div>`;M.hidden=false;return}
   case 'slot':{const i=+b.dataset.i;return eqDetail(curEq,selSlot===i?-1:i)}
   case 'mv':{if(need())return;const e=X.eGet(curEq);X.moveSlot(e,selSlot,+b.dataset.d);X.apply();save();render();return eqDetail(curEq,selSlot+ +b.dataset.d)}
   case 'unslot':{if(need())return;const e=X.eGet(curEq);e.s[selSlot]=null;X.apply();save();render();return eqDetail(curEq,selSlot)}
