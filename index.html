@@ -282,6 +282,8 @@ body.view #nxScene #nxFlea,body.view #nxScene #nxCasL,body.view #nxScene #nxCstL
 .nxNewNote{margin:4px 0 8px;font-size:.74rem;color:#a0305a;background:#ffe8f0;border-radius:10px;padding:5px 9px}.nxNewNote b{background:#ff5c8a;color:#fff;border-radius:999px;padding:0 6px;font-size:.6rem;margin-right:4px}
 @media (prefers-reduced-motion:reduce){.nxNew{animation:none}}
 .nxFlC[data-fl]{cursor:pointer}.nxFlC[data-fl]:active{transform:scale(.97)}.nxFlTap{color:#c8901f!important;font-size:.6rem!important;margin-top:2px}
+body:has(#shop:not([hidden])) #nxScene,body:has(#pay:not([hidden])) #nxScene,body:has(#rules:not([hidden])) #nxScene,body:has(#guide:not([hidden])) #nxScene,body:has(#volSheet:not([hidden])) #nxScene{visibility:hidden!important}
+body:has(#shop:not([hidden])) #nxScene *,body:has(#pay:not([hidden])) #nxScene *,body:has(#rules:not([hidden])) #nxScene *,body:has(#guide:not([hidden])) #nxScene *,body:has(#volSheet:not([hidden])) #nxScene *{visibility:hidden!important;pointer-events:none!important}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
