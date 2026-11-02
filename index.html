@@ -287,6 +287,7 @@ body:has(#shop:not([hidden])) #nxScene *,body:has(#pay:not([hidden])) #nxScene *
 .nxTalP{position:absolute;left:calc(100% - 3px);bottom:-3px;display:flex;align-items:center;gap:0;padding:1px 2px;border-radius:999px;background:#fff;border:1.5px solid #e8dcc0;box-shadow:0 1px 2px rgba(0,0,0,.15);font-size:.56rem;line-height:1.1;white-space:nowrap;pointer-events:none}
 .nxTalP i{font-style:normal}.nxTalP b{font-size:.55rem;color:#8a6a40;font-weight:800;margin-left:1px}
 .nxTalP.t-g{border-color:#ffd23f;background:#fffbe6}.nxTalP.t-r{border-color:transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(90deg,#ff5c8a,#ffd23f,#55e0b4,#7aa2ff,#c48bff) border-box}.nxTalP.t-b{border-color:#ff3b4f;background:#ffe3e6}
+.nxTalP.sm{left:auto;right:-8px;bottom:9px;font-size:.5rem;padding:0 1px;z-index:1}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13235,15 +13236,21 @@ setTimeout(()=>{try{const l=nxLay();['nxCst','nxNt','nxCas','nxFlea'].forEach(id
   function cnt(){const d=D(),s=sn();return{eq:d.eqs.filter(e=>!s.e[e.id]).length,orb:d.orbs.filter(o=>!s.o[o.id]).length,tre:Object.keys(S.tre||{}).filter(k=>newT(k,s)).length}}
   function seeAll(t){const d=D(),s=sn();if(t==='eq')d.eqs.forEach(e=>s.e[e.id]=1);else if(t==='orb')d.orbs.forEach(o=>s.o[o.id]=1);else if(t==='tre')Object.keys(S.tre||{}).forEach(k=>{s.t[k]=S.tre[k]||0});save()}
   function tag(el,on){let b=el.querySelector(':scope>.nxNew');if(on&&!b){b=document.createElement('span');b.className='nxNew';b.textContent='NEW';el.appendChild(b)}else if(!on&&b)b.remove();el.classList.toggle('nxIsNew',!!on)}
-  function talP(r){const o=X.oGet(r.dataset.id),orb=r.querySelector('.nxOrb');if(!o||!orb)return;const L=(o.tal||[]).map(t=>X.TAL[t]).filter(Boolean);const key=(o.tal||[]).join(',');let el=orb.querySelector(':scope>.nxTalP');
-    if(!L.length){if(el)el.remove();return}if(el&&el.dataset.k===key)return;if(!el){el=document.createElement('span');el.className='nxTalP';orb.appendChild(el)}el.dataset.k=key;
-    const best=['b','r','g','w'].find(t=>L.some(T=>T[0]===t))||'w',em=T=>String(T[1]).split(' ')[0];el.className='nxTalP t-'+best;
-    el.innerHTML=L.slice(0,2).map(T=>`<i class="t-${T[0]}">${em(T)}</i>`).join('')+(L.length>2?`<b>+${L.length-2}</b>`:'')}
+  const PRIO=['w_left','w_right','w_mid','g_share','r_aura','g_alone','b_absorb','r_allel'];
+  function talP(r,oid,opt){opt=opt||{};const o=X.oGet(oid||r.dataset.id),orb=r.classList&&r.classList.contains('nxOrb')?r:r.querySelector('.nxOrb');if(!o||!orb)return;
+    let ks=(o.tal||[]).filter(t=>X.TAL[t]);if(opt.prio){const tr={b:0,r:1,g:2,w:3};ks=ks.slice().sort((a,b)=>{const pa=PRIO.indexOf(a),pb=PRIO.indexOf(b);if((pa>=0)!==(pb>=0))return pa>=0?-1:1;if(pa>=0)return pa-pb;return tr[X.TAL[a][0]]-tr[X.TAL[b][0]]})}
+    const L=ks.map(t=>X.TAL[t]);const key=ks.join(',')+(opt.sm?'s':'');let el=orb.querySelector(':scope>.nxTalP');
+    if(!L.length){if(el)el.remove();return}if(el&&el.dataset.k===key)return;if(!el){el=document.createElement('span');orb.appendChild(el)}el.dataset.k=key;
+    const best=['b','r','g','w'].find(t=>L.some(T=>T[0]===t))||'w',em=T=>String(T[1]).split(' ')[0],mx=opt.max||2;el.className='nxTalP t-'+best+(opt.sm?' sm':'');
+    el.innerHTML=L.slice(0,mx).map(T=>`<i class="t-${T[0]}">${em(T)}</i>`).join('')+(L.length>mx&&!opt.sm?`<b>+${L.length-mx}</b>`:'')}
+  const M=NXUI.M;let mq=0;
+  function markM(){if(M.hidden)return;M.querySelectorAll('.nxSlot[data-oid]').forEach(sl=>talP(sl,sl.dataset.oid,{prio:1,max:2}));M.querySelectorAll('.nxBoxS [data-oid]').forEach(sl=>talP(sl,sl.dataset.oid,{prio:1,max:1,sm:1}));}
+  new MutationObserver(()=>{if(mq)return;mq=1;requestAnimationFrame(()=>{mq=0;try{markM()}catch(e){}})}).observe(M,{childList:true,subtree:true});
   function mark(){if(busy||P.hidden)return;busy=true;try{const s=sn(),c=cnt();
     const cur=(P.querySelector('.nxTabs .on')||{dataset:{}}).dataset.t||null;if(lastTab&&cur&&lastTab!==cur)seeAll(lastTab);lastTab=cur;
     const c2=cnt();P.querySelectorAll('.nxTabs [data-a=tab]').forEach(b=>{const n=b.dataset.t===cur?0:(c2[b.dataset.t]||0);let i=b.querySelector('.nxNewDot');if(n){if(!i){i=document.createElement('i');i.className='nxNewDot';b.appendChild(i)}if(i.textContent!==String(n))i.textContent=n}else if(i)i.remove()});
     P.querySelectorAll('.nxRow[data-a=eq][data-id]').forEach(r=>tag(r,!s.e[r.dataset.id]));
-    P.querySelectorAll('.nxCard[data-a=orbD][data-id]').forEach(r=>{tag(r,!s.o[r.dataset.id]);talP(r)});
+    P.querySelectorAll('.nxCard[data-a=orbD][data-id]').forEach(r=>{tag(r,!s.o[r.dataset.id]);talP(r)});P.querySelectorAll('.nxRow[data-a=eq] .nxSlots>.nxOrb[data-loid]').forEach(o=>talP(o,o.dataset.loid,{prio:1,max:1,sm:1}));
     P.querySelectorAll('.nxCard[data-a=treD][data-id]').forEach(r=>tag(r,newT(r.dataset.id,s)));
     const hd=P.querySelector('.nxBody');if(hd){const n=(c[cur]||0);let h=hd.querySelector(':scope>.nxNewNote');if(n&&!h){h=document.createElement('p');h.className='nxNewNote';hd.insertBefore(h,hd.firstChild)}if(h){if(n){const t=`<b>NEW</b> 新しく 手に 入った 物が ${n}つ（タップで くわしく）`;if(h.dataset.t!==t){h.dataset.t=t;h.innerHTML=t}}else h.remove()}}
   }catch(e){}busy=false}
