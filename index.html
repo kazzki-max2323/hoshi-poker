@@ -211,7 +211,7 @@ html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.
 body.bright #nxCst{opacity:.45}
 @media (prefers-reduced-motion:reduce){#nxCst circle.on{animation:none}}
 
-#nxCas{position:absolute;z-index:1;width:96px;margin-left:-48px;pointer-events:none;transition:opacity 1.5s,transform 1.8s ease-in}
+#nxCas{position:absolute;z-index:1;width:112px;margin-left:-56px;pointer-events:none;transition:opacity 1.5s,transform 1.8s ease-in}
 #nxCas svg{width:100%;height:auto;display:block;overflow:visible;filter:drop-shadow(0 3px 2px rgba(60,30,0,.35))}
 #nxCas .pt{transform-box:fill-box;transform-origin:50% 100%}
 #nxCas .pt.new{animation:nxPart .7s cubic-bezier(.2,1.6,.4,1)}
@@ -12879,15 +12879,39 @@ const hr=()=>{try{return GH()}catch(e){return 12}};
 const build=()=>{const h=hr();return h>=5&&h<17};
 function st(){const d=D(),g=S.gday||0;if(!d.cas||d.cas.day!==g)d.cas={day:g,pts:0,done:false,washed:false};return d.cas}
 let el=null,shown=-1;
-function svg(p,newK){const has=k=>STG.find(x=>x[1]===k)[0]<=p,c=k=>`pt${newK===k?' new':''}`;const S1='#e9cc8e',S2='#c9a061',L='#a8803f';
-  return `<svg viewBox="0 0 100 80">${has('mound')?`<ellipse class="${c('mound')}" cx="50" cy="74" rx="46" ry="7" fill="${S2}"/>`:`<ellipse cx="50" cy="75" rx="30" ry="4" fill="rgba(201,160,97,.35)"/>`}
-   ${has('tl')?`<g class="${c('tl')}"><rect x="14" y="30" width="16" height="42" fill="${S1}" stroke="${L}"/><path d="M14 30v-6h4v6h4v-6h4v6h4v-6" fill="${S1}" stroke="${L}"/></g>`:''}
-   ${has('tr')?`<g class="${c('tr')}"><rect x="70" y="30" width="16" height="42" fill="${S1}" stroke="${L}"/><path d="M70 30v-6h4v6h4v-6h4v6h4v-6" fill="${S1}" stroke="${L}"/></g>`:''}
-   ${has('wall')?`<g class="${c('wall')}"><rect x="24" y="44" width="52" height="28" fill="${S1}" stroke="${L}"/><path d="M24 44v-5h6v5h6v-5h6v5h6v-5h6v5h6v-5h6v5h4v-5" fill="${S1}" stroke="${L}"/><circle cx="36" cy="54" r="1.5" fill="${L}"/><circle cx="64" cy="54" r="1.5" fill="${L}"/></g>`:''}
-   ${has('gate')?`<path class="${c('gate')}" d="M43 72v-12a7 7 0 0 1 14 0v12z" fill="#6b4a1e"/>`:''}
-   ${has('flag')?`<g class="${c('flag')}"><line x1="22" y1="24" x2="22" y2="6" stroke="#6b4a1e" stroke-width="1.5"/><path class="flag" d="M22 6l14 4-14 4z" fill="#e2475a"/><line x1="78" y1="24" x2="78" y2="10" stroke="#6b4a1e" stroke-width="1.5"/><path class="flag" d="M78 10l10 3-10 3z" fill="#3f9cff"/></g>`:''}</svg>`}
+function svg(p,newK){const has=k=>STG.find(x=>x[1]===k)[0]<=p,c=k=>`pt${newK===k?' new':''}`;
+  const LN='#a77d43',DK='#5e3d16';
+  const mer=(x0,x1,y,w,h)=>{let d='';for(let x=x0;x<x1-.1;x+=w*2)d+=`M${x} ${y}h${Math.min(w,x1-x)}v-${h}h-${Math.min(w,x1-x)}z`;return d};
+  const tower=(x,w,top,k)=>`<g class="${c(k)}"><rect x="${x}" y="${top}" width="${w}" height="${84-top}" fill="url(#nxcT)"/>
+    <rect x="${x-2}" y="${top-3}" width="${w+4}" height="6" rx="1" fill="url(#nxcT)" stroke="${LN}" stroke-width=".5"/>
+    <path d="${mer(x-2,x+w+2,top-3,3.2,4)}" fill="url(#nxcT)" stroke="${LN}" stroke-width=".5"/>
+    <path d="M${x} ${top+14}h${w}M${x} ${top+28}h${w}M${x} ${top+42}h${w}" stroke="${LN}" stroke-width=".45" opacity=".45"/>
+    <path d="M${x+w/2-1.3} ${top+18}v-6a1.3 1.3 0 0 1 2.6 0v6z" fill="${DK}"/>
+    <rect x="${x}" y="${top}" width="${w}" height="${84-top}" fill="none" stroke="${LN}" stroke-width=".6"/></g>`;
+  return `<svg viewBox="0 0 120 100"><defs>
+   <linearGradient id="nxcT" x1="0" x2="1"><stop offset="0" stop-color="#f7e6bb"/><stop offset=".5" stop-color="#e6c891"/><stop offset="1" stop-color="#c0965a"/></linearGradient>
+   <linearGradient id="nxcW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dda9"/><stop offset="1" stop-color="#d2ad70"/></linearGradient>
+   <radialGradient id="nxcM" cx=".5" cy=".3" r=".7"><stop offset="0" stop-color="#e9cf98"/><stop offset="1" stop-color="#c49a5c"/></radialGradient></defs>
+   ${has('mound')?`<g class="${c('mound')}"><ellipse cx="60" cy="92" rx="54" ry="5" fill="#7cc4dd" opacity=".55"/><path d="M14 92q46 7 92 0" stroke="#fff" stroke-width=".7" fill="none" opacity=".7"/>
+     <ellipse cx="60" cy="86" rx="52" ry="8" fill="url(#nxcM)"/><path d="M12 86q48 10 96 0" stroke="${LN}" stroke-width=".5" fill="none" opacity=".5"/>
+     <circle cx="20" cy="89" r="1.6" fill="#fbd3d8"/><circle cx="26" cy="91" r="1.1" fill="#fff6ea"/><path d="M100 86l1.2 2.4 2.6.3-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.3z" fill="#f29a6a"/></g>`
+     :`<ellipse cx="60" cy="88" rx="34" ry="4.5" fill="rgba(201,160,97,.35)"/><g opacity=".85"><path d="M84 88l2-9h9l2 9z" fill="#e2475a"/><path d="M85.5 79q5.5-6 11 0" stroke="#8a2a30" stroke-width=".8" fill="none"/></g>`}
+   ${has('gate')?`<g class="${c('gate')}"><rect x="46" y="26" width="28" height="40" fill="url(#nxcT)" stroke="${LN}" stroke-width=".6"/>
+     <rect x="44" y="23" width="32" height="6" rx="1" fill="url(#nxcT)" stroke="${LN}" stroke-width=".5"/><path d="${mer(44,76,23,3.6,4.5)}" fill="url(#nxcT)" stroke="${LN}" stroke-width=".5"/>
+     <circle cx="60" cy="38" r="3.4" fill="${DK}"/><path d="M57 38h6M60 35v6" stroke="#d2ad70" stroke-width=".6"/></g>`:''}
+   ${has('tl')?tower(8,22,34,'tl'):''}${has('tr')?tower(90,22,34,'tr'):''}
+   ${has('wall')?`<g class="${c('wall')}"><rect x="24" y="54" width="72" height="30" fill="url(#nxcW)" stroke="${LN}" stroke-width=".6"/>
+     <path d="${mer(24,96,54,4,4.5)}" fill="url(#nxcW)" stroke="${LN}" stroke-width=".5"/>
+     <path d="M24 64h72M24 74h72M32 54v10M48 54v10M72 54v10M88 54v10M40 64v10M80 64v10M30 74v10M90 74v10" stroke="${LN}" stroke-width=".45" opacity=".4"/>
+     <rect x="80" y="54" width="16" height="30" fill="#8a5a20" opacity=".1"/>
+     <path d="M35 70v-5a2 2 0 0 1 4 0v5zM81 70v-5a2 2 0 0 1 4 0v5z" fill="${DK}"/></g>`:''}
+   ${has('gate')?`<g class="${c('gate')}"><path d="M51 84v-11a9 9 0 0 1 18 0v11z" fill="#c9a061"/><path d="M53 84v-11a7 7 0 0 1 14 0v11z" fill="#7a5328"/>
+     <path d="M57.5 84v-17M62.5 84v-17" stroke="#5a3a18" stroke-width=".6"/><circle cx="64.5" cy="77" r=".7" fill="#e8c27a"/><rect x="49" y="84" width="22" height="2.4" rx="1" fill="#d8b77c"/></g>`:''}
+   ${has('flag')?`<g class="${c('flag')}"><path d="M19 30V12M101 30V12M60 19V2" stroke="#6b4a1e" stroke-width="1.1"/>
+     <path class="flag" d="M19 12l12 3.5-12 3.5z" fill="#e2475a"/><path class="flag" d="M101 12l10 3-10 3z" fill="#3f9cff"/><path class="flag" d="M60 2l13 4-13 4z" fill="#ffd23f"/>
+     <circle cx="19" cy="11.5" r="1" fill="#ffd23f"/><circle cx="101" cy="11.5" r="1" fill="#ffd23f"/><circle cx="60" cy="1.5" r="1" fill="#ffd23f"/></g>`:''}</svg>`}
 function place(){const w=$('window');if(!w)return;if(!el){el=document.createElement('div');el.id='nxCas';w.appendChild(el)}
-  try{const g=SCENE.dbg(),wr=w.getBoundingClientRect();el.style.left=(g.WL-wr.left+g.WW*.74)+'px';el.style.top=(g.shore+6*g.k-wr.top-scrollY)+'px'}catch(e){el.style.left='80%';el.style.top='62%'}}
+  try{const g=SCENE.dbg(),wr=w.getBoundingClientRect();el.style.left=(g.WL-wr.left+g.WW*.74)+'px';el.style.top=(g.shore-8*g.k-wr.top-scrollY)+'px'}catch(e){el.style.left='80%';el.style.top='62%'}}
 function draw(newK){place();const c=st(),h=hr(),vis=h>=5&&h<17.5&&!c.washed;el.style.visibility=vis?'':'hidden';if(!vis)return;el.classList.toggle('done',c.done);el.classList.remove('wash');
   const left=Math.max(0,17-h);el.innerHTML=svg(c.pts,newK)+`<span id="nxCasL">🏰 ${Math.min(c.pts,GOAL)}/${GOAL}${c.done?' 完成！':` ・ あと${Math.ceil(left)}時間`}</span>`;el.querySelector('#nxCasL').onclick=e=>{e.stopPropagation();info()};shown=c.pts}
 function info(){const c=st(),UI=NXUI;UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><h3>🏰 砂の城</h3><p class="nxNote">☀️ 昼（5時〜17時）だけ。役を 作ると 砂が 集まって 城が 育つ。夕方に なると 波で 崩れるので、それまでに 完成させよう。毎日 新しく 作れる。</p>
