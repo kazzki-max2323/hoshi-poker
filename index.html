@@ -260,6 +260,15 @@ body:has(#nxP:not([hidden])) #toast,body:has(#nxM:not([hidden])) #toast,body:has
 .nxFlS .nxB{flex:0 0 auto;min-height:34px;font-size:.72rem}
 .nxFlS.add{justify-content:center;border-style:dashed;color:#c8901f;font-weight:800;font-size:.85rem;min-height:48px;cursor:pointer;background:#fffaf0}
 .nxFlS.pk{cursor:pointer}
+#nxNt{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;transition:opacity 2s}
+#nxNt svg{position:absolute;left:0;top:0;overflow:visible}
+#nxNt .lt{opacity:0;transition:opacity 1.2s}#nxNt .lt.on{opacity:1}
+#nxNt .lt.new{animation:nxLit2 1.6s ease-out}@keyframes nxLit2{0%{opacity:0;transform:scale(2.4)}40%{opacity:1}}
+#nxNt .lt{transform-box:fill-box;transform-origin:center}
+#nxNt .dim{opacity:.35}
+#nxNt .tw{animation:nxTw 3.2s ease-in-out infinite}
+#nxNt.done .halo{opacity:1}#nxNt .halo{opacity:0;transition:opacity 2s}
+@media (prefers-reduced-motion:reduce){#nxNt .tw,#nxNt .lt.new{animation:none}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12844,33 +12853,64 @@ const NXCST=window.NXCST=(()=>{const X=NXS,D=()=>X.st();
 const C=[
  {n:'こぐま座',st:[[10,20],[28,26],[44,24],[58,34],[74,30],[88,44],[76,52]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]],rq:[9,9,9,8,9,8,7]},
  {n:'カシオペヤ座',st:[[8,22],[28,46],[48,28],[68,48],[90,24]],ln:[[0,1],[1,2],[2,3],[3,4]],rq:[9,8,8,7,6]},
+ {n:'向かいの 島の 灯り',kind:'isl',ico:'🏮',st:[[-.72,.08],[-.46,.12],[-.22,.3],[.08,.42],[.3,.12],[.5,.22],[.68,.08],[-.02,.8]],ln:[],rq:[9,9,8,8,7,7,6,4]},
  {n:'はくちょう座',st:[[50,6],[50,30],[50,50],[50,72],[18,34],[82,26]],ln:[[0,1],[1,2],[2,3],[4,1],[1,5]],rq:[9,8,7,7,6,5]},
+ {n:'北斗七星',st:[[8,30],[22,24],[36,28],[48,36],[50,56],[72,60],[76,40]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,3]],rq:[9,9,8,8,7,6,5]},
+ {n:'沖の 漁り火',kind:'boat',ico:'🚤',st:[[.12,.18],[.3,.32],[.48,.12],[.64,.4],[.82,.22],[.9,.5],[.22,.58]],ln:[],rq:[9,9,8,7,7,6,5]},
  {n:'オリオン座',st:[[18,8],[80,12],[38,40],[50,44],[62,48],[22,80],[78,76]],ln:[[0,2],[1,4],[2,3],[3,4],[2,5],[4,6]],rq:[8,7,7,6,6,5,4]},
+ {n:'こと座',st:[[50,8],[42,30],[60,32],[38,62],[56,66]],ln:[[0,1],[0,2],[1,2],[1,3],[2,4],[3,4]],rq:[5,8,8,7,6]},
+ {n:'夜光虫の 波打ちぎわ',kind:'glow',ico:'🫧',st:[[.08,0],[.2,0],[.33,0],[.46,0],[.58,0],[.7,0],[.82,0],[.94,0]],ln:[],rq:[9,9,8,8,7,6,6,5]},
  {n:'さそり座',st:[[90,10],[78,22],[66,30],[54,40],[46,54],[40,68],[28,76],[14,70]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]],rq:[8,7,6,6,5,5,4,3]},
+ {n:'しし座',st:[[48,14],[38,8],[28,14],[26,28],[34,38],[36,52],[62,38],[88,42],[82,62],[62,58]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[4,6],[6,7],[7,8],[8,9],[9,5]],rq:[9,9,8,9,8,7,7,6,5,4]},
+ {n:'ふたご座',st:[[30,8],[26,30],[22,52],[18,76],[52,12],[54,34],[58,56],[64,76],[40,32]],ln:[[0,1],[1,2],[2,3],[4,5],[5,6],[6,7],[1,8],[8,5]],rq:[8,9,9,8,7,8,7,6,5]},
+ {n:'わし座',st:[[50,40],[42,34],[58,46],[26,22],[74,60],[46,66],[54,12]],ln:[[1,0],[0,2],[1,3],[2,4],[0,5],[0,6]],rq:[5,8,8,9,7,6,7]},
+ {n:'ペガスス座',st:[[28,24],[66,20],[72,58],[30,62],[90,74],[12,40],[4,52]],ln:[[0,1],[1,2],[2,3],[3,0],[2,4],[0,5],[5,6]],rq:[8,8,7,7,6,5,4]},
+ {n:'みなみじゅうじ座',st:[[50,8],[50,76],[28,40],[70,46],[62,60]],ln:[[0,1],[2,3]],rq:[6,5,8,8,9]},
  {n:'りゅう座',st:[[10,60],[24,40],[40,30],[58,34],[70,20],[86,12],[92,30],[78,40]],ln:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,4]],rq:[7,6,5,5,4,4,3,2]}];
+const OLDN=['こぐま座','カシオペヤ座','はくちょう座','オリオン座','さそり座','りゅう座'];
+const TIER=k=>['R','SR','SR','SSR','SSR','UR'][Math.min(5,Math.floor(k*6/C.length))];
 const RQN=r=>r>=9?'どんな 役でも':`${HANDS[r].n} 以上`;
-function st(){const d=D();if(!d.cst)d.cst={i:0,lit:[],cyc:0};return d.cst}
+function st(){const d=D();if(!d.cst)d.cst={i:0,lit:[],cyc:0,ver:2};const s=d.cst;if(s.ver!==2){const nm=OLDN[s.i%6];const j=C.findIndex(c=>c.n===nm);s.i=j<0?0:j;s.ver=2}return s}
 const cur=()=>C[st().i%C.length];
 let el=null,lastNew=-1;
+/* 星座 以外の 灯り（向かいの 島・沖の 船・波打ちぎわ） */
+let nt=null;
+function drawNt(c,lit,all){const w=$('window');if(!w)return;if(!c.kind){if(nt)nt.innerHTML='';return}if(!nt){nt=document.createElement('div');nt.id='nxNt';w.insertBefore(nt,w.firstChild)}
+  let g;try{g=SCENE.dbg()}catch(e){return}const wr=w.getBoundingClientRect(),ox=-wr.left,oy=-wr.top-scrollY,W=g.W,k=g.k,hz=g.hz,sh=g.shore,ww=wr.width,wh=wr.height;
+  nt.classList.toggle('done',!!all);let h='';
+  if(c.kind==='isl'){const vh=Math.min(64*k,hz*.32),vw=Math.min(W*.21,vh*2.6),vc=W*.53;
+    h+=`<ellipse class="halo" cx="${vc+ox}" cy="${hz-vh*.35+oy}" rx="${vw*.9}" ry="${vh*.6}" fill="url(#nxNtH)"/>`;
+    c.st.forEach(([t,f],i)=>{const px=vc+t*vw+ox,py=hz-vh*Math.pow(1-Math.abs(t),1.7)*f+oy-1.5*k,top=i===c.st.length-1;
+      h+=`<g class="lt${lit[i]?' on':''}${i===lastNew?' new':''}"><circle cx="${px}" cy="${py}" r="${(top?4.5:3.2)*k}" fill="rgba(255,200,110,.28)"/><rect x="${px-1.1*k}" y="${py-1*k}" width="${2.2*k}" height="${(top?2.6:1.8)*k}" rx="${.4*k}" fill="${top?'#ff9a5a':'#ffd98a'}"/>${py+oy<0?'':`<path d="M${px} ${hz+oy+1}v${(4+Math.abs(t)*2)*k}" stroke="rgba(255,210,130,.35)" stroke-width="${1.2*k}"/>`}</g>`});
+    h=`<defs><radialGradient id="nxNtH"><stop offset="0" stop-color="rgba(255,190,110,.22)"/><stop offset="1" stop-color="rgba(255,190,110,0)"/></radialGradient></defs>`+h}
+  else if(c.kind==='boat'){c.st.forEach(([u,v],i)=>{const px=W*u+ox,py=hz+(sh-hz)*v*.75+2*k+oy,s=(.6+v*.9)*k;
+      h+=`<g class="${lit[i]?'':'dim'}"><path d="M${px-6*s} ${py}h${12*s}l${-2*s} ${2.4*s}h${-8*s}z" fill="rgba(10,14,30,.85)"/><path d="M${px-1*s} ${py}v${-6*s}" stroke="rgba(10,14,30,.85)" stroke-width="${.8*s}"/></g>
+      <g class="lt${lit[i]?' on':''}${i===lastNew?' new':''}"><circle class="tw" cx="${px-1*s}" cy="${py-6*s}" r="${3.6*s}" fill="rgba(255,214,140,.3)"/><circle cx="${px-1*s}" cy="${py-6*s}" r="${1.3*s}" fill="#ffe2a0"/><path d="M${px-1*s} ${py+3*s}v${8*s}" stroke="rgba(255,214,140,.35)" stroke-width="${1.6*s}" stroke-dasharray="${1.4*s} ${1.4*s}"/></g>`});}
+  else if(c.kind==='glow'){h+=`<path class="halo" d="M${ox} ${sh+oy}h${W}" stroke="rgba(90,220,255,.45)" stroke-width="${3*k}" filter="url(#nxNtB)"/>`;
+    c.st.forEach(([u],i)=>{const px=W*u+ox,py=sh-2*k+oy;h+=`<g class="lt${lit[i]?' on':''}${i===lastNew?' new':''}"><ellipse class="tw" cx="${px}" cy="${py}" rx="${12*k}" ry="${2.6*k}" fill="rgba(80,220,255,.42)" filter="url(#nxNtB)"/><ellipse cx="${px}" cy="${py}" rx="${5*k}" ry="${1*k}" fill="rgba(190,250,255,.8)"/></g>`});
+    h=`<defs><filter id="nxNtB" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="${1.6*k}"/></filter></defs>`+h}
+  nt.innerHTML=`<svg width="${ww}" height="${wh}" viewBox="0 0 ${ww} ${wh}">${h}</svg>`}
+
 function draw(){const w=$('window');if(!w)return;if(!el){el=document.createElement('div');el.id='nxCst';w.appendChild(el)}const c=cur(),s=st(),lit=s.lit,all=c.st.every((_,i)=>lit[i]);
-  el.className=all?'done':'';
-  el.innerHTML=`<svg viewBox="0 0 100 86">${c.ln.map(([a,b])=>`<line class="${lit[a]&&lit[b]?'on':''}" x1="${c.st[a][0]}" y1="${c.st[a][1]}" x2="${c.st[b][0]}" y2="${c.st[b][1]}"/>`).join('')}${c.st.map(([x,y],i)=>`<circle class="${lit[i]?'on':''}${i===lastNew?' new':''}" cx="${x}" cy="${y}" r="${lit[i]?2.6:1.8}"/>`).join('')}</svg><span id="nxCstL">✨ ${c.n} ${lit.filter(Boolean).length}/${c.st.length}${s.cyc?` ・${s.cyc+1}周目`:''}</span>`;
+  el.className=all?'done':'';drawNt(c,lit,all);
+  el.innerHTML=c.kind?`<span id="nxCstL">${c.ico} ${c.n} ${lit.filter(Boolean).length}/${c.st.length}${s.cyc?` ・${s.cyc+1}周目`:''}</span>`:`<svg viewBox="0 0 100 86">${c.ln.map(([a,b])=>`<line class="${lit[a]&&lit[b]?'on':''}" x1="${c.st[a][0]}" y1="${c.st[a][1]}" x2="${c.st[b][0]}" y2="${c.st[b][1]}"/>`).join('')}${c.st.map(([x,y],i)=>`<circle class="${lit[i]?'on':''}${i===lastNew?' new':''}" cx="${x}" cy="${y}" r="${lit[i]?2.6:1.8}"/>`).join('')}</svg><span id="nxCstL">✨ ${c.n} ${lit.filter(Boolean).length}/${c.st.length}${s.cyc?` ・${s.cyc+1}周目`:''}</span>`;
   el.querySelector('#nxCstL').onclick=e=>{e.stopPropagation();info()};lastNew=-1}
-function info(){const c=cur(),s=st(),UI=NXUI;if(UI.P.hidden){}UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><h3>✨ ${c.n}${s.cyc?`（${s.cyc+1}周目）`:''}</h3>
-  <p class="nxNote">🌙 夜（19時〜5時）だけ。役を 作ると、その 役で 灯せる 星が 1つ 灯る。全部 灯ると 星座が 完成して ごほうび。完成した 星座: ${s.done||0}個</p>
-  ${c.st.map((_,i)=>`<div class="nxRow" style="cursor:default;padding:5px 10px;margin:4px 0"><span style="font-size:1.1rem">${s.lit[i]?'⭐':'☆'}</span><div class="nxInfo"><b style="font-size:.8rem">${RQN(c.rq[i])}</b></div></div>`).join('')}
-  <p class="nxNote">ごほうび：コイン・${['R','SR','SR','SSR','SSR','UR'][s.i%C.length]} 以上の 球・たからもの</p></div>`;UI.M.hidden=false}
+function info(){const c=cur(),s=st(),UI=NXUI;if(UI.P.hidden){}UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><h3>${c.kind?c.ico:'✨'} ${c.n}${s.cyc?`（${s.cyc+1}周目）`:''}</h3>
+  <p class="nxNote">🌙 夜（19時〜5時）だけ。役を 作ると、その 役で 灯せる ${c.kind?'灯り':'星'}が 1つ 灯る。全部 灯ると 完成して ごほうび。夜ごとに 星座・向かいの 島・沖の 船・波打ちぎわ など いろいろ 変わる。完成した 数: ${s.done||0}個</p>
+  ${c.st.map((_,i)=>`<div class="nxRow" style="cursor:default;padding:5px 10px;margin:4px 0"><span style="font-size:1.1rem">${s.lit[i]?(c.kind?c.ico:'⭐'):'☆'}</span><div class="nxInfo"><b style="font-size:.8rem">${RQN(c.rq[i])}</b></div></div>`).join('')}
+  <p class="nxNote">ごほうび：コイン・${TIER(s.i%C.length)} 以上の 球・たからもの</p></div>`;UI.M.hidden=false}
 function light(rank){if(!X.night())return;const c=cur(),s=st();let best=-1;c.rq.forEach((q,i)=>{if(s.lit[i]||rank>q)return;if(best<0||q<c.rq[best])best=i});if(best<0)return;
   s.lit[best]=true;lastNew=best;try{bell(1568+best*60,.02,0,1.6)}catch(e){}draw();
   if(c.st.every((_,i)=>s.lit[i]))setTimeout(complete,1400);save()}
 function complete(){const s=st(),c=cur(),k=s.i%C.length,m=1+s.cyc;try{el&&el.classList.add('done');[784,988,1175,1568].forEach((f,i)=>bell(f,.025,i*.25,2))}catch(e){}
-  const coins=Math.round(Math.max(1000,(S.bet||1)*120)*(k+1)*m/10)*10;S.coins+=coins;const r=['R','SR','SR','SSR','SSR','UR'][k];X.give(X.mkOrb(m>1&&r!=='UR'?X.rUp(r):r),`✨ ${c.n} の 星から`);const t=rollTre(1+k*.4);if(t)setTimeout(()=>addTre(t,`✨ ${c.n} の ごほうび`),2500);
-  evToast(`✨ <b>${c.n}</b> が 完成した<br><small>🪙 ${coins.toLocaleString()}枚 ・ 球 ・ たからもの</small>`);s.done=(s.done||0)+1;
+  const coins=Math.round(Math.max(1000,(S.bet||1)*120)*(1+k*6/C.length)*m/10)*10;S.coins+=coins;const r=TIER(k);X.give(X.mkOrb(m>1&&r!=='UR'?X.rUp(r):r),`${c.kind?c.ico:'✨'} ${c.n} から`);const t=rollTre(1+k*6/C.length*.4);if(t)setTimeout(()=>addTre(t,`✨ ${c.n} の ごほうび`),2500);
+  evToast(`${c.kind?c.ico:'✨'} <b>${c.n}</b> が 完成した<br><small>🪙 ${coins.toLocaleString()}枚 ・ 球 ・ たからもの</small>`);s.done=(s.done||0)+1;
   setTimeout(()=>{s.i++;if(s.i%C.length===0)s.cyc=(s.cyc||0)+1;s.lit=[];draw();save()},4200);ui();save()}
 return{draw,light,info,st,C}})();
 {const _dr=draw;draw=async function(){const p0=S.phase;const r=await _dr.apply(this,arguments);try{if(S.phase!==p0&&S.phase==='won'&&S.win>0){const rk=evaluate(S.hand).rank;if(rk<=9)NXCST.light(rk)}}catch(e){}return r}}
 setTimeout(()=>NXCST.draw(),600);
-setInterval(()=>{try{const e=$('nxCst');if(e){const n=NXS.night();e.style.opacity=n?'':'0';e.style.visibility=n?'':'hidden'}}catch(er){}},1000);
+setInterval(()=>{try{const n=NXS.night();['nxCst','nxNt'].forEach(id=>{const e=$(id);if(e){e.style.opacity=n?'':'0';e.style.visibility=n?'':'hidden'}})}catch(er){}},1000);
+addEventListener('resize',()=>setTimeout(()=>{try{NXCST.draw()}catch(e){}},300));
 /* ========== 砂の城づくり（昼だけ。役を 作ると 城が 育つ。夕方の 波で 崩れる） ========== */
 const NXCAS=window.NXCAS=(()=>{const X=NXS,D=()=>X.st();const GOAL=20;
 const PTS=[10,10,10,10,6,4,3,3,2,1];/* 役の 強さ（rank）→ 砂の 量 */
