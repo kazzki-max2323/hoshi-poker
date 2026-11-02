@@ -281,6 +281,7 @@ body.view #nxScene #nxFlea,body.view #nxScene #nxCasL,body.view #nxScene #nxCstL
 .nxNewDot{position:absolute;top:-7px;right:-5px;min-width:18px;height:18px;box-sizing:border-box;padding:0 5px;border-radius:999px;background:#ff5c8a;color:#fff;font-style:normal;font-size:.62rem;font-weight:800;line-height:15px;border:1.5px solid #fff;text-align:center}
 .nxNewNote{margin:4px 0 8px;font-size:.74rem;color:#a0305a;background:#ffe8f0;border-radius:10px;padding:5px 9px}.nxNewNote b{background:#ff5c8a;color:#fff;border-radius:999px;padding:0 6px;font-size:.6rem;margin-right:4px}
 @media (prefers-reduced-motion:reduce){.nxNew{animation:none}}
+.nxFlC[data-fl]{cursor:pointer}.nxFlC[data-fl]:active{transform:scale(.97)}.nxFlTap{color:#c8901f!important;font-size:.6rem!important;margin-top:2px}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13095,9 +13096,9 @@ function draw(){place();const f=st();const its=f.items.map(it=>`<b>${info(it).ic
   const cu=cur?`<div class="cu">${cur.e}<i class="bb">${cur.kind==='ani'?cur.cry:cur.kind==='vis'?'…ちょっと いい？':'これ、いいな…'}</i></div>`:bye?`<div class="cu by">${bye.e}<i class="bb">${bye.txt}</i></div>`:'';
   el.innerHTML=`${cu}<div class="its">${its}</div><div class="sh"></div><span class="lb">🧺 フリマ${f.items.length?` ${f.items.length}/${MAXN}`:''}</span>`;el.classList.toggle('hot',!!cur)}
 /* 交渉の 画面 */
-function card(it,h){const I=info(it);return `<div class="nxFlC"><h5>${h}</h5>${icoH(it)}<b>${U().esc(I.nm)}</b>${it.t!=='holy'?U().rtag(I.r):''}${I.v&&h==='ほしい 物'?`<small>売値 ${fc(I.v)}枚</small>`:''}</div>`}
+function card(it,h,w){const I=info(it);return `<div class="nxFlC"${w?` data-fl="dv" data-w="${w}"`:''}><h5>${h}</h5>${icoH(it)}<b>${U().esc(I.nm)}</b>${it.t!=='holy'?U().rtag(I.r):''}${I.v&&h==='ほしい 物'?`<small>売値 ${fc(I.v)}枚</small>`:''}${w?'<small class="nxFlTap">タップで くわしく</small>':''}</div>`}
 function offCard(c){const o=c.off;if(o.ty==='buy')return `<div class="nxFlC"><h5>出す と 言っている</h5><span class="i">🪙</span><b>${fc(o.p)}枚</b><small>売値の ${Math.round(o.p/Math.max(1,info(c.want).v)*100)}%</small></div>`;
-  return card(o.g,'かわりに').replace('</div>',(o.b?`<small>＋ おまけ 🪙 ${fc(o.b)}枚</small>`:'')+'</div>')}
+  return card(o.g,'かわりに','off').replace('</div>',(o.b?`<small>＋ おまけ 🪙 ${fc(o.b)}枚</small>`:'')+'</div>')}
 function sayLine(c){const I=info(c.want),o=c.off;if(c.line)return c.line;
   if(c.kind==='ani'){return {s:c.cry,t:`${I.nm} が ほしい みたい。${o.g?info(o.g).nm+' を '+c.br:''}`}}
   if(c.kind==='vis'){const V=VIS[c.k]||VIS.merchant;return {s:V.cry+'。'+(o.ty==='buy'?`🪙 ${fc(o.p)}枚 出す`:`${info(o.g).nm} と 交換 しよう`)}}
@@ -13106,7 +13107,7 @@ function sayLine(c){const I=info(c.want),o=c.off;if(c.line)return c.line;
 function deal(){const c=cur,UI=U();if(!c)return manage();const L=sayLine(c),left=Math.max(1,Math.ceil(c.left/60));
   UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3rem">${c.e}</span><div><h3>${c.n}</h3><div class="nxTags"><span class="nxTag">あと 約${left}分 待って くれる</span>${c.kind==='vis'?'<span class="nxTag" style="background:#efe4ff;color:#5a2a9a">来訪者</span>':''}</div></div></div>
    <div class="nxFlSay">「${L.s}」${L.t?`<small>（${L.t}）</small>`:''}</div>
-   <div class="nxFlDeal">${card(c.want,'ほしい 物')}<span class="ar">⇄</span>${offCard(c)}</div>
+   <div class="nxFlDeal">${card(c.want,'ほしい 物','want')}<span class="ar">⇄</span>${offCard(c)}</div>
    <div class="nxBtns"><button class="nxB go" data-fl="ok">🤝 受ける</button>${c.cnt<2&&!c.noMore?'<button class="nxB" data-fl="ctr">💬 言い返す<small>もう少し いい 条件に</small></button>':''}<button class="nxB red wide" data-fl="no">ことわる</button></div></div>`;UI.M.hidden=false}
 function accept(){const c=cur,f=st();if(!c)return;const k=f.items.indexOf(c.want);if(k<0){leave('…');U().M.hidden=true;return}f.items.splice(k,1);const o=c.off,src='🧺 フリマで 交換';
   if(o.ty==='buy'){S.coins+=o.p;try{getCoin(o.p,'🧺 フリマで 売れた')}catch(e){}}
@@ -13134,22 +13135,32 @@ function picker(){const UI=U(),d=D();let rows='';
   else{const L=TRE.filter(t=>S.tre[t.id]>0);rows=L.map(t=>`<button class="nxFlS pk" data-fl="pv" data-k="tre" data-id="${t.id}"><span class="i">${t.e}</span><div class="nxInfo"><b>${UI.esc(t.n)} ${UI.rtag(t.r)} ×${S.tre[t.id]}</b><small>売値 ${fc(sellPrice(t))}枚</small></div></button>`).join('')||'<div class="nxEmpty">たからものが ない</div>'}
   UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-fl="back">←</button><h3>🧺 何を 並べる？</h3><div class="nxFilter" style="margin-top:8px">${[['eq','🎒 装備'],['orb','🔮 球'],['tre','🐚 たからもの']].map(([k,n])=>`<button class="${ptab===k?'on':''}" data-fl="pt" data-k="${k}">${n}</button>`).join('')}</div>${rows}</div>`;UI.M.hidden=false}
 function effO(o){if(o.kind==='sup'){const S2=X.SUP[o.s];return S2?S2[2](o.lv,o):''}const K=EQK[o.k];return K?K[2](X.baseV(o)):''}
-function preview(k,id){const UI=U();let top='',sec='';
-  if(k==='eq'){const e=X.eGet(id);if(!e)return picker();const T=X.TRT[e.tr]||['','','',0],ins=e.s.filter(Boolean).map(i=>X.oGet(i)).filter(Boolean);
-    top=`<span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div><h3>${UI.esc(X.eqName(e))}</h3><div class="nxTags">${UI.rtag(e.r)}<span class="nxTag">球枠 ${e.s.length}</span></div></div>`;
+function detH(it){const UI=U();let top='',sec='';
+  if(it.t==='eq'){const e=it.e,T=X.TRT[e.tr]||['','','',0],ins=e.s.filter(Boolean).map(i=>X.oGet(i)).filter(Boolean);
+    top=`<span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div><h3>${UI.esc(X.eqName(e))}</h3><div class="nxTags">${UI.rtag(e.r)}<span class="nxTag">🎒 装備</span><span class="nxTag">球枠 ${e.s.length}</span></div></div>`;
     sec=`<div class="nxSec"><h4>${T[0]} 特性：${T[1]}</h4>${T[2]}</div>`+(ins.length?`<div class="nxSec"><h4>🔮 中の 球</h4>${ins.map(o=>UI.esc(X.orbName(o))+' Lv'+o.lv).join('、')}<br><small>並べると 箱に もどる</small></div>`:'')+`<div class="nxSec"><h4>💰 売値の 目安</h4>${fc(X.sellE(e))}枚</div>`}
-  else if(k==='orb'){const o=X.oGet(id);if(!o)return picker();const E=X.EL[o.el]||['',''];
+  else if(it.t==='orb'){const o=it.o,E=X.EL[o.el]||['',''];
     const kd=o.kind==='sup'?'🤝 サポート球':o.kind==='dng'?'⚠️ 危険な 球':o.kind==='cur'?'🩸 呪いの 球':'';
-    top=`${UI.orbH(o,'lg')}<div><h3>${UI.esc(X.orbName(o))}</h3><div class="nxTags">${UI.rtag(o.r)}<span class="nxTag">Lv${o.lv}</span><span class="nxTag">${E[0]} ${E[1]}</span>${kd?`<span class="nxTag">${kd}</span>`:''}</div></div>`;
+    top=`${UI.orbH(o,'lg')}<div><h3>${UI.esc(X.orbName(o))}</h3><div class="nxTags">${UI.rtag(o.r)}<span class="nxTag">🔮 球 Lv${o.lv}</span><span class="nxTag">${E[0]} ${E[1]}</span>${kd?`<span class="nxTag">${kd}</span>`:''}</div></div>`;
     let ex='';if(o.kind==='dng'){const G=X.DNG&&X.DNG[o.d];if(G)ex=`<div class="nxSec"><h4>⚠️ ${G[1]}</h4>◎ ${G[2]}<br>✖ ${G[3]}</div>`}
     if(o.kind==='cur'&&typeof CURSE!=='undefined'&&CURSE[o.c]){const C=CURSE[o.c];ex=`<div class="nxSec"><h4>🩸 ${C.nm}</h4>◎ ${C.good}<br>✖ ${C.bad}</div>`}
-    sec=`<div class="nxSec"><h4>✨ 効果</h4>${effO(o)||'—'}</div>${ex}`+((o.tal||[]).length?`<div class="nxSec"><h4>🌸 才能</h4>${o.tal.length}つ 開花 ずみ</div>`:'')+`<div class="nxSec"><h4>💰 売値の 目安</h4>${fc(X.sellO(o))}枚</div>`}
-  else{const t=TRE.find(x=>x.id===id);if(!t||!(S.tre[t.id]>0))return picker();
-    top=`<span style="font-size:3rem">${t.e}</span><div><h3>${UI.esc(t.n)}</h3><div class="nxTags">${UI.rtag(t.r)}<span class="nxTag">持っている数 ×${S.tre[t.id]}</span></div></div>`;
+    const desc=o.kind!=='sup'&&typeof ABD!=='undefined'&&ABD[o.k]?`<br><small>${ABD[o.k]}</small>`:'';
+    sec=`<div class="nxSec"><h4>✨ 効果</h4>${effO(o)||'—'}${desc}</div>${ex}`+((o.tal||[]).length?`<div class="nxSec"><h4>🌸 才能</h4>${o.tal.map(t=>{const T=X.TAL[t];return T?`<b>${T[1]}</b>（${T[2]}）`:''}).join('、')}</div>`:'')+`<div class="nxSec"><h4>💰 売値の 目安</h4>${fc(X.sellO(o))}枚</div>`}
+  else if(it.t==='holy'){top=`<span style="font-size:3rem">🕊️</span><div><h3>清めの 羽根</h3><div class="nxTags"><span class="nxTag">持っている数 ×${D().holy||0}</span></div></div>`;
+    sec=`<div class="nxSec">🩸 呪いの 球の 呪いを 解く ことが できる。解くと ふつうの 球に なって、効果も 少し 上がる。</div>`}
+  else{reg(it);const t=TRE.find(x=>x.id===it.id);if(!t)return{top:'<h3>？</h3>',sec:''};
+    top=`<span style="font-size:3rem">${t.e}</span><div><h3>${UI.esc(t.n)}</h3><div class="nxTags">${UI.rtag(t.r)}<span class="nxTag">🐚 たからもの</span><span class="nxTag">持っている数 ×${S.tre[t.id]||0}</span></div></div>`;
     sec=`<div class="nxSec"><small>${UI.esc(t.f||'')}</small></div><div class="nxSec"><h4>✨ 使うと</h4>${window.NXT?NXT.useTxt(t):''}</div><div class="nxSec"><h4>💰 売値の 目安</h4>${fc(sellPrice(t))}枚</div>`}
+  return{top,sec}}
+function preview(k,id){const UI=U();let it=null;
+  if(k==='eq'){const e=X.eGet(id);if(e)it={t:'eq',e}}else if(k==='orb'){const o=X.oGet(id);if(o)it={t:'orb',o}}else if(S.tre[id]>0)it={t:'tre',id};
+  if(!it)return picker();const{top,sec}=detH(it);
   UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-fl="pick">←</button><div class="nxTop">${top}</div>${sec}
    <p class="nxNote">並べると、お客さんが この 物を 見て 値段や 交換を 持ちかけて くる。</p>
    <div class="nxBtns"><button class="nxB go" data-fl="add" data-k="${k}" data-id="${id}">🧺 シートに 並べる</button><button class="nxB" data-fl="pick">← ほかを 見る</button></div></div>`;UI.M.hidden=false}
+function dview(w){const c=cur,UI=U();if(!c)return manage();const it=w==='want'?c.want:c.off.g;if(!it)return deal();const{top,sec}=detH(it);
+  UI.M.innerHTML=`<div class="nxDet" data-flhold="1"><button class="nxDx" data-fl="deal">←</button><p class="nxNote" style="margin-top:0">${c.e} ${c.n}の ${w==='want'?'ほしい 物':'かわりに くれる 物'}</p><div class="nxTop">${top}</div>${sec}
+   <div class="nxBtns"><button class="nxB go wide" data-fl="deal">← 交渉に もどる</button></div></div>`;UI.M.hidden=false}
 function add(k,id){const f=st(),d=D();if(f.items.length>=MAXN){evToast('シートに 並べられるのは 3つまで');return manage()}
   if(k==='eq'){const e=X.eGet(id);if(!e||X.isOn(e))return;e.s=e.s.map(()=>null);d.eqs=d.eqs.filter(x=>x!==e);f.items.push({t:'eq',e})}
   else if(k==='orb'){const o=X.oGet(id);if(!o||X.eqOf(o))return;d.orbs=d.orbs.filter(x=>x!==o);f.items.push({t:'orb',o})}
@@ -13158,10 +13169,10 @@ function add(k,id){const f=st(),d=D();if(f.items.length>=MAXN){evToast('シー�
 function un(i){const f=st(),d=D(),it=f.items[i];if(!it)return;f.items.splice(i,1);if(it.t==='eq')d.eqs.push(it.e);else if(it.t==='orb')d.orbs.push(it.o);else{reg(it);S.tre[it.id]=(S.tre[it.id]||0)+1}
   if(cur&&cur.want===it){U().M.hidden=true;leave(cur.kind==='ani'?cur.no:'あ… ひっこめちゃった')}save();U().refresh();draw();manage()}
 U().M.addEventListener('click',e=>{const b=e.target.closest('[data-fl]');if(!b||!U().M.contains(b))return;e.stopPropagation();const a=b.dataset.fl;
-  if(a==='pick')return picker();if(a==='back')return manage();if(a==='pt'){ptab=b.dataset.k;return picker()}if(a==='add')return add(b.dataset.k,b.dataset.id);if(a==='pv')return preview(b.dataset.k,b.dataset.id);if(a==='un')return un(+b.dataset.i);
+  if(a==='pick')return picker();if(a==='back')return manage();if(a==='pt'){ptab=b.dataset.k;return picker()}if(a==='add')return add(b.dataset.k,b.dataset.id);if(a==='pv')return preview(b.dataset.k,b.dataset.id);if(a==='dv')return dview(b.dataset.w);if(a==='un')return un(+b.dataset.i);
   if(a==='deal')return deal();if(a==='ok')return accept();if(a==='ctr')return counter();if(a==='no')return refuse()});
 /* 時間（アプリを 開いて いる 間だけ 進む） */
-setInterval(()=>{try{if(document.hidden)return;const f=st();if(cur){const open=!U().M.hidden&&U().M.querySelector('[data-fl=ok]');if(!open){cur.left-=5;if(cur.left<=0)leave(cur.kind==='ani'?cur.no:'…帰って いった')}}
+setInterval(()=>{try{if(document.hidden)return;const f=st();if(cur){const open=!U().M.hidden&&U().M.querySelector('[data-fl=ok],[data-flhold]');if(!open){cur.left-=5;if(cur.left<=0)leave(cur.kind==='ani'?cur.no:'…帰って いった')}}
   else if(f.items.length){f.acc+=5;const v=window.NXVIS&&NXVIS.cur();if((v&&!f.vseen[v.t])||(f.n<PER_DAY&&f.acc>=f.next)){f.next=f.acc+R(900,1800);spawn()}}
   place()}catch(e){}},5000);
 setTimeout(()=>{try{const f=st();let ch=false;f.items.forEach((it,i)=>{if(it.t!=='tre')return;reg(it);if(!TRE.find(x=>x.id===it.id)&&typeof genTre==='function'){const t=genTre('R');f.items[i]={t:'tre',id:t.id,def:Object.assign({},t)};ch=true}});if(ch)save()}catch(e){}draw()},900);addEventListener('resize',()=>setTimeout(place,300));
