@@ -271,6 +271,7 @@ body:has(#nxP:not([hidden])) #toast,body:has(#nxM:not([hidden])) #toast,body:has
 @media (prefers-reduced-motion:reduce){#nxNt .tw,#nxNt .lt.new{animation:none}}
 .nxOInf{background:#fff6e0;border:2px solid #f2c97a;border-radius:12px;padding:8px 10px;margin-top:6px;font-size:.78rem;line-height:1.5;color:#4a2a0a}
 .nxOInf .hd{display:flex;gap:10px;align-items:center;margin-bottom:4px}.nxOInf>div+div{margin-top:4px}.nxOInf small{color:#8a6a40}
+#meteor{z-index:87!important}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -6460,7 +6461,7 @@ let lastCoins=S.coins;setInterval(()=>{if(coinSilent){lastCoins=S.coins;return}c
 {let fishT=0;const near=(el,x,y,pad)=>{if(!el)return false;const r=el.getBoundingClientRect();if(!r.width)return false;return x>=r.left-pad&&x<=r.right+pad&&y>=r.top-pad&&y<=r.bottom+pad};
  const inWin=t=>t&&t.closest&&t.closest('.win:not(#msg):not(.bar),#nxP,#nxM,#nxFlea,#fukuOpen,#getPop.on,#zkPop,#bagPop,#chestPop,#wishPop,#jpPop,#resetDlg,#synFx,button:not(#fishBtn):not(#meteor)');
  addEventListener('pointerdown',e=>{const x=e.clientX,y=e.clientY,t=e.target;
-   const m=$('meteor');if(m&&m._catch&&(t===m||m.contains(t)||(!inWin(t)&&near(m,x,y,18)))){e.stopImmediatePropagation();m._catch(e);return}
+   const m=$('meteor');if(m&&m._catch&&(t===m||m.contains(t)||(!(t&&t.closest&&t.closest('.win:not(#msg):not(.bar),#fukuOpen,#getPop.on,#zkPop,#bagPop,#chestPop,#wishPop,#jpPop,#resetDlg,#synFx,button:not(#fishBtn):not(#meteor):not(.nxDx):not(.nxX)'))&&near(m,x,y,18)))){e.stopImmediatePropagation();m._catch(e);return}
    const f=$('fishBtn');if(f&&(t===f||f.contains(t)||(!inWin(t)&&near(f,x,y,6)))){e.stopImmediatePropagation();e.preventDefault();fishT=Date.now();try{f.onclick&&f.onclick({stopPropagation(){},preventDefault(){}})}catch(err){}}},true);
  addEventListener('click',e=>{if(Date.now()-fishT<600){const f=$('fishBtn');if(f&&(e.target===f||f.contains(e.target))){e.stopImmediatePropagation();e.preventDefault()}}},true)}
 /* ========== v140：タップで 遊べる 浜辺 ========== */
@@ -13176,6 +13177,14 @@ return{st,spawn,draw,manage,deal,get cur(){return cur}}})();
     const go=()=>{reset(el);back()};
     if(el){el.style.transition='transform .18s ease-in,opacity .18s ease-in';el.style.transform=`translateX(${Math.sign(dx)*W()*.9}px) rotate(${Math.sign(dx)*4}deg)`;el.style.opacity='0';setTimeout(go,170)}else go()},{passive:true,capture:true});
   function back(){const u=U();try{if(!u.M.hidden){const b=u.M.querySelector('.nxDx');if(b){b.click()}else u.M.hidden=true;try{u.refresh()}catch(e){}}else if(!u.P.hidden){const x=u.P.querySelector('.nxX');if(x)x.click();else u.close()}try{tone(520,.05,'sine',.012)}catch(e){}}catch(e){}}
+})();
+
+/* ---- 装備から 球の 詳細を 見たら、閉じると 装備の 画面に もどる ---- */
+(()=>{const M=NXUI.M;
+  M.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||!M.contains(b))return;const a=b.dataset.a;
+    if(a==='orbD'){const d=M.querySelector('.nxDet[data-eq]');if(d)M.dataset.backEq=d.dataset.eq;return}
+    if(a==='mclose'&&M.dataset.backEq&&!M.querySelector('.nxDet[data-eq]')){const id=M.dataset.backEq;delete M.dataset.backEq;if(NXS.eGet(id)){e.stopPropagation();e.preventDefault();NXUI.refresh();NXUI.eqDetail(id)}}},true);
+  new MutationObserver(()=>{if(M.hidden)delete M.dataset.backEq}).observe(M,{attributes:true,attributeFilter:['hidden']});
 })();
 </script>
 <!--NXJS-END-->
