@@ -193,7 +193,7 @@ html,body,button,a,label,[role=button],.card,.chip,.srow,.synIt,.synSlot,.stab,.
 .nxBoxS{display:flex;flex-wrap:wrap;gap:10px 8px;padding:10px 8px 12px;min-height:44px;border:2px dashed #e0c08a;border-radius:12px;background:#fffaf0}
 .nxBoxS.over{background:#ffe9c0;border-color:#d9580f}
 .nxDrg{cursor:pointer}
-#nxM [data-oid]{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+#nxM [data-oid]{touch-action:pan-y;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 #nxM [data-oid].lift{opacity:.3}
 .nxSlot.over{background:#ffd98a;box-shadow:0 0 0 3px #f29a2a inset}
 #nxGhost{position:fixed;z-index:90;pointer-events:none;transform:translate(-50%,-60%) scale(1.25);filter:drop-shadow(0 8px 10px rgba(0,0,0,.35));transition:transform .12s}
@@ -234,7 +234,7 @@ body.bright #nxCst{opacity:.45}
 @media (max-width:360px){.nxSumG{grid-template-columns:1fr}}
 body:has(#nxP:not([hidden])) #toast,body:has(#nxM:not([hidden])) #toast,body:has(#nxP:not([hidden])) #getPop,body:has(#nxM:not([hidden])) #getPop{z-index:85}
 .nxUseT{display:block;margin-top:5px;padding:4px 6px;border-radius:8px;background:#fff1d6;color:#7a3e00;font-size:.7rem;line-height:1.35;text-align:left}
-#nxP [data-loid]{touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+#nxP [data-loid]{touch-action:pan-y;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 #nxP [data-loid].lift{opacity:.3}
 #nxP .nxOrb.nxOver{box-shadow:0 0 0 3px #f29a2a}
 #nxP .nxRow.nxOver{background:#fff1cf}
@@ -13156,6 +13156,22 @@ setInterval(()=>{try{if(document.hidden)return;const f=st();if(cur){const open=!
 setTimeout(draw,900);addEventListener('resize',()=>setTimeout(place,300));
 try{const ul=document.querySelector('#rules ul:last-of-type');if(ul)ul.insertAdjacentHTML('beforeend','<li><b>🧺 浜辺の フリマ</b>：浜辺の シートに 装備・球・たからものを 3つまで 並べると、お客さんや 動物が 来て「買いたい」「交換 しない？」と 持ちかけて くる。受ける・言い返す・ことわる から えらぶ。アプリを 開いて いる 間だけ、1日 8人 くらい。</li>')}catch(e){}
 return{st,spawn,draw,manage,deal,get cur(){return cur}}})();
+
+/* ---- アイテム画面：しっかり 左右に スワイプすると 前の 画面に もどる ---- */
+(()=>{const U=()=>NXUI;let t0=null;
+  const open=()=>{const u=U();return u&&(!u.M.hidden||!u.P.hidden)};
+  addEventListener('touchstart',e=>{if(!open()||e.touches.length!==1){t0=null;return}const el=e.target;if(el.closest&&el.closest('.nxTabs,.nxFilter,input,textarea,select,.nxWheelW')){t0=null;return}
+    const p=e.touches[0];t0={x:p.clientX,y:p.clientY,t:Date.now(),mx:0,my:0,first:0}},{passive:true,capture:true});
+  addEventListener('touchmove',e=>{if(!t0)return;const p=e.touches[0],dx=Math.abs(p.clientX-t0.x),dy=Math.abs(p.clientY-t0.y);if(!t0.first&&(dx>8||dy>8))t0.first=Date.now()-t0.t;t0.mx=Math.max(t0.mx,dx);t0.my=Math.max(t0.my,dy)},{passive:true,capture:true});
+  addEventListener('touchend',e=>{const s=t0;t0=null;if(!s||!open())return;const p=e.changedTouches[0],dx=p.clientX-s.x,dy=p.clientY-s.y,dt=Date.now()-s.t;
+    const W=Math.min(innerWidth,520);
+    if(Math.abs(dx)<Math.max(110,W*.3))return;/* しっかり 横に */
+    if(s.my>40||Math.abs(dy)>Math.abs(dx)*.35)return;/* 縦の 動きが 混ざったら しない */
+    if(dt>1000||s.first>280)return;/* 長押し（球を つかむ）の あとは しない */
+    if(document.getElementById('nxGhost'))return;
+    back()},{passive:true,capture:true});
+  function back(){const u=U();try{if(!u.M.hidden){const b=u.M.querySelector('.nxDx');if(b){b.click()}else u.M.hidden=true;try{u.refresh()}catch(e){}}else if(!u.P.hidden){const x=u.P.querySelector('.nxX');if(x)x.click();else u.close()}try{tone(520,.05,'sine',.012)}catch(e){}}catch(e){}}
+})();
 </script>
 <!--NXJS-END-->
 </body></html>
