@@ -6458,7 +6458,7 @@ let lastCoins=S.coins;setInterval(()=>{if(coinSilent){lastCoins=S.coins;return}c
 
 /* ========== v139：流れ星と 釣りは どんな 時でも タップで 判定 ========== */
 {let fishT=0;const near=(el,x,y,pad)=>{if(!el)return false;const r=el.getBoundingClientRect();if(!r.width)return false;return x>=r.left-pad&&x<=r.right+pad&&y>=r.top-pad&&y<=r.bottom+pad};
- const inWin=t=>t&&t.closest&&t.closest('.win:not(#msg):not(.bar),#fukuOpen,#getPop.on,#zkPop,#bagPop,#chestPop,#wishPop,#jpPop,#resetDlg,#synFx,button:not(#fishBtn):not(#meteor)');
+ const inWin=t=>t&&t.closest&&t.closest('.win:not(#msg):not(.bar),#nxP,#nxM,#nxFlea,#fukuOpen,#getPop.on,#zkPop,#bagPop,#chestPop,#wishPop,#jpPop,#resetDlg,#synFx,button:not(#fishBtn):not(#meteor)');
  addEventListener('pointerdown',e=>{const x=e.clientX,y=e.clientY,t=e.target;
    const m=$('meteor');if(m&&m._catch&&(t===m||m.contains(t)||(!inWin(t)&&near(m,x,y,18)))){e.stopImmediatePropagation();m._catch(e);return}
    const f=$('fishBtn');if(f&&(t===f||f.contains(t)||(!inWin(t)&&near(f,x,y,6)))){e.stopImmediatePropagation();e.preventDefault();fishT=Date.now();try{f.onclick&&f.onclick({stopPropagation(){},preventDefault(){}})}catch(err){}}},true);
@@ -13157,19 +13157,24 @@ setTimeout(draw,900);addEventListener('resize',()=>setTimeout(place,300));
 try{const ul=document.querySelector('#rules ul:last-of-type');if(ul)ul.insertAdjacentHTML('beforeend','<li><b>🧺 浜辺の フリマ</b>：浜辺の シートに 装備・球・たからものを 3つまで 並べると、お客さんや 動物が 来て「買いたい」「交換 しない？」と 持ちかけて くる。受ける・言い返す・ことわる から えらぶ。アプリを 開いて いる 間だけ、1日 8人 くらい。</li>')}catch(e){}
 return{st,spawn,draw,manage,deal,get cur(){return cur}}})();
 
-/* ---- アイテム画面：しっかり 左右に スワイプすると 前の 画面に もどる ---- */
+/* ---- アイテム画面：しっかり 左右に スワイプすると 前の 画面に もどる（指に ついて 動く 小さな アニメーション） ---- */
 (()=>{const U=()=>NXUI;let t0=null;
   const open=()=>{const u=U();return u&&(!u.M.hidden||!u.P.hidden)};
+  const layer=()=>{const u=U();return !u.M.hidden?u.M.querySelector('.nxDet'):u.P.querySelector('.nxBox')};
+  const W=()=>Math.min(innerWidth,520),need=()=>Math.max(110,W()*.3);
+  const reset=(el,anim)=>{if(!el)return;if(anim){el.style.transition='transform .22s cubic-bezier(.2,1.3,.4,1),opacity .22s';el.style.transform='';el.style.opacity='';setTimeout(()=>{el.style.transition=''},240)}else{el.style.transition='';el.style.transform='';el.style.opacity=''}};
   addEventListener('touchstart',e=>{if(!open()||e.touches.length!==1){t0=null;return}const el=e.target;if(el.closest&&el.closest('.nxTabs,.nxFilter,input,textarea,select,.nxWheelW')){t0=null;return}
-    const p=e.touches[0];t0={x:p.clientX,y:p.clientY,t:Date.now(),mx:0,my:0,first:0}},{passive:true,capture:true});
-  addEventListener('touchmove',e=>{if(!t0)return;const p=e.touches[0],dx=Math.abs(p.clientX-t0.x),dy=Math.abs(p.clientY-t0.y);if(!t0.first&&(dx>8||dy>8))t0.first=Date.now()-t0.t;t0.mx=Math.max(t0.mx,dx);t0.my=Math.max(t0.my,dy)},{passive:true,capture:true});
-  addEventListener('touchend',e=>{const s=t0;t0=null;if(!s||!open())return;const p=e.changedTouches[0],dx=p.clientX-s.x,dy=p.clientY-s.y,dt=Date.now()-s.t;
-    const W=Math.min(innerWidth,520);
-    if(Math.abs(dx)<Math.max(110,W*.3))return;/* しっかり 横に */
-    if(s.my>40||Math.abs(dy)>Math.abs(dx)*.35)return;/* 縦の 動きが 混ざったら しない */
-    if(dt>1000||s.first>280)return;/* 長押し（球を つかむ）の あとは しない */
-    if(document.getElementById('nxGhost'))return;
-    back()},{passive:true,capture:true});
+    const p=e.touches[0];t0={x:p.clientX,y:p.clientY,t:Date.now(),mx:0,my:0,first:0,el:null,off:false}},{passive:true,capture:true});
+  addEventListener('touchmove',e=>{const s=t0;if(!s)return;const p=e.touches[0],ddx=p.clientX-s.x,dx=Math.abs(ddx),dy=Math.abs(p.clientY-s.y);if(!s.first&&(dx>8||dy>8))s.first=Date.now()-s.t;s.mx=Math.max(s.mx,dx);s.my=Math.max(s.my,dy);
+    if(s.off)return;if(s.my>40||s.first>280||document.getElementById('nxGhost')){s.off=true;reset(s.el,true);s.el=null;return}
+    if(!s.el&&dx>14&&dx>dy*1.6){s.el=layer();if(s.el)s.el.style.transition=''}
+    if(s.el){const r=Math.min(1,dx/need());s.el.style.transform=`translateX(${ddx*.55}px) rotate(${ddx*.006}deg)`;s.el.style.opacity=String(1-r*.35)}},{passive:true,capture:true});
+  addEventListener('touchcancel',()=>{if(t0){reset(t0.el,true);t0=null}},{passive:true,capture:true});
+  addEventListener('touchend',e=>{const s=t0;t0=null;if(!s)return;const el=s.el;if(!open()){reset(el);return}const p=e.changedTouches[0],dx=p.clientX-s.x,dy=p.clientY-s.y,dt=Date.now()-s.t;
+    const ok=!s.off&&Math.abs(dx)>=need()&&s.my<=40&&Math.abs(dy)<=Math.abs(dx)*.35&&dt<=1000&&s.first<=280&&!document.getElementById('nxGhost');
+    if(!ok){reset(el,true);return}
+    const go=()=>{reset(el);back()};
+    if(el){el.style.transition='transform .18s ease-in,opacity .18s ease-in';el.style.transform=`translateX(${Math.sign(dx)*W()*.9}px) rotate(${Math.sign(dx)*4}deg)`;el.style.opacity='0';setTimeout(go,170)}else go()},{passive:true,capture:true});
   function back(){const u=U();try{if(!u.M.hidden){const b=u.M.querySelector('.nxDx');if(b){b.click()}else u.M.hidden=true;try{u.refresh()}catch(e){}}else if(!u.P.hidden){const x=u.P.querySelector('.nxX');if(x)x.click();else u.close()}try{tone(520,.05,'sine',.012)}catch(e){}}catch(e){}}
 })();
 </script>
