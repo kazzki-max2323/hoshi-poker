@@ -272,6 +272,8 @@ body:has(#nxP:not([hidden])) #toast,body:has(#nxM:not([hidden])) #toast,body:has
 .nxOInf{background:#fff6e0;border:2px solid #f2c97a;border-radius:12px;padding:8px 10px;margin-top:6px;font-size:.78rem;line-height:1.5;color:#4a2a0a}
 .nxOInf .hd{display:flex;gap:10px;align-items:center;margin-bottom:4px}.nxOInf>div+div{margin-top:4px}.nxOInf small{color:#8a6a40}
 #meteor{z-index:87!important}
+#nxScene{position:fixed;z-index:2;pointer-events:none}
+body.view #nxScene #nxFlea,body.view #nxScene #nxCasL,body.view #nxScene #nxCstL{opacity:0;pointer-events:none}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12886,7 +12888,7 @@ const cur=()=>C[st().i%C.length];
 let el=null,lastNew=-1;
 /* 星座 以外の 灯り（向かいの 島・沖の 船・波打ちぎわ） */
 let nt=null;
-function drawNt(c,lit,all){const w=$('window');if(!w)return;if(!c.kind){if(nt)nt.innerHTML='';return}if(!nt){nt=document.createElement('div');nt.id='nxNt';w.insertBefore(nt,w.firstChild)}
+function drawNt(c,lit,all){const w=nxLay();if(!w)return;if(!c.kind){if(nt)nt.innerHTML='';return}if(!nt){nt=document.createElement('div');nt.id='nxNt';w.insertBefore(nt,w.firstChild)}
   let g;try{g=SCENE.dbg()}catch(e){return}const wr=w.getBoundingClientRect(),ox=-wr.left,oy=-wr.top-scrollY,W=g.W,k=g.k,hz=g.hz,sh=g.shore,ww=wr.width,wh=wr.height;
   nt.classList.toggle('done',!!all);let h='';
   if(c.kind==='isl'){const vh=Math.min(64*k,hz*.32),vw=Math.min(W*.21,vh*2.6),vc=W*.53;
@@ -12902,7 +12904,7 @@ function drawNt(c,lit,all){const w=$('window');if(!w)return;if(!c.kind){if(nt)nt
     h=`<defs><filter id="nxNtB" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="${1.6*k}"/></filter></defs>`+h}
   nt.innerHTML=`<svg width="${ww}" height="${wh}" viewBox="0 0 ${ww} ${wh}">${h}</svg>`}
 
-function draw(){const w=$('window');if(!w)return;if(!el){el=document.createElement('div');el.id='nxCst';w.appendChild(el)}const c=cur(),s=st(),lit=s.lit,all=c.st.every((_,i)=>lit[i]);
+function draw(){const w=nxLay();if(!w)return;if(!el){el=document.createElement('div');el.id='nxCst';w.appendChild(el)}const c=cur(),s=st(),lit=s.lit,all=c.st.every((_,i)=>lit[i]);
   el.className=all?'done':'';drawNt(c,lit,all);
   el.innerHTML=c.kind?`<span id="nxCstL">${c.ico} ${c.n} ${lit.filter(Boolean).length}/${c.st.length}${s.cyc?` ・${s.cyc+1}周目`:''}</span>`:`<svg viewBox="0 0 100 86">${c.ln.map(([a,b])=>`<line class="${lit[a]&&lit[b]?'on':''}" x1="${c.st[a][0]}" y1="${c.st[a][1]}" x2="${c.st[b][0]}" y2="${c.st[b][1]}"/>`).join('')}${c.st.map(([x,y],i)=>`<circle class="${lit[i]?'on':''}${i===lastNew?' new':''}" cx="${x}" cy="${y}" r="${lit[i]?2.6:1.8}"/>`).join('')}</svg><span id="nxCstL">✨ ${c.n} ${lit.filter(Boolean).length}/${c.st.length}${s.cyc?` ・${s.cyc+1}周目`:''}</span>`;
   el.querySelector('#nxCstL').onclick=e=>{e.stopPropagation();info()};lastNew=-1}
@@ -13005,7 +13007,7 @@ function castleSvg(p,newK){const has=k=>STG.find(x=>x[1]===k)[0]<=p,c=k=>`pt${ne
    ${has('flag')?`<g class="${c('flag')}"><path d="M19 30V12M101 30V12M60 19V2" stroke="#6b4a1e" stroke-width="1.1"/>
      <path class="flag" d="M19 12l12 3.5-12 3.5z" fill="#e2475a"/><path class="flag" d="M101 12l10 3-10 3z" fill="#3f9cff"/><path class="flag" d="M60 2l13 4-13 4z" fill="#ffd23f"/>
      <circle cx="19" cy="11.5" r="1" fill="#ffd23f"/><circle cx="101" cy="11.5" r="1" fill="#ffd23f"/><circle cx="60" cy="1.5" r="1" fill="#ffd23f"/></g>`:''}</svg>`}
-function place(){const w=$('window');if(!w)return;if(!el){el=document.createElement('div');el.id='nxCas';w.appendChild(el)}
+function place(){const w=nxLay();if(!w)return;if(!el){el=document.createElement('div');el.id='nxCas';w.appendChild(el)}
   try{const g=SCENE.dbg(),wr=w.getBoundingClientRect();el.style.left=(g.WL-wr.left+g.WW*.74)+'px';el.style.top=(g.shore-8*g.k-wr.top-scrollY)+'px'}catch(e){el.style.left='80%';el.style.top='62%'}}
 function draw(newK){place();const c=st(),h=hr(),vis=h>=5&&h<17.5&&!c.washed;el.style.visibility=vis?'':'hidden';if(!vis)return;el.classList.toggle('done',c.done);el.classList.remove('wash');
   const left=Math.max(0,17-h);el.innerHTML=svg(c.pts,newK)+`<span id="nxCasL">${zz().ico} ${Math.min(c.pts,GOAL)}/${GOAL}${c.done?' 完成！':` ・ あと${Math.ceil(left)}時間`}</span>`;el.querySelector('#nxCasL').onclick=e=>{e.stopPropagation();info()};shown=c.pts}
@@ -13080,7 +13082,7 @@ function spawn(){const f=st();if(!f.items.length)return;let c;const v=window.NXV
   try{[660,880].forEach((q,i)=>tone(q,.18,'sine',.018,i*.14))}catch(e){}}
 function leave(txt){if(!cur)return;bye={e:cur.e,txt};cur=null;draw();setTimeout(()=>{bye=null;draw()},4500)}
 /* 浜辺の シート */
-function place(){const w=$('window');if(!w)return;if(!el){el=document.createElement('div');el.id='nxFlea';w.appendChild(el);el.addEventListener('click',e=>{e.stopPropagation();cur?deal():manage()});el.addEventListener('pointerdown',e=>e.stopPropagation())}
+function place(){const w=nxLay();if(!w)return;if(!el){el=document.createElement('div');el.id='nxFlea';w.appendChild(el);el.addEventListener('click',e=>{e.stopPropagation();cur?deal():manage()});el.addEventListener('pointerdown',e=>e.stopPropagation())}
   try{const g=SCENE.dbg(),wr=w.getBoundingClientRect();el.style.left=(g.WL-wr.left+g.WW*.27)+'px';el.style.top=(g.shore+10*g.k-wr.top-scrollY)+'px'}catch(e){el.style.left='27%';el.style.top='66%'}}
 function draw(){place();const f=st();const its=f.items.map(it=>`<b>${info(it).ico}</b>`).join('');
   const cu=cur?`<div class="cu">${cur.e}<i class="bb">${cur.kind==='ani'?cur.cry:cur.kind==='vis'?'…ちょっと いい？':'これ、いいな…'}</i></div>`:bye?`<div class="cu by">${bye.e}<i class="bb">${bye.txt}</i></div>`:'';
@@ -13195,6 +13197,13 @@ setTimeout(()=>{try{let ch=false;Object.keys(S.tre||{}).forEach(k=>{if(k.startsW
   if(S.gtre&&S.gtre.length){S.gtre.length=0;ch=true}for(let i=TRE.length-1;i>=0;i--)if(String(TRE[i].id).startsWith('g_')||TRE[i].src==='gen'){TRE.splice(i,1);ch=true}
   try{const f=NXFL.st();const n0=f.items.length;f.items=f.items.filter(it=>!(it.t==='tre'&&String(it.id).startsWith('g_')));if(f.items.length!==n0){ch=true;NXFL.draw()}}catch(e){}
   if(ch){save();ui()}}catch(e){}},1500);
+
+/* ---- 浜辺に 置く 物（フリマ・砂の 作品・星座・島の 灯り）は、画面の 揺れ（ダブルアップ演出 など）と 一緒に 揺れない 層に 置く ---- */
+function nxLay(){let l=document.getElementById('nxScene');const w=$('window');if(!w)return null;
+  if(!l){l=document.createElement('div');l.id='nxScene';document.body.appendChild(l)}
+  try{const g=SCENE.dbg();l.style.left=g.WL+'px';l.style.top=(g.WT-scrollY)+'px';l.style.width=g.WW+'px';l.style.height=g.WH+'px'}catch(e){const r=w.getBoundingClientRect();l.style.left=r.left+'px';l.style.top=r.top+'px';l.style.width=r.width+'px';l.style.height=r.height+'px'}
+  return l}
+setTimeout(()=>{try{const l=nxLay();['nxCst','nxNt','nxCas','nxFlea'].forEach(id=>{const e=document.getElementById(id);if(e&&e.parentNode!==l)l.appendChild(e)})}catch(e){}},50);
 </script>
 <!--NXJS-END-->
 </body></html>
