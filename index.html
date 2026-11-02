@@ -269,6 +269,8 @@ body:has(#nxP:not([hidden])) #toast,body:has(#nxM:not([hidden])) #toast,body:has
 #nxNt .tw{animation:nxTw 3.2s ease-in-out infinite}
 #nxNt.done .halo{opacity:1}#nxNt .halo{opacity:0;transition:opacity 2s}
 @media (prefers-reduced-motion:reduce){#nxNt .tw,#nxNt .lt.new{animation:none}}
+.nxOInf{background:#fff6e0;border:2px solid #f2c97a;border-radius:12px;padding:8px 10px;margin-top:6px;font-size:.78rem;line-height:1.5;color:#4a2a0a}
+.nxOInf .hd{display:flex;gap:10px;align-items:center;margin-bottom:4px}.nxOInf>div+div{margin-top:4px}.nxOInf small{color:#8a6a40}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12502,10 +12504,17 @@ function sumH(){const sm=X.sums(),ks=Object.keys(sm).filter(k=>EQK[k]&&sm[k]>0).
 function eqList(){const d=D();const L=d.eqs.slice().sort((a,b)=>(X.isOn(b)-X.isOn(a))||X.RR.indexOf(b.r)-X.RR.indexOf(a.r));
   return `<p class="nxNote">🎒 装備は 球を はめる 器。同時に つけられるのは <b>${X.MAXEQ}つ</b>（いま ${d.on.length}/${X.MAXEQ}）。球は 左から 順番に 並び、となりや 真ん中で 効き方が 変わる。<br>球は <b>長押しで つかんで</b> ほかの 装備へ 動かせる。</p>`+
    sumH()+(L.length?L.map(e=>{const T=X.TRT[e.tr];return `<div class="nxRow${X.isOn(e)?' on':''}" data-a="eq" data-id="${e.id}"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div class="nxInfo"><b>${esc(X.eqName(e))} ${rtag(e.r)}${X.isOn(e)?' <span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</b><small>${T[0]} ${T[1]}：${T[2]}</small><div class="nxSlots" style="justify-content:flex-start">${e.s.map(i=>orbH(i&&X.oGet(i),'sm')).join('')}</div></div></div>`}).join(''):'<div class="nxEmpty">装備が ない。ショップや 宝箱で 手に 入る。</div>')}
+function oInfo(o){const e=X.eqOf(o),r=X.orbEff(o),mx=X.maxLv(o);let k='';
+  if(o.kind==='sup')k=`<div>🤝 <b>サポート球</b>：${X.SUP[o.s][2](o.lv,o)}<br><small>自分では 能力を 持たず、同じ 装備の 仲間を 強くする。Lv が 上がると 強くなる。</small></div>`;
+  else{const desc=typeof ABD!=='undefined'&&ABD[o.k]?ABD[o.k]:'';k=`<div>✨ <b>${esc(effTxt(o))}</b>${r&&e&&X.isOn(e)?`<br><small>この 装備で 強化 →</small> <b style="color:#2a5aa8">${esc(EQK[o.k]?EQK[o.k][2](r.v):'')}</b>`:e&&!X.isOn(e)?'<br><small>（この 装備を つけると 効く）</small>':''}${desc?`<br><small>${desc}</small>`:''}</div>`}
+  if(o.kind==='dng'&&X.DNG[o.d]){const G=X.DNG[o.d];k+=`<div>⚠️ <b>${G[1]}</b><br>◎ ${G[2]}<br>✖ ${G[3]}</div>`}
+  if(o.kind==='cur'&&typeof CURSE!=='undefined'&&CURSE[o.c]){const C=CURSE[o.c];k+=`<div>${C.ico} <b>${C.nm}</b><br>◎ ${C.good}<br>✖ ${C.bad}</div>`}
+  const tal=o.tal.length?`<div>🌸 才能：${o.tal.map(t=>{const T=X.TAL[t];return `<b>${T[1]}</b>（${T[2]}）`}).join('、')}</div>`:'<div><small>🌸 才能：まだ ない</small></div>';
+  return `<div class="nxOInf"><div class="hd">${orbH(o)}<div><b>${esc(X.orbName(o))}</b> ${rtag(o.r)}<br><small>Lv${o.lv} / ${mx} ・ ${X.EL[o.el][0]} ${X.EL[o.el][1]}属性</small></div></div>${k}${tal}</div>`}
 function eqDetail(id,slot){const e=X.eGet(id);if(!e){M.hidden=true;return}curEq=id;selSlot=slot??-1;const T=X.TRT[e.tr],res=X.evalEq(e);
   const slots=e.s.map((i,n)=>{const o=i&&X.oGet(i);return `<div class="nxSlot${selSlot===n?' sel':''}" data-a="slot" data-i="${n}"${o?` data-oid="${o.id}"`:''}>${orbH(o)}<small>${n===0?'左はし':n===e.s.length-1?'右はし':''}${e.s.length%2&&n===(e.s.length-1)/2&&e.s.length>1?'真ん中':''}</small></div>`}).join('');
-  let act='';if(selSlot>=0){const o=e.s[selSlot]&&X.oGet(e.s[selSlot]);act=o?`<div class="nxBtns"><button class="nxB" data-a="unslot">はずす</button><button class="nxB" data-a="orbD" data-id="${o.id}">くわしく</button><button class="nxB wide" data-a="pick">べつの 球に かえる</button></div>`:`<div class="nxBtns"><button class="nxB go wide" data-a="pick">🔮 箱から 球を えらぶ</button></div>`}
-  const effs=res.length?res.map(r=>`<div class="nxRow" style="cursor:default;margin:3px 0;padding:5px 8px">${orbH(r.o,'sm')}<div class="nxInfo"><b>${esc(X.orbName(r.o))}${r.o.kind==='sup'?'（コピー）':''}</b><small>${EQK[r.k]?EQK[r.k][2](r.v):''}</small></div></div>`).join(''):'<small>球を つけると ここに 効果が 出る</small>';
+  let act='';if(selSlot>=0){const o=e.s[selSlot]&&X.oGet(e.s[selSlot]);act=o?`${oInfo(o)}<div class="nxBtns"><button class="nxB" data-a="unslot">📦 はずす</button><button class="nxB" data-a="pick">🔁 べつの 球に かえる</button><button class="nxB wide" data-a="orbD" data-id="${o.id}">🔮 育てる・進化（球の 画面へ）</button></div>`:`<div class="nxBtns"><button class="nxB go wide" data-a="pick">🔮 箱から 球を えらぶ</button></div>`}
+  const effs=res.length?res.map(r=>`<div class="nxRow" data-a="orbD" data-id="${r.o.id}" style="margin:3px 0;padding:5px 8px">${orbH(r.o,'sm')}<div class="nxInfo"><b>${esc(X.orbName(r.o))}${r.o.kind==='sup'?'（コピー）':''}</b><small>${EQK[r.k]?EQK[r.k][2](r.v):''}</small></div></div>`).join(''):'<small>球を つけると ここに 効果が 出る</small>';
   const sups=e.s.map(i=>i&&X.oGet(i)).filter(o=>o&&o.kind==='sup'&&o.s!=='copy').map(o=>`<small>🤝 ${X.SUP[o.s][1]}：${X.SUP[o.s][2](o.lv,o)}</small>`).join('<br>');
   const box=D().orbs.filter(o=>!X.eqOf(o)).sort((a,b)=>X.RR.indexOf(b.r)-X.RR.indexOf(a.r)||b.lv-a.lv);
   M.innerHTML=`<div class="nxDet" data-eq="${e.id}"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div><h3>${esc(X.eqName(e))}</h3><div class="nxTags">${rtag(e.r)}<span class="nxTag">球枠 ${e.s.length}</span>${X.isOn(e)?'<span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</div></div></div>
