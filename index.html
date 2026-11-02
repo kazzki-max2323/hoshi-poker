@@ -9497,16 +9497,16 @@ const SCENE=(()=>{
     x.fillStyle=sn?`rgba(200,205,220,${.22*wxA})`:`rgba(52,58,74,${(hv?.62:.5)*wxA})`;x.fillRect(0,0,W,hz+2);
     const g=x.createLinearGradient(0,0,0,hz*.6);g.addColorStop(0,`rgba(${sn?'170,175,190':'40,44,58'},${.55*wxA})`);g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,W,hz*.6);
     if(wxFlash>0){x.fillStyle=`rgba(230,235,255,${wxFlash*.55})`;x.fillRect(0,0,W,hz+2)}}
-  function wxFx(rdt){const kd=wxKind();if(wxA<.01&&!kd){wxDrops.length=0;wxFlakes.length=0;return}const dt=Math.min(rdt||.016,.05)*60,top=WT,bot=WT+WH;
-    x.save();x.beginPath();x.rect(WL,WT,WW,WH);x.clip();
+  function wxFx(rdt){const kd=wxKind();if(wxA<.01&&!kd){wxDrops.length=0;wxFlakes.length=0;return}const dt=Math.min(rdt||.016,.05)*60,top=0,bot=WT+WH;
+    x.save();x.beginPath();x.rect(0,0,W,H);x.clip();
     // 全体を すこし 暗く・しっとり
-    x.fillStyle=kd==='snow'?`rgba(220,225,240,${.06*wxA})`:`rgba(20,26,40,${.16*wxA})`;x.fillRect(WL,WT,WW,WH);
-    if(kd==='snow'){const N=Math.round(110*wxA);while(wxFlakes.length<N)wxFlakes.push({x:R(WL,WL+WW),y:R(top-WH,bot),r:R(.8,2.6)*k,v:R(.25,.7)*k,ph:R(0,6)});if(wxFlakes.length>N)wxFlakes.length=N;
-      for(const f of wxFlakes){f.y+=f.v*dt*(f.r/k*.5+.6);f.x+=Math.sin(t*.8+f.ph)*.35*dt;if(f.y>bot){f.y=top-R(0,40);f.x=R(WL,WL+WW)}x.globalAlpha=.85*wxA;x.fillStyle='#ffffff';x.beginPath();x.arc(f.x,f.y,f.r,0,7);x.fill()}x.restore();x.globalAlpha=1;return}
+    x.fillStyle=kd==='snow'?`rgba(220,225,240,${.06*wxA})`:`rgba(20,26,40,${.16*wxA})`;x.fillRect(0,0,W,H);
+    if(kd==='snow'){const N=Math.round(110*wxA);while(wxFlakes.length<N)wxFlakes.push({x:R(0,W),y:R(top-WH,bot),r:R(.8,2.6)*k,v:R(.25,.7)*k,ph:R(0,6)});if(wxFlakes.length>N)wxFlakes.length=N;
+      for(const f of wxFlakes){f.y+=f.v*dt*(f.r/k*.5+.6);f.x+=Math.sin(t*.8+f.ph)*.35*dt;if(f.y>bot){f.y=top-R(0,40);f.x=R(0,W)}x.globalAlpha=.85*wxA;x.fillStyle='#ffffff';x.beginPath();x.arc(f.x,f.y,f.r,0,7);x.fill()}x.restore();x.globalAlpha=1;return}
     const I=kd==='drizzle'?.45:kd==='rain'?.8:1.25,N=Math.round(170*I*wxA),wind=kd==='storm'?2.2:1.1;
-    while(wxDrops.length<N){const z=Math.random();wxDrops.push({x:R(WL-40,WL+WW+20),y:R(top-WH,bot),z,l:(6+z*16)*k*(kd==='drizzle'?.55:1),v:(7+z*9)*k*(kd==='drizzle'?.6:1),end:R(shore-6*k,bot)})}if(wxDrops.length>N)wxDrops.length=N;
+    while(wxDrops.length<N){const z=Math.random();wxDrops.push({x:R(-40,W+20),y:R(top-WH,bot),z,l:(6+z*16)*k*(kd==='drizzle'?.55:1),v:(7+z*9)*k*(kd==='drizzle'?.6:1),end:R(shore-6*k,bot)})}if(wxDrops.length>N)wxDrops.length=N;
     x.lineCap='round';
-    for(const d of wxDrops){d.y+=d.v*dt;d.x+=wind*d.v*.12*dt;if(d.y>d.end){if(d.z>.35){if(d.end<shore+6*k)wxRip.push({x:d.x,y:d.end,r:.5,l:1});else wxSpl.push({x:d.x,y:d.end,l:1,s:.6+d.z*.6})}d.y=top-R(0,60);d.x=R(WL-40,WL+WW+20);d.end=Math.random()<.5?R(seaY(.15),shore):R(shore,bot);continue}
+    for(const d of wxDrops){d.y+=d.v*dt;d.x+=wind*d.v*.12*dt;if(d.y>d.end){if(d.z>.35){if(d.end<shore+6*k)wxRip.push({x:d.x,y:d.end,r:.5,l:1});else wxSpl.push({x:d.x,y:d.end,l:1,s:.6+d.z*.6})}d.y=top-R(0,60);d.x=R(-40,W+20);d.end=Math.random()<.5?R(seaY(.15),shore):R(shore,bot);continue}
       x.strokeStyle=`rgba(${200+d.z*40|0},${212+d.z*30|0},255,${(.18+d.z*.4)*wxA})`;x.lineWidth=(.5+d.z*.9)*k*.9;x.beginPath();x.moveTo(d.x,d.y);x.lineTo(d.x-wind*d.l*.12,d.y-d.l);x.stroke()}
     // 海の 波紋
     x.lineWidth=.7;for(const r of wxRip){r.r+=.35*dt;r.l-=.035*dt;x.strokeStyle=`rgba(210,225,255,${.45*r.l*wxA})`;x.beginPath();x.ellipse(r.x,r.y,r.r*k*1.6,r.r*k*.45,0,0,7);x.stroke()}wxRip=wxRip.filter(r=>r.l>0).slice(-120);
@@ -9514,7 +9514,7 @@ const SCENE=(()=>{
     for(const s of wxSpl){s.l-=.08*dt;const q=1-s.l;x.strokeStyle=`rgba(225,232,255,${.55*s.l*wxA})`;x.lineWidth=.7*k;x.beginPath();x.moveTo(s.x-1*k-q*3*k*s.s,s.y-q*3*k*s.s);x.lineTo(s.x-.3*k,s.y);x.moveTo(s.x+1*k+q*3*k*s.s,s.y-q*3*k*s.s);x.lineTo(s.x+.3*k,s.y);x.moveTo(s.x,s.y-q*4*k*s.s);x.lineTo(s.x,s.y-.5*k);x.stroke()}wxSpl=wxSpl.filter(s=>s.l>0).slice(-90);
     // 雷
     if(kd==='storm'){const now=performance.now();if(now>wxNextBolt){wxNextBolt=now+R(6000,16000);wxFlash=1;try{setTimeout(()=>{noise(1.6,{v:.09,type:'lowpass',f:220,q:.5});tone(55,1.2,'sine',.05)},R(300,1200))}catch(e){}}}
-    if(wxFlash>0){x.fillStyle=`rgba(230,235,255,${wxFlash*.25})`;x.fillRect(WL,WT,WW,WH);wxFlash-=.04*dt}
+    if(wxFlash>0){x.fillStyle=`rgba(230,235,255,${wxFlash*.25})`;x.fillRect(0,0,W,H);wxFlash-=.04*dt}
     x.restore()}
   /* ---------- 光の 海辺アイテム ---------- */
   ITEMS.push({c:1800,n:'キャンドル',d:[0,0],m:[.5,.995],a:0},{c:4500,n:'ちょうちん',d:[0,0],m:[.16,.6],a:0},{c:8000,n:'浮き玉ランプ',d:[0,0],m:[.92,.985],a:0},{c:80000,n:'星のプロジェクター',d:[0,0],m:[.76,.99],a:0},{c:120000,n:'ミラーボール',d:[0,0],m:[.62,.36],a:0});
