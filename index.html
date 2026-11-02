@@ -9205,7 +9205,7 @@ const SCENE=(()=>{
       for(const [u,v,w] of [[.07,.2,1],[.15,.6,.7],[.86,.3,1.1],[.93,.75,.6]]){const rx=WL+WW*u,ry=shore+(2+v*6)*k,rw=16*k*w;
         x.fillStyle='rgba(120,150,170,.35)';x.beginPath();x.ellipse(rx+rw*.9,ry+3*k,rw*.8,3*k,0,0,7);x.fill();
         x.fillStyle=vgrad(ry-rw*.6,ry+3*k,[[0,'#6a6470'],[1,'#2e2a34']]);x.beginPath();x.moveTo(rx-rw,ry+3*k);x.quadraticCurveTo(rx-rw*.9,ry-rw*.5,rx-rw*.2,ry-rw*.6);x.quadraticCurveTo(rx+rw*.7,ry-rw*.5,rx+rw,ry+3*k);x.closePath();x.fill();
-        x.fillStyle='rgba(80,140,90,.6)';x.fillRect(rx-rw*.8,ry+1*k,rw*1.6,1.6*k);x.fillStyle='rgba(255,255,255,.5)';x.fillRect(rx+rw*.6+Math.sin(t*2+u*20)*3*k,ry+2.5*k,2*k,.8*k);
+        x.fillStyle='rgba(255,255,255,.5)';x.fillRect(rx+rw*.6+Math.sin(t*2+u*20)*3*k,ry+2.5*k,2*k,.8*k);
         window._tidePts.push([rx,ry,rw])}
       const cx=WL+WW*.86+Math.sin(t*.7)*14*k,cy=shore+5*k;x.fillStyle='#e0523a';x.beginPath();x.ellipse(cx,cy,3.4*k,2.2*k,0,0,7);x.fill();x.strokeStyle='#e0523a';x.lineWidth=.8*k;for(const sd of[-1,1]){x.beginPath();x.moveTo(cx+sd*3*k,cy);x.lineTo(cx+sd*5*k,cy-2*k);x.stroke()}
       x.restore()}}
