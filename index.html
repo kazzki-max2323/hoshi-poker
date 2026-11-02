@@ -12519,8 +12519,9 @@ function eqDetail(id,slot){const e=X.eGet(id);if(!e){M.hidden=true;return}curEq=
   const box=D().orbs.filter(o=>!X.eqOf(o)).sort((a,b)=>X.RR.indexOf(b.r)-X.RR.indexOf(a.r)||b.lv-a.lv);
   M.innerHTML=`<div class="nxDet" data-eq="${e.id}"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span class="nxOrb lg" style="--rc:${X.RCOL[e.r]};background:#fff7e0">${X.eqIcon(e)}</span><div><h3>${esc(X.eqName(e))}</h3><div class="nxTags">${rtag(e.r)}<span class="nxTag">球枠 ${e.s.length}</span>${X.isOn(e)?'<span class="nxTag" style="background:#d6f7ea;color:#1a7a5a">装備中</span>':''}</div></div></div>
    <div class="nxSec"><h4>${T[0]} 特性：${T[1]}</h4>${T[2]}</div>
-   <div class="nxSec"><h4>🔮 球（タップで えらぶ・長押しで つかんで 動かせる）</h4><div class="nxSlots">${slots}</div>${act}</div>
+   <div class="nxSec"><h4>🔮 球（タップで えらぶ・長押しで つかんで 動かせる）</h4><div class="nxSlots">${slots}</div></div>
    <div class="nxSec"><h4>📦 箱の 球 <small style="font-weight:500;color:#8a6a40">長押しで つかんで 上の 枠へ ／ 枠の 球を ここへ 持ってくると はずれる</small></h4><div class="nxBoxS" data-drop="box">${box.length?box.map(o=>`<span class="nxDrg" data-a="orbD" data-id="${o.id}" data-oid="${o.id}">${orbH(o,'sm')}</span>`).join(''):'<small style="color:#a08060">箱は からっぽ</small>'}</div></div>
+   ${act?`<div class="nxSec">${act}</div>`:''}
    <div class="nxSec"><h4>✨ いまの 効果${X.isOn(e)?'':'（装備すると 効く）'}</h4>${effs}${sups?'<div style="margin-top:4px">'+sups+'</div>':''}</div>
    <div class="nxBtns"><button class="nxB mint" data-a="toggle">${X.isOn(e)?'🎒 はずす':'🎒 装備する'}</button><button class="nxB red" data-a="sellE">売る（${fc(X.sellE(e))}枚）</button></div></div>`;M.hidden=false}
 function orbPicker(){const e=X.eGet(curEq);if(!e)return;const cur=e.s[selSlot];const L=D().orbs.filter(o=>o.id!==cur).sort((a,b)=>(!!X.eqOf(a)-!!X.eqOf(b))||X.RR.indexOf(b.r)-X.RR.indexOf(a.r)||b.lv-a.lv);
