@@ -12815,7 +12815,8 @@ function mkStock(k){const T=k==='ufo'?[()=>{const it={type:'orb',o:X.mkOrb(pk(['
   :k==='pirate'?[()=>({type:'orb',o:X.mkOrb(pk(['SR','SSR','UR']),{kind:'cur'}),p:0}),()=>({type:'orb',o:X.mkOrb(pk(['R','SR','SSR']),{kind:'dng'}),p:0}),()=>{const e=X.mkEq(pk(['UR','LG']));return{type:'eq',e,p:X.EPRICE[e.r]}}]
   :k==='mermaid'?[()=>({type:'orb',o:X.mkOrb(pk(['SR','SSR']),{kind:'sup'}),p:0}),()=>({type:'orb',o:X.mkOrb(pk(['R','SR','SSR']),{kind:'sup'}),p:0}),()=>{const t=rollTre(4);return{type:'tre',t,p:Math.round(t.p*2.5)}},()=>({type:'holy',p:200000})]
   :[()=>{const e=X.mkEq(pk(['SR','SSR','UR']));e.tr=pk(['t_lone','t_mid','t_safe','t_sup','t_spin','t_night']);return{type:'eq',e,p:X.EPRICE[e.r]*1.5}},()=>{const e=X.mkEq(pk(['SSR','UR']));e.tr=pk(['t_lone','t_mid','t_safe','t_sup']);return{type:'eq',e,p:X.EPRICE[e.r]*1.5}},()=>({type:'fuku',k:'x',e:'🎁',n:'特大 福袋',p:3000000,d:'中身は おたのしみ（4つ）：とても いい ものが 出やすい'})];
-  return T.map(f=>{const it=f();if(it.type==='orb'&&!it.p)it.p=Math.round(X.OPRICE[it.o.r]*1.8);it.p=Math.round(it.p);return it})}
+  const L=T.map(f=>{const it=f();if(it.type==='orb'&&!it.p)it.p=Math.round(X.OPRICE[it.o.r]*1.8);it.p=Math.round(it.p);return it});
+  if(Math.random()<.5){const ds=TRE.filter(t=>/^nev_s_drones/.test(t.id));if(ds.length){const t=ds[Math.random()*ds.length|0];L.push({type:'tre',t,p:Math.round(t.p*3)})}}return L}
 function items(){const e=cur();if(!e)return[];if(!e.stock){e.stock=mkStock(e.k);save()}return e.stock}
 function openShop(){const e=cur(),UI=U();if(!e){evToast('もう 帰って しまった…');UI.M.hidden=true;return}const L=items(),left=Math.max(1,Math.round((e.t+STAY-Date.now())/60000));if(UI.P.hidden){UI.open('eq')}
   UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3rem">${e.who[0]}</span><div><h3>${e.who[1]}の お店</h3><div class="nxTags"><span class="nxTag">${e.who[2]}</span><span class="nxTag" style="background:#ffe0e4;color:#8a1a10">あと 約${left}分で 帰る</span></div></div></div>
@@ -13100,6 +13101,7 @@ const VIS={ufo:{cry:'ピコ…ピコ… ソレ、ホシイ',buy:1.8,ex:'orbUp'},
 const FAC={gen:[1.1,1.5],norm:[.9,1.2],stingy:[.6,.85],col:[1,1.35],art:[.9,1.3]},CP={gen:.7,norm:.5,stingy:.3,col:.55,art:.5};
 let cur=null,bye=null,el=null;
 function gift(kind,r){if(kind==='holy')return{t:'holy'};
+  if(kind==='tre'&&Math.random()<.12){const ds=TRE.filter(t=>/^nev_s_drones/.test(t.id)&&(RI(t.r)<=RI(r)+1));if(ds.length)return{t:'tre',id:ds[Math.random()*ds.length|0].id}}
   if(kind==='tre'){const tr=['N','R','SR','SSR','UR'][Math.min(4,RI(r)+(Math.random()<.25?1:0))];let pool=TRE.filter(t=>t.r===tr&&!/^(ndc_|sz_|g_)/.test(t.id));if(!pool.length)pool=TRE.filter(t=>t.r==='N');return{t:'tre',id:pk(pool).id}}
   if(kind==='eqUp')return{t:'eq',e:X.mkEq(up(r,1))};
   if(kind==='sup')return{t:'orb',o:X.mkOrb(X.RR[Math.min(4,RI(r))],{kind:'sup'})};
@@ -13290,6 +13292,9 @@ setTimeout(()=>{try{const l=nxLay();['nxCst','nxNt','nxCas','nxFlea'].forEach(id
   addEventListener('touchend',e=>{if(!g())return;fire('pointerup',e.changedTouches[0])},{capture:true});
   addEventListener('touchcancel',e=>{if(!g())return;fire('pointerup',e.changedTouches[0])},{capture:true});
 })();
+
+/* ---- ドローンショーの たねが 出やすく（たからもの 約100回に 3回） ---- */
+{const _rt=rollTre;rollTre=function(){const t=_rt.apply(this,arguments);try{if(Math.random()<.021){const ds=TRE.filter(x=>/^nev_s_drones/.test(x.id));const w=ds.map(x=>x.r==='SSR'?1:3),tot=w.reduce((a,b)=>a+b,0);let r=Math.random()*tot;for(let i=0;i<ds.length;i++){r-=w[i];if(r<=0)return ds[i]}}}catch(e){}return t}}
 </script>
 <!--NXJS-END-->
 </body></html>
