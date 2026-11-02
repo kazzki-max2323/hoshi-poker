@@ -12665,18 +12665,29 @@ ITUNLOCK.forEach(([k,p])=>add({id:'nky_'+k,e:'🗝️',n:`${ITEM[k]}の 鍵`,r:p
 try{SCENE.decos().forEach(d=>add({id:'ndc_'+d.n,e:(typeof DECO_INFO!=='undefined'&&DECO_INFO[d.n]?DECO_INFO[d.n][0]:'🎁'),n:d.n,r:prR(d.c*25),f:'浜辺の 置きもの。売ると コインに なる',use:{t:'deco',n:d.n}}))}catch(e){}
 /* ---- ふつうの たからものの 使い道 ---- */
 const POK=[.1,.2,.35,.6,1],DBX=[.2,.35,.5,.8,1.5],ORBP=[.15,.25,.4,.6,1];
-function useOf(t){if(t.use)return t.use;const h=hsh(t.id),c=h%100,ri=RI[t.r]||0,sub=(h>>>8)%3;
-  if(c<28)return sub===0&&ri<=1?{t:'joker'}:sub===1&&ri>=2?{t:'mul'}:{t:'pay',m:POK[ri]};
-  if(c<54)return sub===0?{t:'guard'}:{t:'dblX',m:DBX[ri]};
-  if(c<78)return{t:'offer',lv:ri+1};return{t:'orb',p:ORBP[ri]}}
+function useOf(t){if(t.use)return t.use;const h0=hsh(t.id),h=(Math.imul(h0^(h0>>>15),0x2c1b3c6d)^Math.imul(h0^(h0>>>12),0x297a2d39))>>>0,c=h%100,ri=RI[t.r]||0,sub=(h>>>8)%3;
+  if(c<14)return sub===0&&ri<=1?{t:'joker'}:sub===1&&ri>=2?{t:'mul'}:{t:'pay',m:POK[ri]};
+  if(c<26)return sub===0?{t:'guard'}:{t:'dblX',m:DBX[ri]};
+  if(c<35)return{t:'offer',lv:ri+1};if(c<44)return{t:'orb',p:ORBP[ri]};
+  if(c<50)return{t:'star',n:2+Math.min(3,ri)};if(c<56)return{t:'animal'};if(c<61)return{t:'fish'};if(c<67)return{t:'craft'};if(c<72)return{t:'guest'};
+  if(c<78)return{t:'free',n:ri>=3?2:1};if(ri>=3)return c%2?{t:'orb',p:ORBP[ri]}:{t:'offer',lv:ri+1};if(c<82)return{t:'sky'};if(c<87)return{t:'scene'};if(c<91)return{t:'people'};if(c<96)return{t:'letter'};return{t:'notes'}}
+const LETTERS=['きょうも いい 波でしたか','この 手紙を 拾った あなたへ。ゆっくりで いいよ','星の 名前を ひとつ 覚えたら、夜が 少し 近くなる','砂浜で なくした 片方の サンダル、見かけたら 教えてください','ラムネの ビー玉は、いつか 海に 返そうと 思っています','遠い 島から こんにちは。こちらは 晴れ です','カニに 指を はさまれた。痛かったけど 笑った','夕焼けが きれいな 日は、だれかに 言いたくなる','願いごとは 3回 言うと 叶う らしい。2回で 噛んだ','この 浜の 焚き火は、ずっと 前から あたたかい','貝がらを 耳に あてたら、知らない 歌が 聞こえた','明日も いい 日に なりますように'];
 function useTxt(t){const u=useOf(t),ri=RI[t.r]||0;switch(u.t){
   case 'music':return `🎵 ${u.name} が 流れる`;case 'event':{const it=SHOP.find(i=>i.id===u.id);return `🎆 ${it?it.name:t.n.replace(/の たね$/,'')} が はじまる`}
   case 'unlock':return S.unlocked[u.k]?'🔓 もう 解放ずみ':`🔓 ダブルアップの アイテム「${ITEM[u.k]}」を 解放`;case 'deco':return '💰 売って コインに する もの';
   case 'pay':return `🃏 次の 5回、役の 配当 +${Math.round(u.m*100)}%`;case 'joker':return '🃏 次に くばる 手札に ジョーカー 確定';case 'mul':return '🃏 次に 役が できたら 配当 ×2';
   case 'guard':return '🎲 次の ダブルアップで 負けても 1回 復活';case 'dblX':return `🎲 次の ダブルアップで 勝つと さらに +${Math.round(u.m*100)}%`;
   case 'offer':return `🌸 お供え：次の 才能 開花が 良くなる${u.lv>=5?'（虹 以上 1つ 確定）':u.lv>=4?'（金 以上 1つ 確定）':''}`;
-  case 'orb':return `🔮 ${Math.round(u.p*100)}% で 球が 生まれる（だめなら ルーレット 無料券）`}return ''}
-function canUse(t){const u=useOf(t);if(u.t==='unlock'&&S.unlocked[u.k])return false;if(u.t==='deco')return false;if((u.t==='event'||u.t==='music')&&S.phase==='busy')return false;return true}
+  case 'orb':return `🔮 ${Math.round(u.p*100)}% で 球が 生まれる（だめなら ルーレット 無料券）`;
+  case 'star':return `🌠 流れ星が ${u.n}つ 流れる（つかまえると コイン）`;case 'animal':return '🐾 浜辺に 動物が やって来る';
+  case 'fish':return '🎣 釣りの 獲物が すぐ かかる（釣りを していない ときは えさ代 なしで 始める）';case 'craft':return '🏰 昼は 砂の 作品に 砂 +3 ／ 🌙 夜は 灯りを 1つ ともす';
+  case 'guest':return '🧺 フリマに すぐ お客さんが 来る（並べて いる とき）';case 'free':return `🎟️ 球の ルーレット 無料券 ×${u.n}`;
+  case 'sky':return '🌤️ しばらく 雨や 雪が やんで 晴れる';case 'scene':return '🎈 浜辺の 景色で 何かが 起こる（おたのしみ）';
+  case 'people':return '👫 浜辺に だれかが やって来る（おたのしみ）';case 'letter':return '💌 ボトルの 手紙を 読む（おたのしみ）';case 'notes':return '🎵 焚き火から 小さな 音楽が 聞こえる（おたのしみ）'}return ''}
+function canUse(t){const u=useOf(t);if(u.t==='unlock'&&S.unlocked[u.k])return false;
+  if(u.t==='craft'){try{const h=GH();if(!(h>=5&&h<17)&&!X.night())return false;if(h>=5&&h<17){const c=NXCAS.st();if(c.done||c.washed)return false}}catch(e){return false}}
+  if(u.t==='guest'){try{const f=NXFL.st();if(!f.items.length||NXFL.cur)return false}catch(e){return false}}
+  if(u.t==='fish'&&S.fishing&&S.fishing.hooked)return false;if(u.t==='deco')return false;if((u.t==='event'||u.t==='music')&&S.phase==='busy')return false;return true}
 function useIt(t){const u=useOf(t),d=D(),B=d.buf,ri=RI[t.r]||0;if(!canUse(t)||!(S.tre[t.id]>0))return false;S.tre[t.id]--;
   switch(u.t){
   case 'music':{if(!S.sound){S.sound=true;try{$('snd').textContent='音: ON'}catch(e){}}startMusic(u.track,u.sec*2);try{say('musicStart',{n:2,ctx:{item:u.name},delay:800})}catch(e){}break}
@@ -12688,6 +12699,17 @@ function useIt(t){const u=useOf(t),d=D(),B=d.buf,ri=RI[t.r]||0;if(!canUse(t)||!(
   case 'guard':B.guard=(B.guard||0)+1;evToast('🛡️ 次の ダブルアップは 負けても 1回 復活！');break;
   case 'dblX':B.dblX={n:1,m:Math.max(u.m,(B.dblX&&B.dblX.n>0?B.dblX.m:0))};evToast(`🎲 次の ダブルアップで 勝つと +${Math.round(B.dblX.m*100)}%！`);break;
   case 'offer':d.offer=Math.max(d.offer||0,u.lv);evToast(`🌸 ${t.e} ${t.n} を お供えした…<br><small>次の 才能 開花が 良くなる</small>`);break;
+  case 'star':{evToast('🌠 空を 見て…');for(let i=0;i<u.n;i++)setTimeout(()=>{try{if(!document.getElementById('meteor'))spawnMeteor()}catch(e){}},1500+i*9000);break}
+  case 'animal':try{SCENE.visit()}catch(e){}evToast('🐾 だれかが 浜辺に やって来る…');break;
+  case 'fish':{const f=S.fishing,now=Date.now();if(f&&!f.hooked){f.at=now+3000;evToast('🎣 浮きが ぴくっと 動いた…！')}else{const ph=phaseOf(GH())[1];S.fishing={start:now,at:now+15000,hooked:false,night:ph==='night'||ph==='dawn'};evToast('🎣 えさ代 なしで 釣りを 始めた。すぐ かかりそう…')}try{fishUI()}catch(e){}save();break}
+  case 'craft':{const h=GH();if(h>=5&&h<17){NXCAS.add(6);evToast('🏰 砂を 運んだ！ 砂の 作品に 砂 +3')}else{NXCST.light(0);evToast('✨ 灯りを ひとつ ともした')}break}
+  case 'guest':{const f=NXFL.st();f.n=Math.max(0,(f.n||0)-1);NXFL.spawn();evToast('🧺 フリマに お客さんが 来た！<br><small>シートの となりを タップ</small>');break}
+  case 'free':d.free=(d.free||0)+u.n;evToast(`🎟️ ルーレット 無料券 ×${u.n}<br><small>球を 育てる ときに 使われる</small>`);break;
+  case 'sky':window.WX_TEST=0;setTimeout(()=>{if(window.WX_TEST===0)window.WX_TEST=null},20*60000);evToast('🌤️ 雲が 切れて、空が 晴れてきた');break;
+  case 'scene':try{SCENE.play()}catch(e){}evToast('🎈 あれ？ 海の ほうで 何か…');break;
+  case 'people':try{SCENE.amb()}catch(e){}evToast('👫 浜辺に だれかが やって来た');break;
+  case 'letter':{const m=LETTERS[Math.random()*LETTERS.length|0];evToast(`💌 ボトルの 手紙…<br><small>「${m}」</small>`);break}
+  case 'notes':{for(let i=0;i<8;i++)setTimeout(()=>{try{SCENE.notes()}catch(e){}},i*500);try{[523,659,784,659,880,784].forEach((f,i)=>bell(f,.02,i*.35,1.4))}catch(e){}evToast('🎵 焚き火の ほうから 小さな 音楽が…');break}
   case 'orb':if(Math.random()<u.p){const r=['N','R','SR','SSR','UR'][Math.max(0,Math.min(4,ri+(Math.random()<.15?1:0)-(Math.random()<.3?1:0)))];X.give(X.mkOrb(r),`🐚 ${t.n} から 生まれた`)}else{d.free=(d.free||0)+1;evToast('🎟️ ルーレット 無料券を もらった！')}break}
   try{sfx.chime()}catch(e){}save();ui();return true}
 /* ---- イベント ---- */
