@@ -274,6 +274,13 @@ body:has(#nxP:not([hidden])) #toast,body:has(#nxM:not([hidden])) #toast,body:has
 #meteor{z-index:87!important}
 #nxScene{position:fixed;z-index:2;pointer-events:none}
 body.view #nxScene #nxFlea,body.view #nxScene #nxCasL,body.view #nxScene #nxCstL{opacity:0;pointer-events:none}
+#nxP .nxRow,#nxP .nxCard,#nxP .nxTabs button{position:relative}
+.nxNew{position:absolute;top:-7px;left:-5px;z-index:2;background:#ff5c8a;color:#fff;font-size:.56rem;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:1px 7px;border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.25);animation:nxNewB 2.2s ease-in-out infinite;pointer-events:none}
+@keyframes nxNewB{50%{transform:translateY(-2px)}}
+.nxIsNew{box-shadow:0 0 0 2px #ffb3cc,0 0 10px rgba(255,92,138,.25)!important}
+.nxNewDot{position:absolute;top:-7px;right:-5px;min-width:18px;height:18px;box-sizing:border-box;padding:0 5px;border-radius:999px;background:#ff5c8a;color:#fff;font-style:normal;font-size:.62rem;font-weight:800;line-height:15px;border:1.5px solid #fff;text-align:center}
+.nxNewNote{margin:4px 0 8px;font-size:.74rem;color:#a0305a;background:#ffe8f0;border-radius:10px;padding:5px 9px}.nxNewNote b{background:#ff5c8a;color:#fff;border-radius:999px;padding:0 6px;font-size:.6rem;margin-right:4px}
+@media (prefers-reduced-motion:reduce){.nxNew{animation:none}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13204,6 +13211,28 @@ function nxLay(){let l=document.getElementById('nxScene');const w=$('window');if
   try{const g=SCENE.dbg();l.style.left=g.WL+'px';l.style.top=(g.WT-scrollY)+'px';l.style.width=g.WW+'px';l.style.height=g.WH+'px'}catch(e){const r=w.getBoundingClientRect();l.style.left=r.left+'px';l.style.top=r.top+'px';l.style.width=r.width+'px';l.style.height=r.height+'px'}
   return l}
 setTimeout(()=>{try{const l=nxLay();['nxCst','nxNt','nxCas','nxFlea'].forEach(id=>{const e=document.getElementById(id);if(e&&e.parentNode!==l)l.appendChild(e)})}catch(e){}},50);
+
+/* ---- 新しく 手に 入った 物に「NEW」を つける（装備・球・たからもの、タブにも 数） ---- */
+(()=>{const X=NXS,D=()=>X.st(),P=NXUI.P;let busy=false,lastTab=null;
+  function sn(){const d=D();if(!d.seen){d.seen={o:{},e:{},t:{}};d.orbs.forEach(o=>d.seen.o[o.id]=1);d.eqs.forEach(e=>d.seen.e[e.id]=1);Object.keys(S.tre||{}).forEach(k=>{if(S.tre[k]>0)d.seen.t[k]=S.tre[k]});save()}return d.seen}
+  const newT=(id,s)=>(S.tre[id]||0)>(s.t[id]||0);
+  function cnt(){const d=D(),s=sn();return{eq:d.eqs.filter(e=>!s.e[e.id]).length,orb:d.orbs.filter(o=>!s.o[o.id]).length,tre:Object.keys(S.tre||{}).filter(k=>newT(k,s)).length}}
+  function seeAll(t){const d=D(),s=sn();if(t==='eq')d.eqs.forEach(e=>s.e[e.id]=1);else if(t==='orb')d.orbs.forEach(o=>s.o[o.id]=1);else if(t==='tre')Object.keys(S.tre||{}).forEach(k=>{s.t[k]=S.tre[k]||0});save()}
+  function tag(el,on){let b=el.querySelector(':scope>.nxNew');if(on&&!b){b=document.createElement('span');b.className='nxNew';b.textContent='NEW';el.appendChild(b)}else if(!on&&b)b.remove();el.classList.toggle('nxIsNew',!!on)}
+  function mark(){if(busy||P.hidden)return;busy=true;try{const s=sn(),c=cnt();
+    const cur=(P.querySelector('.nxTabs .on')||{dataset:{}}).dataset.t||null;if(lastTab&&cur&&lastTab!==cur)seeAll(lastTab);lastTab=cur;
+    const c2=cnt();P.querySelectorAll('.nxTabs [data-a=tab]').forEach(b=>{const n=b.dataset.t===cur?0:(c2[b.dataset.t]||0);let i=b.querySelector('.nxNewDot');if(n){if(!i){i=document.createElement('i');i.className='nxNewDot';b.appendChild(i)}if(i.textContent!==String(n))i.textContent=n}else if(i)i.remove()});
+    P.querySelectorAll('.nxRow[data-a=eq][data-id]').forEach(r=>tag(r,!s.e[r.dataset.id]));
+    P.querySelectorAll('.nxCard[data-a=orbD][data-id]').forEach(r=>tag(r,!s.o[r.dataset.id]));
+    P.querySelectorAll('.nxCard[data-a=treD][data-id]').forEach(r=>tag(r,newT(r.dataset.id,s)));
+    const hd=P.querySelector('.nxBody');if(hd){const n=(c[cur]||0);let h=hd.querySelector(':scope>.nxNewNote');if(n&&!h){h=document.createElement('p');h.className='nxNewNote';hd.insertBefore(h,hd.firstChild)}if(h){if(n){const t=`<b>NEW</b> 新しく 手に 入った 物が ${n}つ（タップで くわしく）`;if(h.dataset.t!==t){h.dataset.t=t;h.innerHTML=t}}else h.remove()}}
+  }catch(e){}busy=false}
+  let qd=0;new MutationObserver(()=>{if(busy||qd)return;qd=1;requestAnimationFrame(()=>{qd=0;mark()})}).observe(P,{childList:true,subtree:true});
+  new MutationObserver(()=>{if(P.hidden&&lastTab){seeAll(lastTab);lastTab=null}else if(!P.hidden)mark()}).observe(P,{attributes:true,attributeFilter:['hidden']});
+  P.addEventListener('click',e=>{const b=e.target.closest('[data-a][data-id]');if(!b||!P.contains(b))return;const s=sn(),a=b.dataset.a,id=b.dataset.id;
+    if(a==='eq')s.e[id]=1;else if(a==='orbD')s.o[id]=1;else if(a==='treD')s.t[id]=S.tre[id]||0;else return;save();setTimeout(mark,0)},true);
+  setTimeout(sn,2000);
+})();
 </script>
 <!--NXJS-END-->
 </body></html>
