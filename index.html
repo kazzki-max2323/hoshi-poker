@@ -13190,6 +13190,11 @@ return{st,spawn,draw,manage,deal,get cur(){return cur}}})();
 
 /* ---- 自動で 作られる「世界に ひとつだけの たからもの」は もう 出さない（ふつうの たからものに） ---- */
 genTre=function(r){const L=TRE.filter(t=>t.r===r&&!/^(g_|ndc_|sz_)/.test(t.id)&&t.src!=='gen');return L.length?L[Math.random()*L.length|0]:TRE.find(t=>t.r==='N')};
+/* 持っている「世界に ひとつだけの たからもの」も 消す */
+setTimeout(()=>{try{let ch=false;Object.keys(S.tre||{}).forEach(k=>{if(k.startsWith('g_')){delete S.tre[k];ch=true}});Object.keys(S.zukan||{}).forEach(k=>{if(k.startsWith('g_')){delete S.zukan[k];ch=true}});
+  if(S.gtre&&S.gtre.length){S.gtre.length=0;ch=true}for(let i=TRE.length-1;i>=0;i--)if(String(TRE[i].id).startsWith('g_')||TRE[i].src==='gen'){TRE.splice(i,1);ch=true}
+  try{const f=NXFL.st();const n0=f.items.length;f.items=f.items.filter(it=>!(it.t==='tre'&&String(it.id).startsWith('g_')));if(f.items.length!==n0){ch=true;NXFL.draw()}}catch(e){}
+  if(ch){save();ui()}}catch(e){}},1500);
 </script>
 <!--NXJS-END-->
 </body></html>
