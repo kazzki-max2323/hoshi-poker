@@ -13187,6 +13187,9 @@ return{st,spawn,draw,manage,deal,get cur(){return cur}}})();
     if(a==='mclose'&&M.dataset.backEq&&!M.querySelector('.nxDet[data-eq]')){const id=M.dataset.backEq;delete M.dataset.backEq;if(NXS.eGet(id)){e.stopPropagation();e.preventDefault();NXUI.refresh();NXUI.eqDetail(id)}}},true);
   new MutationObserver(()=>{if(M.hidden)delete M.dataset.backEq}).observe(M,{attributes:true,attributeFilter:['hidden']});
 })();
+
+/* ---- 自動で 作られる「世界に ひとつだけの たからもの」は もう 出さない（ふつうの たからものに） ---- */
+genTre=function(r){const L=TRE.filter(t=>t.r===r&&!/^(g_|ndc_|sz_)/.test(t.id)&&t.src!=='gen');return L.length?L[Math.random()*L.length|0]:TRE.find(t=>t.r==='N')};
 </script>
 <!--NXJS-END-->
 </body></html>
