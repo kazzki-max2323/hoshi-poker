@@ -292,7 +292,10 @@ body.nxFw #nxScene,body.nxFw #bubbles,body.nxFw #status,body.nxFw #shopBtn,body.
 #nxScene,#status,#shopBtn,#nxBtn,header>*{transition:opacity 1.2s}
 body.nxFw #toast{opacity:0!important}
 #nxCrowd{position:fixed;inset:0;pointer-events:none;z-index:2}
-.nxPpl{position:absolute;opacity:0;transition:opacity 2.5s;filter:brightness(.85)}.nxPpl.in{opacity:1}
+.nxPpl{position:absolute;opacity:0;transition:opacity 2.5s;transform-origin:50% 100%}.nxPpl.in{opacity:1}.nxPpl svg{display:block;filter:brightness(.82) saturate(.9) drop-shadow(0 0 1.5px rgba(255,200,150,.18))}
+.nxSway{transform-origin:50% 100%;animation:nxSway 6s ease-in-out infinite}@keyframes nxSway{0%,100%{transform:rotate(-.8deg)}50%{transform:rotate(.8deg)}}
+.nxFan{transform-box:fill-box;transform-origin:0% 100%;animation:nxFanW 1.1s ease-in-out infinite}@keyframes nxFanW{50%{transform:rotate(-14deg)}}
+@media (prefers-reduced-motion:reduce){.nxSway,.nxFan{animation:none}}
 .nxSpk{animation:nxSpk .25s steps(2) infinite}@keyframes nxSpk{50%{opacity:.3;r:2.4}}
 @media (prefers-reduced-motion:reduce){.nxSpk{animation:none}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
@@ -13377,19 +13380,68 @@ const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_s
     tm.push(setTimeout(()=>{try{SCENE.amb(AM.includes('yukata')?'yukata':pk(AM))}catch(e){}},2500));tm.push(setTimeout(()=>{try{SCENE.visit(pk(VI))}catch(e){}},12000));
     tm.push(setTimeout(()=>{if(on())try{SCENE.amb(pk(AM))}catch(e){}},45000));
     crowdStart()}
-  /* 浜辺に 集まる 見物の 人（後ろ姿の 影） */
-  const KIND=[{c:'#3b3f74',o:'#e8a0b8',h:22},{c:'#5a2f52',o:'#f2c46b',h:23},{c:'#24505e',o:'#f7a35c',h:22},{c:'#4a3b2a',o:'#9fd3ff',h:24},{c:'#2f3f6a',o:'#ffd2e0',h:15,kid:1},{c:'#3a2f5e',o:'#c9f7d0',h:16,sit:1},{c:'#552b3b',o:'#ffe08a',h:16,sit:1}];
-  function fig(K,fan,spk){const h=K.h,w=K.sit?13:10;return `<svg viewBox="-12 -${h+8} 24 ${h+10}" width="${24}" height="${h+10}" style="overflow:visible">
-    ${K.sit?`<path d="M-${w/2} 0q${w/2}-${h*.75} ${w} 0z" fill="${K.c}"/>`:`<path d="M-${w/2} 0l2-${h*.72}h${w-4}l2 ${h*.72}z" fill="${K.c}"/>`}
-    <rect x="-${w/2-1}" y="-${K.sit?h*.42:h*.5}" width="${w-2}" height="2.4" fill="${K.o}" opacity=".85"/>
-    <circle cy="-${K.sit?h*.62:h*.82}" r="${K.kid?3.2:3.8}" fill="#1c1a2e"/>${K.kid?'':`<path d="M-3 -${(K.sit?h*.62:h*.82)+2}q3-4 6 0" fill="#1c1a2e"/>`}
-    ${fan?`<ellipse cx="${w/2+2}" cy="-${h*.7}" rx="3" ry="3.4" fill="${K.o}" opacity=".9"/><path d="M${w/2} -${h*.55}l2 -${h*.12}" stroke="#2a2030" stroke-width=".8"/>`:''}
-    ${spk?`<path d="M${w/2-1} -${h*.5}l4 -5" stroke="#3a3040" stroke-width=".6"/><circle class="nxSpk" cx="${w/2+3}" cy="-${h*.5+5.5}" r="1.6" fill="#ffd27a"/>`:''}</svg>`}
+  /* 浜辺に 集まる 見物の 人（後ろ姿・浴衣） */
+  const FAB=[['#2c3a6e','#e9eefc'],['#5b2d55','#ffd0e4'],['#22505c','#d8fff4'],['#3b2b62','#ffe7a8'],['#6a2f3a','#ffe0c8'],['#1f2f4f','#9fd3ff'],['#4e5a2c','#fff2c0'],['#e2d6c4','#d86a8a']];
+  const OBI=['#f2c46b','#e8768f','#f7a35c','#9fd3ff','#c9f7d0','#ffd2e0','#d9534f','#ffe08a'];
+  const MEN=[['#2a2f3f','#8a93b0'],['#3a3226','#c8b48a'],['#1f3a44','#7fb5c2'],['#3b2b2b','#b08a7a']];
+  const pk=a=>a[Math.random()*a.length|0];let uid=0;
+  const HAIR='#17141f',SKIN='#9c7a68',RIM='rgba(255,214,170,.45)';
+  function pat(id,bg,fg,kind){if(kind===0)return `<pattern id="${id}" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="${bg}"/><circle cx="1" cy="1" r=".55" fill="${fg}" opacity=".7"/><circle cx="3" cy="3" r=".55" fill="${fg}" opacity=".7"/></pattern>`;
+    if(kind===1)return `<pattern id="${id}" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="${bg}"/><g fill="${fg}" opacity=".75"><circle cx="2" cy="2" r=".7"/><circle cx="3.1" cy="1.6" r=".7"/><circle cx="3.2" cy="2.8" r=".7"/><circle cx="2.1" cy="3.3" r=".7"/><circle cx="1.4" cy="2.5" r=".7"/></g><circle cx="5.6" cy="5.4" r=".5" fill="${fg}" opacity=".5"/></pattern>`;
+    return `<pattern id="${id}" width="3" height="6" patternUnits="userSpaceOnUse"><rect width="3" height="6" fill="${bg}"/><rect width="1" height="6" fill="${fg}" opacity=".35"/></pattern>`}
+  const shadow=(w)=>`<ellipse cx="0" cy="0" rx="${w}" ry="2" fill="rgba(0,0,0,.38)"/>`;
+  const geta=(x)=>`<rect x="${x-1.2}" y="-3.2" width="2.4" height="2.6" fill="${SKIN}"/><rect x="${x-1.8}" y="-.9" width="3.6" height="1" rx=".3" fill="#5a3a22"/>`;
+  function woman(o){const id='nxF'+(uid++),[bg,fg]=o.fab,ob=o.obi;const arm=o.fan;
+    return `<defs>${pat(id,bg,fg,o.pk)}</defs>${shadow(9)}${geta(-2.4)}${geta(2.4)}
+     <path d="M-7 -26Q-8.2 -14 -6.6 -3L6.6 -3Q8.2 -14 7 -26Z" fill="url(#${id})"/>
+     <path d="M-6.6 -3.4H6.6" stroke="${fg}" stroke-width=".5" opacity=".4"/>
+     <path d="M-7 -25.5L-11.2 -23.2L-11.4 -13.4Q-10.4 -11.8 -7.3 -12.6Z" fill="url(#${id})"/>
+     ${arm?`<g class="nxFan"><path d="M7 -25L10.5 -31L12 -30.2L8.8 -24.4Z" fill="url(#${id})"/><path d="M11.5 -31L13.5 -36" stroke="#3a2a20" stroke-width=".7"/><ellipse cx="14.4" cy="-38.6" rx="3.4" ry="3.8" fill="${ob}" opacity=".95"/><path d="M12.4 -38.6h4" stroke="#fff" stroke-width=".3" opacity=".5"/></g>`:`<path d="M7 -25.5L11.2 -23.2L11.4 -13.4Q10.4 -11.8 7.3 -12.6Z" fill="url(#${id})"/>`}
+     <rect x="-7.3" y="-19.6" width="14.6" height="5" rx=".6" fill="${ob}"/><path d="M-7.3 -18.4h14.6" stroke="#fff" stroke-width=".35" opacity=".35"/>
+     <path d="M0 -17.2L-6.6 -21.4Q-7.6 -17 -6.4 -13.2Z M0 -17.2L6.6 -21.4Q7.6 -17 6.4 -13.2Z" fill="${ob}" stroke="rgba(0,0,0,.25)" stroke-width=".4"/><rect x="-1.4" y="-19.4" width="2.8" height="4.6" rx=".6" fill="${ob}" stroke="rgba(0,0,0,.3)" stroke-width=".4"/>
+     <rect x="-1.5" y="-29.2" width="3" height="3.4" fill="${SKIN}"/>
+     <circle cy="-32.2" r="4.3" fill="${HAIR}"/><circle cy="-37" r="2.7" fill="${HAIR}"/><circle cx="2.6" cy="-36.6" r=".9" fill="${pk(OBI)}"/><path d="M2.6 -36L3.4 -33.4" stroke="#ddd" stroke-width=".3"/><circle cx="3.4" cy="-33.2" r=".45" fill="#fff" opacity=".8"/>
+     <path d="M-7 -26Q0 -28.2 7 -26M-3.6 -35Q0 -37.6 3.6 -35" stroke="${RIM}" stroke-width=".9" fill="none"/>`}
+  function man(o){const id='nxF'+(uid++),[bg,fg]=o.fab;
+    return `<defs>${pat(id,bg,fg,2)}</defs>${shadow(10)}${geta(-2.8)}${geta(2.8)}
+     <path d="M-8.4 -27.4Q-8.8 -14 -7.2 -3L7.2 -3Q8.8 -14 8.4 -27.4Z" fill="url(#${id})"/>
+     <path d="M-8.4 -27L-11.6 -25L-11.4 -17.6Q-10.6 -16.4 -8.2 -17Z M8.4 -27L11.6 -25L11.4 -17.6Q10.6 -16.4 8.2 -17Z" fill="url(#${id})"/>
+     <rect x="-8.2" y="-15.6" width="16.4" height="2.6" fill="${o.obi}" opacity=".9"/><rect x="4.4" y="-16.2" width="2.6" height="3.8" fill="${o.obi}"/>
+     <rect x="-1.7" y="-30.4" width="3.4" height="3.4" fill="${SKIN}"/><circle cx="-4.6" cy="-33.4" r="1" fill="${SKIN}"/><circle cx="4.6" cy="-33.4" r="1" fill="${SKIN}"/>
+     <circle cy="-33.8" r="4.6" fill="${HAIR}"/><path d="M-4.4 -35.4Q0 -39.8 4.4 -35.4" fill="${HAIR}"/>
+     <path d="M-8.4 -27.4Q0 -29.6 8.4 -27.4M-3.8 -37Q0 -39.2 3.8 -37" stroke="${RIM}" stroke-width=".9" fill="none"/>`}
+  function kid(o){const id='nxF'+(uid++),[bg,fg]=o.fab;
+    return `<defs>${pat(id,bg,fg,1)}</defs>${shadow(6)}${geta(-1.6)}${geta(1.6)}
+     <path d="M-5 -17Q-5.6 -9 -4.6 -3L4.6 -3Q5.6 -9 5 -17Z" fill="url(#${id})"/>
+     <path d="M-5 -16.6L-7.4 -15L-7.2 -9.8Q-6.6 -9 -5 -9.6Z M5 -16.6L7.4 -15L7.2 -9.8Q6.6 -9 5 -9.6Z" fill="url(#${id})"/>
+     <ellipse cx="0" cy="-10.6" rx="5.6" ry="1.8" fill="${o.obi}" opacity=".9"/><path d="M0 -10.6Q-6 -15 -6.8 -9.6Q-5 -6.4 0 -10.6Q5 -6.4 6.8 -9.6Q6 -15 0 -10.6Z" fill="${o.obi}" opacity=".75"/>
+     <circle cy="-20.6" r="3.6" fill="${HAIR}"/><circle cx="-2.8" cy="-23.2" r="1.5" fill="${HAIR}"/><circle cx="2.8" cy="-23.2" r="1.5" fill="${HAIR}"/>
+     <path d="M-5 -17Q0 -18.6 5 -17" stroke="${RIM}" stroke-width=".8" fill="none"/>`}
+  function sitter(o){const id='nxF'+(uid++),[bg,fg]=o.fab;
+    return `<defs>${pat(id,bg,fg,o.pk)}</defs><ellipse cx="0" cy="0" rx="10" ry="2.2" fill="rgba(0,0,0,.38)"/>
+     <path d="M-8.6 -.4Q-9.4 -8 -6.4 -16.6L6.4 -16.6Q9.4 -8 8.6 -.4Z" fill="url(#${id})"/>
+     <rect x="-6.6" y="-12.8" width="13.2" height="3.8" rx=".5" fill="${o.obi}"/><path d="M0 -11L-4.6 -14Q-5.4 -10.8 -4.4 -8.2Z M0 -11L4.6 -14Q5.4 -10.8 4.4 -8.2Z" fill="${o.obi}" stroke="rgba(0,0,0,.25)" stroke-width=".4"/>
+     <rect x="-1.4" y="-19.2" width="2.8" height="2.8" fill="${SKIN}"/><circle cy="-22" r="4" fill="${HAIR}"/>${o.bun?`<circle cy="-26.4" r="2.4" fill="${HAIR}"/>`:''}
+     <path d="M-6.4 -16.6Q0 -18.4 6.4 -16.6" stroke="${RIM}" stroke-width=".9" fill="none"/>`}
+  function crouch(o){const id='nxF'+(uid++),[bg,fg]=o.fab;
+    return `<defs>${pat(id,bg,fg,o.pk)}</defs>${shadow(8)}
+     <path d="M-7 -.6Q-8 -7 -5.6 -13.6Q0 -15.6 5.6 -13.6Q8 -7 7 -.6Z" fill="url(#${id})"/>
+     <rect x="-6" y="-10.4" width="12" height="3.4" fill="${o.obi}"/>
+     <path d="M5 -11L10 -9" stroke="url(#${id})" stroke-width="2.4" stroke-linecap="round"/><path d="M10 -9L15 -12.6" stroke="#4a3a30" stroke-width=".5"/>
+     <circle class="nxSpk" cx="15.4" cy="-13" r="1.5" fill="#ffd27a"/><circle cx="15.4" cy="-13" r="4" fill="rgba(255,190,90,.25)"/>
+     <circle cy="-17" r="3.9" fill="${HAIR}"/>${o.bun?`<circle cy="-21.2" r="2.3" fill="${HAIR}"/>`:''}
+     <path d="M-5.6 -13.6Q0 -15.6 5.6 -13.6" stroke="${RIM}" stroke-width=".9" fill="none"/>`}
+  function svgOf(kind){const o={fab:pk(FAB),obi:pk(OBI),pk:Math.random()*2|0,fan:Math.random()<.4,bun:Math.random()<.6};let body,w=34,h=48,vb='-17 -44 34 48';
+    if(kind==='w')body=woman(o);else if(kind==='m'){o.fab=pk(MEN);body=man(o)}else if(kind==='k'){body=kid(o);vb='-12 -30 24 32';w=24;h=32}
+    else if(kind==='s')body=sitter(o),vb='-14 -32 28 34',w=28,h=34;else if(kind==='c')body=crouch(o),vb='-12 -26 30 28',w=30,h=28;
+    else if(kind==='pair'){const o2={fab:pk(MEN),obi:pk(MEN)[1]};body=`<g transform="translate(-6 0) rotate(3 0 -20)">${woman(o)}</g><g transform="translate(7 0) rotate(-2 0 -20)">${man(o2)}</g><path d="M-1 -14Q.6 -12 2.4 -14" stroke="${SKIN}" stroke-width="1.4" fill="none"/>`;vb='-22 -44 44 48';w=44}
+    else if(kind==='spair'){const o2={fab:pk(FAB),obi:pk(OBI),pk:1,bun:1};body=`<rect x="-18" y="-1.6" width="36" height="2.6" rx=".6" fill="#7a6845" opacity=".8"/><path d="M-18 -.4h36" stroke="#a89068" stroke-width=".4" stroke-dasharray="1 1"/><g transform="translate(-6 0) rotate(4 0 -16)">${sitter(o)}</g><g transform="translate(7 0)">${sitter(o2)}</g>`;vb='-20 -32 40 34';w=40;h=34}
+    return {html:`<svg viewBox="${vb}" width="${w}" height="${h}" style="overflow:visible">${body}</svg>`,w,h}}
   function crowdStart(){if(!crowd){crowd=document.createElement('div');crowd.id='nxCrowd';document.body.appendChild(crowd)}crowd.innerHTML='';ppl=[];
-    let g;try{g=SCENE.dbg()}catch(e){return}const n=6+(Math.random()*3|0);
-    for(let i=0;i<n;i++){const K=KIND[Math.random()*KIND.length|0],el=document.createElement('div');el.className='nxPpl';el.innerHTML=fig(K,Math.random()<.35,Math.random()<.25);
-      const u=.06+.88*(i+Math.random()*.6)/n,v=Math.random();el.style.left=(g.WL+g.WW*u)+'px';el.style.top=(g.shore-scrollY+(14+v*34)*g.k)+'px';el.style.transform=`translate(-50%,-100%) scale(${(.85+v*.35)*g.k})`;el.style.zIndex=10+Math.round(v*10);
-      crowd.appendChild(el);tm.push(setTimeout(()=>el.classList.add('in'),1500+i*2200+Math.random()*1500))}}
+    let g;try{g=SCENE.dbg()}catch(e){return}const plan=['w','pair','m','k','s','w','c','spair','w','m'].sort(()=>Math.random()-.5).slice(0,6+(Math.random()*3|0));
+    plan.forEach((kind,i)=>{const F=svgOf(kind),el=document.createElement('div');el.className='nxPpl';el.innerHTML=`<div class="nxSway" style="animation-duration:${(5+Math.random()*4).toFixed(1)}s;animation-delay:-${(Math.random()*5).toFixed(1)}s">${F.html}</div>`;
+      const u=.06+.88*(i+.2+Math.random()*.6)/plan.length,v=Math.random(),sc=(.95+v*.45)*g.k;el.style.left=(g.WL+g.WW*u)+'px';el.style.top=(g.shore-scrollY+(16+v*36)*g.k)+'px';el.style.transform=`translate(-50%,-100%) scale(${sc})`;el.style.zIndex=10+Math.round(v*10);
+      crowd.appendChild(el);tm.push(setTimeout(()=>el.classList.add('in'),1500+i*2200+Math.random()*1500))})}
   function end(){document.body.classList.remove('nxFw');if(crowd){crowd.querySelectorAll('.nxPpl').forEach((e,i)=>setTimeout(()=>e.classList.remove('in'),i*500));setTimeout(()=>{if(!on()&&crowd)crowd.innerHTML=''},6000)}
     const L=q.slice(-3);q=[];L.forEach((h,i)=>setTimeout(()=>{try{_ev(h)}catch(e){}},1500+i*3500))}
   setInterval(()=>{if(document.body.classList.contains('nxFw')&&!on())end()},1000);
