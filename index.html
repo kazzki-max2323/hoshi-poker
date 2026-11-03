@@ -299,6 +299,7 @@ body.nxFw #toast{opacity:0!important}
 .nxSpk{animation:nxSpk .25s steps(2) infinite}@keyframes nxSpk{50%{opacity:.3;r:2.4}}
 @media (prefers-reduced-motion:reduce){.nxSpk{animation:none}}
 body.nxFw.nxFwAfter #bubbles{opacity:1!important;pointer-events:auto!important}
+body.nxFwAfter{cursor:pointer}
 #nxSmoke{position:fixed;inset:0;pointer-events:none;z-index:1}#nxSmoke i{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(190,190,215,.22),rgba(190,190,215,0) 70%);transform:translate(-50%,-50%);animation:nxSmk 18s ease-out forwards;opacity:0}
 @keyframes nxSmk{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + 40px),-60%) scale(1.6)}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
@@ -6809,7 +6810,7 @@ Object.assign(MUMS,{ntHorn:['…汽笛','遠くで 船が','どこ行くんや�
   else if(r<.5){[[420,.35,0],[380,.5,.45]].forEach(([f,d,dl])=>tone(f,d,'sine',.02,dl));setTimeout(()=>{[[420,.3,0],[380,.45,.4]].forEach(([f,d,dl])=>tone(f,d,'sine',.015,dl))},1500);if(Math.random()<.3)say('ntOwl',{delay:1000})}
   else{for(let i=0;i<6;i++)noise(.04+Math.random()*.05,{v:.03,type:'highpass',f:2000+Math.random()*2000});}}catch(e){}},3000)}
 /* 深夜は 波を 静かに */
-{let last=-1;setInterval(()=>{try{if(!ac||!waveBus||document.body.classList.contains('afterglow')||document.body.classList.contains('airCalm')||document.body.classList.contains('airStill'))return;const h=SCENE.dbg().gh,deep=(h>=23||h<4)?1:0;if(deep===last)return;last=deep;waveBus.gain.setTargetAtTime((S.vol?S.vol.wave:1)*1.15*1.5*(deep?.65:1),ac.currentTime,2)}catch(e){}},4000)}
+{let last=-1;setInterval(()=>{try{if(!ac||!waveBus||document.body.classList.contains('nxFw')||document.body.classList.contains('afterglow')||document.body.classList.contains('airCalm')||document.body.classList.contains('airStill'))return;const h=SCENE.dbg().gh,deep=(h>=23||h<4)?1:0;if(deep===last)return;last=deep;waveBus.gain.setTargetAtTime((S.vol?S.vol.wave:1)*1.15*1.5*(deep?.65:1),ac.currentTime,2)}catch(e){}},4000)}
 /* 11. 夜の 住人 */
 Object.assign(MUMS,{nt_couple:['月を 見てる 二人','ええ雰囲気','そっとしとこ'],nt_blanket:['毛布 あったかそう','焚き火に 当たってる','夜は 冷えるね'],nt_kid:['星 指さしてる','あれ なに座？','流れ星 探してる']});
 Object.assign(EMO,{nt_couple:['🌙','💞'],nt_blanket:['🔥'],nt_kid:['⭐','👆']});
@@ -13377,7 +13378,8 @@ setTimeout(()=>{try{const d=NXS.st();if(d.giftFw1)return;d.giftFw1=1;const ids=[
 const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_sea','fw_yanagi','fw_cute','fw_odama'];let until=0,q=[],crowd=null,ppl=[],tm=[],last='fireworks',after=0,sayOk=false;
   const on=()=>Date.now()<until||Date.now()<after;
   const _sh=SCENE.show;SCENE.show=function(name,sec){const r=_sh.apply(this,arguments);try{if(FWS.includes(name)){last=name;start((sec||60)*1000)}}catch(e){}return r};
-  function start(ms){const was=on();after=0;document.body.classList.remove('nxFwAfter');until=Math.max(until,Date.now()+ms);try{NXUI.M.hidden=true;NXUI.close()}catch(e){}['shop','rules','guide','pay','volSheet'].forEach(id=>{const e=$(id);if(e)e.hidden=true});
+  function duck(onp){try{if(!ac)return;const t=ac.currentTime,V=S.vol||{};waveBus.gain.cancelScheduledValues(t);sfxBus.gain.cancelScheduledValues(t);waveBus.gain.setTargetAtTime((V.wave??1)*1.15*1.5*(onp?.3:1),t,.8);sfxBus.gain.setTargetAtTime((V.se??1)*(onp?.12:1),t,.4)}catch(e){}}
+  function start(ms){const was=on();after=0;duck(true);document.body.classList.remove('nxFwAfter');until=Math.max(until,Date.now()+ms);try{NXUI.M.hidden=true;NXUI.close()}catch(e){}['shop','rules','guide','pay','volSheet'].forEach(id=>{const e=$(id);if(e)e.hidden=true});
     try{const t=$('toast');t.classList.remove('on','stick')}catch(e){}document.body.classList.add('nxFw');if(!was)gather()}
   function gather(){tm.forEach(clearTimeout);tm=[];const pk=a=>a[Math.random()*a.length|0];
     const AM=['yukata','couple_sit','family','oldcouple','senko','sparklers','minilantern'].filter(n=>SCENE.ambs.includes(n)),VI=['tanuki','fox','rabbit','owl','deer','fukuro','tanuki3'].filter(n=>SCENE.visitors.includes(n));
@@ -13455,13 +13457,14 @@ const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_s
     const say2=(k,o)=>{sayOk=true;try{_say(k,o)}catch(e){}sayOk=false};
     [[2000,'fwAfter_'+last],[6500,'fwAfter'],[11500,'fwAfter_'+last],[16000,'fwAfter']].forEach(([t,k])=>tm.push(setTimeout(()=>say2(k,{n:1,origin:'beach',delay:0}),t)));
     tm.push(setTimeout(()=>{if(crowd)[...crowd.querySelectorAll('.nxPpl')].sort(()=>Math.random()-.5).forEach((e,i)=>setTimeout(()=>e.classList.remove('in'),i*1400))},10000))}
-  function end(){phase=0;after=0;document.body.classList.remove('nxFw','nxFwAfter');setTimeout(()=>{if(!on()&&crowd)crowd.innerHTML=''},4000);
+  function end(){phase=0;after=0;duck(false);document.body.classList.remove('nxFw','nxFwAfter');setTimeout(()=>{if(!on()&&crowd)crowd.innerHTML=''},4000);
     const L=q.slice(-3);q=[];L.forEach((h,i)=>setTimeout(()=>{try{_ev(h)}catch(e){}},1500+i*3500))}
+  addEventListener('pointerdown',e=>{if(after&&Date.now()<after&&document.body.classList.contains('nxFwAfter')){e.stopPropagation();e.preventDefault();tm.forEach(clearTimeout);tm=[];if(crowd)crowd.querySelectorAll('.nxPpl').forEach((el,i)=>setTimeout(()=>el.classList.remove('in'),i*150));end()}},true);
   setInterval(()=>{if(!document.body.classList.contains('nxFw'))return;const n=Date.now();if(n>=until&&!after&&phase===0)afterglow();else if(after&&n>=after)end()},500);
   /* 呟きと 通知は 花火の 間は 出さない（通知は おわってから まとめて） */
   const _say=say;say=function(){if(on()&&!sayOk)return;return _say.apply(this,arguments)};
-  const _ev=evToast;evToast=function(h){if(on()){if(!/不死鳥が 夜空に/.test(String(h)))q.push(h);return}return _ev.apply(this,arguments)};
-  const _tt=treToast;treToast=function(h){if(on()){q.push(h);return}return _tt.apply(this,arguments)};
+  const _ev=evToast;evToast=function(h){if(on()){if(!/不死鳥が 夜空に|はじまり|スタート|開幕/.test(String(h)))q.push(h);return}return _ev.apply(this,arguments)};
+  const _tt=treToast;treToast=function(h){if(on()){if(!/はじまり|スタート|開幕/.test(String(h)))q.push(h);return}return _tt.apply(this,arguments)};
   return{on,start,end}})();
 
 Object.assign(MUMS,{fwAfter:['きれい だったね…','まだ 目に 焼きついてる','煙の においが 夏っぽい','たーまやー…','終わっちゃった…','また 見たいな','ドーンって 胸に 響いた','静かに なると ちょっと さみしい','空に まだ 光が 残ってる 気がする','いい 夜だね'],
@@ -13475,7 +13478,7 @@ Object.assign(EMO,{fwAfter:['🎆','✨','🌙'],fwAfter_fireworks:['🎆'],fwAf
 /* ---- 花火の 音（打ち上げの ヒュー・ドーン・山の こだま・パチパチ・シャー） ---- */
 const FWSND=window.FWSND=(()=>{let bus=null;
   function ir(sec){const r=ac.sampleRate,n=Math.floor(r*sec),b=ac.createBuffer(2,n,r);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<n;i++){const t=i/n;d[i]=(Math.random()*2-1)*Math.pow(1-t,3)*(i<r*.04?i/(r*.04):1)}}return b}
-  function init(){if(!S.sound||(typeof skipping!=='undefined'&&skipping)||document.hidden)return null;A();if(!bus){bus=ac.createGain();bus.gain.value=.85;const dry=ac.createGain(),wet=ac.createGain(),rev=ac.createConvolver();wet.gain.value=.5;rev.buffer=ir(3.4);bus.connect(dry).connect(sfxBus);bus.connect(rev).connect(wet).connect(sfxBus)}return bus}
+  function init(){if(!S.sound||(typeof skipping!=='undefined'&&skipping)||document.hidden)return null;A();if(!bus){bus=ac.createGain();bus.gain.value=.85;const out=ac.createGain();out.gain.value=(S.vol&&S.vol.se!=null?S.vol.se:1);FWSND._out=out;const dry=ac.createGain(),wet=ac.createGain(),rev=ac.createConvolver();wet.gain.value=.5;rev.buffer=ir(3.4);bus.connect(dry).connect(out);bus.connect(rev).connect(wet).connect(out);out.connect(master)}try{FWSND._out.gain.value=(S.vol&&S.vol.se!=null?S.vol.se:1)}catch(e){}return bus}
   function nz(t,d,o){const{type='lowpass',f=800,f2,q=.7,v=.1,att=.005,pan=0}=o||{};const s=ac.createBufferSource();s.buffer=NB;s.loop=true;s.playbackRate.value=.75+Math.random()*.5;const fl=ac.createBiquadFilter();fl.type=type;fl.frequency.setValueAtTime(f,t);if(f2)fl.frequency.exponentialRampToValueAtTime(f2,t+d);fl.Q.value=q;
     const g=ac.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,v),t+att);g.gain.exponentialRampToValueAtTime(.0001,t+d);let out=g;if(ac.createStereoPanner){const p=ac.createStereoPanner();p.pan.value=pan;g.connect(p);out=p}s.connect(fl).connect(g);out.connect(bus);s.start(t,Math.random()*1.5);s.stop(t+d+.05)}
   function launch(pan,dur){if(!init())return;const t=ac.currentTime;nz(t,dur+.1,{type:'bandpass',f:700,f2:2400,q:3.5,v:.02,att:.12,pan});
