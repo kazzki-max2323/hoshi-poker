@@ -288,6 +288,13 @@ body:has(#shop:not([hidden])) #nxScene *,body:has(#pay:not([hidden])) #nxScene *
 .nxTalP i{font-style:normal}.nxTalP b{font-size:.55rem;color:#8a6a40;font-weight:800;margin-left:1px}
 .nxTalP.t-g{border-color:#ffd23f;background:#fffbe6}.nxTalP.t-r{border-color:transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(90deg,#ff5c8a,#ffd23f,#55e0b4,#7aa2ff,#c48bff) border-box}.nxTalP.t-b{border-color:#ff3b4f;background:#ffe3e6}
 .nxTalP.sm{left:auto;right:-8px;bottom:9px;font-size:.5rem;padding:0 1px;z-index:1}
+body.nxFw #nxScene,body.nxFw #bubbles,body.nxFw #status,body.nxFw #shopBtn,body.nxFw #nxBtn,body.nxFw #nxVis,body.nxFw #nowplay,body.nxFw #fishBtn,body.nxFw header>*:not(.coin){opacity:0!important;pointer-events:none!important;transition:opacity 1.2s}
+#nxScene,#status,#shopBtn,#nxBtn,header>*{transition:opacity 1.2s}
+body.nxFw #toast{opacity:0!important}
+#nxCrowd{position:fixed;inset:0;pointer-events:none;z-index:2}
+.nxPpl{position:absolute;opacity:0;transition:opacity 2.5s;filter:brightness(.85)}.nxPpl.in{opacity:1}
+.nxSpk{animation:nxSpk .25s steps(2) infinite}@keyframes nxSpk{50%{opacity:.3;r:2.4}}
+@media (prefers-reduced-motion:reduce){.nxSpk{animation:none}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13354,17 +13361,43 @@ setTimeout(()=>{try{const l=nxLay();['nxCst','nxNt','nxCas','nxFlea'].forEach(id
 /* ---- ドローンショーの たねが 出やすく（たからもの 約100回に 3回） ---- */
 {const _rt=rollTre;rollTre=function(){const t=_rt.apply(this,arguments);try{if(Math.random()<.021){const ds=TRE.filter(x=>/^nev_s_drones/.test(x.id));const w=ds.map(x=>x.r==='SSR'?1:3),tot=w.reduce((a,b)=>a+b,0);let r=Math.random()*tot;for(let i=0;i<ds.length;i++){r-=w[i];if(r<=0)return ds[i]}}}catch(e){}return t}}
 
-/* ---- 花火の 間は、浜辺に 人や 動物が 集まって くる（少しだけ） ---- */
-{const FWS=['fireworks','grandfw','fw_phoenix','fw_sea','fw_yanagi','fw_cute','fw_odama'];let last=0;const _sh=SCENE.show;
-  SCENE.show=function(name,sec){const r=_sh.apply(this,arguments);try{if(FWS.includes(name)&&Date.now()-last>60000){last=Date.now();const pk=a=>a[Math.random()*a.length|0];
-    const AM=['yukata','couple_sit','family','oldcouple','sparklers','senko','selfie','minilantern'].filter(n=>SCENE.ambs.includes(n)),VI=['tanuki','fox','rabbit','owl','deer','fukuro','tanuki3','koinu2'].filter(n=>SCENE.visitors.includes(n));
-    setTimeout(()=>{try{SCENE.amb(pk(AM))}catch(e){}},3000);setTimeout(()=>{try{SCENE.visit(pk(VI))}catch(e){}},9000);
-    setTimeout(()=>{try{const f=NXFL.st();if(f.items.length&&!NXFL.cur){f.n=Math.max(0,(f.n||0)-1);NXFL.spawn()}}catch(e){}},16000);
-    if((sec||60)>=80)setTimeout(()=>{try{SCENE.amb(pk(AM))}catch(e){}},45000)}}catch(e){}return r}}
 
 /* ---- お試し：花火大会の たねを 1つずつ（1回だけ） ---- */
 setTimeout(()=>{try{const d=NXS.st();if(d.giftFw1)return;d.giftFw1=1;const ids=['nev_s_fireworks','nev_s_grandfw','nev_s_fw_phoenix','nev_s_fw_sea','nev_s_fw_yanagi','nev_s_fw_cute','nev_s_fw_odama'].filter(id=>TRE.find(t=>t.id===id));
   ids.forEach(id=>{S.tre[id]=(S.tre[id]||0)+1;S.zukan[id]=1});save();ui();setTimeout(()=>evToast(`🎁 <b>花火大会の たね</b> を ${ids.length}つ もらった<br><small>🎒 アイテム → たからもの → 「曲・イベント」から 使える（夜が おすすめ）</small>`),3500)}catch(e){}},2500);
+
+/* ---- 花火見物モード：花火大会の 間は 画面を すっきり（呟き・通知・星座・フリマ・上の ボタンを かくす）、浴衣の 人などが 集まる ---- */
+const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_sea','fw_yanagi','fw_cute','fw_odama'];let until=0,q=[],crowd=null,ppl=[],tm=[];
+  const on=()=>Date.now()<until;
+  const _sh=SCENE.show;SCENE.show=function(name,sec){const r=_sh.apply(this,arguments);try{if(FWS.includes(name))start((sec||60)*1000)}catch(e){}return r};
+  function start(ms){const was=on();until=Math.max(until,Date.now()+ms);try{NXUI.M.hidden=true;NXUI.close()}catch(e){}['shop','rules','guide','pay','volSheet'].forEach(id=>{const e=$(id);if(e)e.hidden=true});
+    try{const t=$('toast');t.classList.remove('on','stick')}catch(e){}document.body.classList.add('nxFw');if(!was)gather()}
+  function gather(){tm.forEach(clearTimeout);tm=[];const pk=a=>a[Math.random()*a.length|0];
+    const AM=['yukata','couple_sit','family','oldcouple','senko','sparklers','minilantern'].filter(n=>SCENE.ambs.includes(n)),VI=['tanuki','fox','rabbit','owl','deer','fukuro','tanuki3'].filter(n=>SCENE.visitors.includes(n));
+    tm.push(setTimeout(()=>{try{SCENE.amb(AM.includes('yukata')?'yukata':pk(AM))}catch(e){}},2500));tm.push(setTimeout(()=>{try{SCENE.visit(pk(VI))}catch(e){}},12000));
+    tm.push(setTimeout(()=>{if(on())try{SCENE.amb(pk(AM))}catch(e){}},45000));
+    crowdStart()}
+  /* 浜辺に 集まる 見物の 人（後ろ姿の 影） */
+  const KIND=[{c:'#3b3f74',o:'#e8a0b8',h:22},{c:'#5a2f52',o:'#f2c46b',h:23},{c:'#24505e',o:'#f7a35c',h:22},{c:'#4a3b2a',o:'#9fd3ff',h:24},{c:'#2f3f6a',o:'#ffd2e0',h:15,kid:1},{c:'#3a2f5e',o:'#c9f7d0',h:16,sit:1},{c:'#552b3b',o:'#ffe08a',h:16,sit:1}];
+  function fig(K,fan,spk){const h=K.h,w=K.sit?13:10;return `<svg viewBox="-12 -${h+8} 24 ${h+10}" width="${24}" height="${h+10}" style="overflow:visible">
+    ${K.sit?`<path d="M-${w/2} 0q${w/2}-${h*.75} ${w} 0z" fill="${K.c}"/>`:`<path d="M-${w/2} 0l2-${h*.72}h${w-4}l2 ${h*.72}z" fill="${K.c}"/>`}
+    <rect x="-${w/2-1}" y="-${K.sit?h*.42:h*.5}" width="${w-2}" height="2.4" fill="${K.o}" opacity=".85"/>
+    <circle cy="-${K.sit?h*.62:h*.82}" r="${K.kid?3.2:3.8}" fill="#1c1a2e"/>${K.kid?'':`<path d="M-3 -${(K.sit?h*.62:h*.82)+2}q3-4 6 0" fill="#1c1a2e"/>`}
+    ${fan?`<ellipse cx="${w/2+2}" cy="-${h*.7}" rx="3" ry="3.4" fill="${K.o}" opacity=".9"/><path d="M${w/2} -${h*.55}l2 -${h*.12}" stroke="#2a2030" stroke-width=".8"/>`:''}
+    ${spk?`<path d="M${w/2-1} -${h*.5}l4 -5" stroke="#3a3040" stroke-width=".6"/><circle class="nxSpk" cx="${w/2+3}" cy="-${h*.5+5.5}" r="1.6" fill="#ffd27a"/>`:''}</svg>`}
+  function crowdStart(){if(!crowd){crowd=document.createElement('div');crowd.id='nxCrowd';document.body.appendChild(crowd)}crowd.innerHTML='';ppl=[];
+    let g;try{g=SCENE.dbg()}catch(e){return}const n=6+(Math.random()*3|0);
+    for(let i=0;i<n;i++){const K=KIND[Math.random()*KIND.length|0],el=document.createElement('div');el.className='nxPpl';el.innerHTML=fig(K,Math.random()<.35,Math.random()<.25);
+      const u=.06+.88*(i+Math.random()*.6)/n,v=Math.random();el.style.left=(g.WL+g.WW*u)+'px';el.style.top=(g.shore-scrollY+(14+v*34)*g.k)+'px';el.style.transform=`translate(-50%,-100%) scale(${(.85+v*.35)*g.k})`;el.style.zIndex=10+Math.round(v*10);
+      crowd.appendChild(el);tm.push(setTimeout(()=>el.classList.add('in'),1500+i*2200+Math.random()*1500))}}
+  function end(){document.body.classList.remove('nxFw');if(crowd){crowd.querySelectorAll('.nxPpl').forEach((e,i)=>setTimeout(()=>e.classList.remove('in'),i*500));setTimeout(()=>{if(!on()&&crowd)crowd.innerHTML=''},6000)}
+    const L=q.slice(-3);q=[];L.forEach((h,i)=>setTimeout(()=>{try{_ev(h)}catch(e){}},1500+i*3500))}
+  setInterval(()=>{if(document.body.classList.contains('nxFw')&&!on())end()},1000);
+  /* 呟きと 通知は 花火の 間は 出さない（通知は おわってから まとめて） */
+  const _say=say;say=function(){if(on())return;return _say.apply(this,arguments)};
+  const _ev=evToast;evToast=function(h){if(on()){q.push(h);return}return _ev.apply(this,arguments)};
+  const _tt=treToast;treToast=function(h){if(on()){q.push(h);return}return _tt.apply(this,arguments)};
+  return{on,start,end}})();
 </script>
 <!--NXJS-END-->
 </body></html>
