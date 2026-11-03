@@ -298,6 +298,9 @@ body.nxFw #toast{opacity:0!important}
 @media (prefers-reduced-motion:reduce){.nxSway,.nxFan{animation:none}}
 .nxSpk{animation:nxSpk .25s steps(2) infinite}@keyframes nxSpk{50%{opacity:.3;r:2.4}}
 @media (prefers-reduced-motion:reduce){.nxSpk{animation:none}}
+body.nxFw.nxFwAfter #bubbles{opacity:1!important;pointer-events:auto!important}
+#nxSmoke{position:fixed;inset:0;pointer-events:none;z-index:1}#nxSmoke i{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(190,190,215,.22),rgba(190,190,215,0) 70%);transform:translate(-50%,-50%);animation:nxSmk 18s ease-out forwards;opacity:0}
+@keyframes nxSmk{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + 40px),-60%) scale(1.6)}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -9480,10 +9483,10 @@ const SCENE=(()=>{
   function frame(now){
     {const idle=performance.now()-(window._lastInput||0)>60000,iv=window._eco?Math.max(90,!document.hasFocus()?140:90):!document.hasFocus()?100:document.body.classList.contains('reachOn')||document.body.classList.contains('dbl')?36:idle?70:42;if(now-last<iv&&!still){requestAnimationFrame(frame);return}}
     const rdt=still?0:Math.min(.1,(now-last)/1000||.033);t+=rdt*.55;last=now;
-    if(!still&&!cur&&now>=nextAt&&!document.hidden){startEvent();nextAt=now+300000*evMul()}
+    if(!still&&!cur&&now>=nextAt&&!document.hidden&&!(window.NXFW&&NXFW.on())){startEvent();nextAt=now+300000*evMul()}
     if(festOn()){if(ambAt-now>25000)ambAt=now+R(4000,12000);if(visitAt-now>90000)visitAt=now+R(15000,40000)}
-    if(!still&&!vcur&&now>=visitAt&&!document.hidden){startVisitor();visitAt=now+R(540000,720000)*visMul()*(festOn()?.12:1)}
-    if(!still&&!acur&&now>=ambAt&&!document.hidden){startAmb();ambAt=now+R(150000,240000)*(festOn()?.08:1)}
+    if(!still&&!vcur&&now>=visitAt&&!document.hidden&&!(window.NXFW&&NXFW.on())){startVisitor();visitAt=now+R(540000,720000)*visMul()*(festOn()?.12:1)}
+    if(!still&&!acur&&now>=ambAt&&!document.hidden&&!(window.NXFW&&NXFW.on())){startAmb();ambAt=now+R(150000,240000)*(festOn()?.08:1)}
     sky();runEvents('sky',rdt);runAmb('sky',rdt);runVisitor('sky',rdt);seasonDraw('sky');try{festX('sky')}catch(e){}try{nightFx('sky')}catch(e){}runShows('sky',rdt);try{skyDeco()}catch(e){}try{sekkiFx()}catch(e){}try{wxSky()}catch(e){}
     ITEMS.forEach(it=>{const target=hasDeco(it.n)?1:0;it.a+=(target-it.a)*(still?1:.04)});
     const by=n=>ITEMS.find(i=>i.n===n);
@@ -13370,10 +13373,10 @@ setTimeout(()=>{try{const d=NXS.st();if(d.giftFw1)return;d.giftFw1=1;const ids=[
   ids.forEach(id=>{S.tre[id]=(S.tre[id]||0)+1;S.zukan[id]=1});save();ui();setTimeout(()=>evToast(`🎁 <b>花火大会の たね</b> を ${ids.length}つ もらった<br><small>🎒 アイテム → たからもの → 「曲・イベント」から 使える（夜が おすすめ）</small>`),3500)}catch(e){}},2500);
 
 /* ---- 花火見物モード：花火大会の 間は 画面を すっきり（呟き・通知・星座・フリマ・上の ボタンを かくす）、浴衣の 人などが 集まる ---- */
-const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_sea','fw_yanagi','fw_cute','fw_odama'];let until=0,q=[],crowd=null,ppl=[],tm=[];
-  const on=()=>Date.now()<until;
-  const _sh=SCENE.show;SCENE.show=function(name,sec){const r=_sh.apply(this,arguments);try{if(FWS.includes(name))start((sec||60)*1000)}catch(e){}return r};
-  function start(ms){const was=on();until=Math.max(until,Date.now()+ms);try{NXUI.M.hidden=true;NXUI.close()}catch(e){}['shop','rules','guide','pay','volSheet'].forEach(id=>{const e=$(id);if(e)e.hidden=true});
+const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_sea','fw_yanagi','fw_cute','fw_odama'];let until=0,q=[],crowd=null,ppl=[],tm=[],last='fireworks',after=0,sayOk=false;
+  const on=()=>Date.now()<until||Date.now()<after;
+  const _sh=SCENE.show;SCENE.show=function(name,sec){const r=_sh.apply(this,arguments);try{if(FWS.includes(name)){last=name;start((sec||60)*1000)}}catch(e){}return r};
+  function start(ms){const was=on();after=0;document.body.classList.remove('nxFwAfter');until=Math.max(until,Date.now()+ms);try{NXUI.M.hidden=true;NXUI.close()}catch(e){}['shop','rules','guide','pay','volSheet'].forEach(id=>{const e=$(id);if(e)e.hidden=true});
     try{const t=$('toast');t.classList.remove('on','stick')}catch(e){}document.body.classList.add('nxFw');if(!was)gather()}
   function gather(){tm.forEach(clearTimeout);tm=[];const pk=a=>a[Math.random()*a.length|0];
     const AM=['yukata','couple_sit','family','oldcouple','senko','sparklers','minilantern'].filter(n=>SCENE.ambs.includes(n)),VI=['tanuki','fox','rabbit','owl','deer','fukuro','tanuki3'].filter(n=>SCENE.visitors.includes(n));
@@ -13442,14 +13445,29 @@ const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_s
     plan.forEach((kind,i)=>{const F=svgOf(kind),el=document.createElement('div');el.className='nxPpl';el.innerHTML=`<div class="nxSway" style="animation-duration:${(5+Math.random()*4).toFixed(1)}s;animation-delay:-${(Math.random()*5).toFixed(1)}s">${F.html}</div>`;
       const u=.06+.88*(i+.2+Math.random()*.6)/plan.length,v=Math.random(),sc=(.95+v*.45)*g.k;el.style.left=(g.WL+g.WW*u)+'px';el.style.top=(g.shore-scrollY+(16+v*36)*g.k)+'px';el.style.transform=`translate(-50%,-100%) scale(${sc})`;el.style.zIndex=10+Math.round(v*10);
       crowd.appendChild(el);tm.push(setTimeout(()=>el.classList.add('in'),1500+i*2200+Math.random()*1500))})}
-  function end(){document.body.classList.remove('nxFw');if(crowd){crowd.querySelectorAll('.nxPpl').forEach((e,i)=>setTimeout(()=>e.classList.remove('in'),i*500));setTimeout(()=>{if(!on()&&crowd)crowd.innerHTML=''},6000)}
+  /* 余韻：花火が 終わっても しばらく 静かな まま。煙が 流れて、ぽつぽつ 呟き、見物人は ゆっくり 帰る */
+  const AFTER=22000;let phase=0;
+  function smoke(){let g;try{g=SCENE.dbg()}catch(e){return}const d=document.createElement('div');d.id='nxSmoke';for(let i=0;i<7;i++){const s=document.createElement('i');s.style.left=(g.WL+g.WW*(.1+.8*Math.random()))+'px';s.style.top=(g.hz*(.25+.35*Math.random())-scrollY)+'px';s.style.animationDelay=(Math.random()*2).toFixed(1)+'s';s.style.width=s.style.height=(60+Math.random()*80)*g.k+'px';d.appendChild(s)}document.body.appendChild(d);setTimeout(()=>d.remove(),20000)}
+  function afterglow(){phase=1;after=Date.now()+AFTER;document.body.classList.add('nxFwAfter');smoke();
+    const say2=(k,o)=>{sayOk=true;try{_say(k,o)}catch(e){}sayOk=false};
+    [[2000,'fwAfter_'+last],[6500,'fwAfter'],[11500,'fwAfter_'+last],[16000,'fwAfter']].forEach(([t,k])=>tm.push(setTimeout(()=>say2(k,{n:1,origin:'beach',delay:0}),t)));
+    tm.push(setTimeout(()=>{if(crowd)[...crowd.querySelectorAll('.nxPpl')].sort(()=>Math.random()-.5).forEach((e,i)=>setTimeout(()=>e.classList.remove('in'),i*1400))},10000))}
+  function end(){phase=0;after=0;document.body.classList.remove('nxFw','nxFwAfter');setTimeout(()=>{if(!on()&&crowd)crowd.innerHTML=''},4000);
     const L=q.slice(-3);q=[];L.forEach((h,i)=>setTimeout(()=>{try{_ev(h)}catch(e){}},1500+i*3500))}
-  setInterval(()=>{if(document.body.classList.contains('nxFw')&&!on())end()},1000);
+  setInterval(()=>{if(!document.body.classList.contains('nxFw'))return;const n=Date.now();if(n>=until&&!after&&phase===0)afterglow();else if(after&&n>=after)end()},500);
   /* 呟きと 通知は 花火の 間は 出さない（通知は おわってから まとめて） */
-  const _say=say;say=function(){if(on())return;return _say.apply(this,arguments)};
-  const _ev=evToast;evToast=function(h){if(on()){q.push(h);return}return _ev.apply(this,arguments)};
+  const _say=say;say=function(){if(on()&&!sayOk)return;return _say.apply(this,arguments)};
+  const _ev=evToast;evToast=function(h){if(on()){if(!/不死鳥が 夜空に/.test(String(h)))q.push(h);return}return _ev.apply(this,arguments)};
   const _tt=treToast;treToast=function(h){if(on()){q.push(h);return}return _tt.apply(this,arguments)};
   return{on,start,end}})();
+
+Object.assign(MUMS,{fwAfter:['きれい だったね…','まだ 目に 焼きついてる','煙の においが 夏っぽい','たーまやー…','終わっちゃった…','また 見たいな','ドーンって 胸に 響いた','静かに なると ちょっと さみしい','空に まだ 光が 残ってる 気がする','いい 夜だね'],
+ fwAfter_fireworks:['いい 花火大会 だった','最後の 連発、すごかった','いろんな 形が あったね'],fwAfter_grandfw:['空が ずっと 明るかった','スターマイン 圧巻…','耳が まだ ドーンって 言ってる'],
+ fwAfter_fw_phoenix:['不死鳥…泣きそうに なった','羽ばたいてた…！','横いっぱいの 花火、すごかった','ナイアガラ、光の 滝 だった'],fwAfter_fw_sea:['水中花火、海が 光ってた','ナイアガラ きれい…','波に うつってたね'],
+ fwAfter_fw_yanagi:['柳、ゆっくり 落ちていくの 好き','金色の 雨 みたい だった','静かで いい 花火'],fwAfter_fw_cute:['ハート 見えた？','ニコちゃん かわいかった','土星、ちゃんと 輪っか あった'],
+ fwAfter_fw_odama:['大玉、お腹に 響いた','あんな 大きいの 初めて','一発 一発、すごい 迫力']});
+Object.assign(EMO,{fwAfter:['🎆','✨','🌙'],fwAfter_fireworks:['🎆'],fwAfter_grandfw:['🎇'],fwAfter_fw_phoenix:['🕊️','🥹'],fwAfter_fw_sea:['🌊'],fwAfter_fw_yanagi:['🎐'],fwAfter_fw_cute:['💗'],fwAfter_fw_odama:['🎇']});
+{const _cr=crabRace;crabRace=function(){if(window.NXFW&&NXFW.on())return;return _cr.apply(this,arguments)}}
 </script>
 <!--NXJS-END-->
 </body></html>
