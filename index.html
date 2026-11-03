@@ -12880,10 +12880,11 @@ const NXVIS=window.NXVIS=(()=>{const X=NXS,D=()=>X.st(),U=()=>NXUI;const pk=a=>a
 const WHO={ufo:['🛸','UFO','宇宙から 来た 不思議な お店'],pirate:['🏴‍☠️','海賊船','あやしい 品物ばかり'],mermaid:['🧜','人魚の 行商','海の 底の 宝もの'],merchant:['🐫','旅の 商人','めずらしい 装備と 特大 福袋']};
 const STAY=20*60000;
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`};
-function sched(){const d=D();if(d.vis&&d.vis.date===today())return d.vis;const now=Date.now(),end=new Date();end.setHours(23,30,0,0);const st=Math.max(now+3*60000,new Date().setHours(9,0,0,0));
-  const n=2+(Math.random()<.5?1:0),ks=Object.keys(WHO).sort(()=>Math.random()-.5),list=[];if(end-st>STAY){for(let i=0;i<n;i++)list.push({t:st+Math.random()*(end-st-STAY),k:ks[i%ks.length]});list.sort((a,b)=>a.t-b.t)}
-  d.vis={date:today(),list,seen:{}};save();return d.vis}
-function cur(){const v=sched(),now=Date.now();const e=v.list.find(x=>now>=x.t&&now<x.t+STAY);return e?Object.assign(e,{who:WHO[e.k]}):null}
+/* アプリを 開いて いる 時間で 来る：その日 最初は 開いて 4〜10分、そのあとは 20〜40分ごと。1日 3回まで、1回 20分（開いて いる 時間） */
+function sched(){const d=D();if(!d.vis||d.vis.date!==today()||!('n' in d.vis))d.vis={date:today(),n:0,acc:0,next:Math.round(240+Math.random()*360),cur:null,last:d.vis&&d.vis.last||null,seen:{}};return d.vis}
+function advance(dt){const v=sched();if(v.cur){v.cur.left-=dt;if(v.cur.left<=0){v.last=v.cur.k;v.cur=null;save()}return}if(v.n>=3)return;v.acc+=dt;if(v.acc>=v.next){const ks=Object.keys(WHO).filter(k=>k!==v.last);v.cur={t:Date.now(),k:ks[Math.random()*ks.length|0],left:STAY/1000};v.n++;v.acc=0;v.next=Math.round(1200+Math.random()*1200);save()}}
+function cur(){const v=sched();return v.cur?Object.assign(v.cur,{who:WHO[v.cur.k]}):null}
+const leftMin=e=>Math.max(1,Math.ceil((e.left||0)/60));
 function mkStock(k){const T=k==='ufo'?[()=>{const it={type:'orb',o:X.mkOrb(pk(['SR','SSR','UR']),{k:pk((typeof STARK!=='undefined'?STARK:[]).filter(q=>EQK[q]).concat(['pay']))})};it.p=X.OPRICE[it.o.r]*2;return it},()=>{const it={type:'orb',o:X.mkOrb(pk(['SSR','UR']),{k:pk((typeof STARK!=='undefined'?STARK:[]).filter(q=>EQK[q]).concat(['pay']))})};it.p=X.OPRICE[it.o.r]*2;return it},()=>{const t=rollTre(3);return{type:'tre',t,p:Math.round(t.p*3)}}]
   :k==='pirate'?[()=>({type:'orb',o:X.mkOrb(pk(['SR','SSR','UR']),{kind:'cur'}),p:0}),()=>({type:'orb',o:X.mkOrb(pk(['R','SR','SSR']),{kind:'dng'}),p:0}),()=>{const e=X.mkEq(pk(['UR','LG']));return{type:'eq',e,p:X.EPRICE[e.r]}}]
   :k==='mermaid'?[()=>({type:'orb',o:X.mkOrb(pk(['SR','SSR']),{kind:'sup'}),p:0}),()=>({type:'orb',o:X.mkOrb(pk(['R','SR','SSR']),{kind:'sup'}),p:0}),()=>{const t=rollTre(4);return{type:'tre',t,p:Math.round(t.p*2.5)}},()=>({type:'holy',p:200000})]
@@ -12891,20 +12892,20 @@ function mkStock(k){const T=k==='ufo'?[()=>{const it={type:'orb',o:X.mkOrb(pk(['
   const L=T.map(f=>{const it=f();if(it.type==='orb'&&!it.p)it.p=Math.round(X.OPRICE[it.o.r]*1.8);it.p=Math.round(it.p);return it});
   if(Math.random()<.5){const ds=TRE.filter(t=>/^nev_s_drones/.test(t.id));if(ds.length){const t=ds[Math.random()*ds.length|0];L.push({type:'tre',t,p:Math.round(t.p*3)})}}return L}
 function items(){const e=cur();if(!e)return[];if(!e.stock){e.stock=mkStock(e.k);save()}return e.stock}
-function openShop(){const e=cur(),UI=U();if(!e){evToast('もう 帰って しまった…');UI.M.hidden=true;return}const L=items(),left=Math.max(1,Math.round((e.t+STAY-Date.now())/60000));if(UI.P.hidden){UI.open('eq')}
+function openShop(){const e=cur(),UI=U();if(!e){evToast('もう 帰って しまった…');UI.M.hidden=true;return}const L=items(),left=leftMin(e);if(UI.P.hidden){UI.open('eq')}
   UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3rem">${e.who[0]}</span><div><h3>${e.who[1]}の お店</h3><div class="nxTags"><span class="nxTag">${e.who[2]}</span><span class="nxTag" style="background:#ffe0e4;color:#8a1a10">あと 約${left}分で 帰る</span></div></div></div>
    <div class="nxSec">${L.map((it,i)=>NXSHOP.itemH(it,i,'v')).join('')}</div><p class="nxNote">ここで しか 買えない ものばかり。🪙 ${UI.fc(S.coins)}枚</p></div>`;UI.M.hidden=false}
 /* 浜辺の アイコンと お知らせ */
 let btn=null,lastK=null;
 function tick(){try{const e=cur(),w=$('window');if(!w)return;if(e){if(!btn){btn=document.createElement('button');btn.id='nxVis';btn.type='button';btn.addEventListener('click',ev=>{ev.stopPropagation();openShop()});w.appendChild(btn)}
-    const left=Math.max(1,Math.round((e.t+STAY-Date.now())/60000));btn.innerHTML=`<b>${e.who[0]}</b>${e.who[1]}<small style="font-size:.55rem">あと${left}分</small>`;
+    const left=leftMin(e);btn.innerHTML=`<b>${e.who[0]}</b>${e.who[1]}<small style="font-size:.55rem">あと${left}分</small>`;
     const v=D().vis;if(!v.seen[e.t]){v.seen[e.t]=1;save();try{say('nxVis_'+e.k,{n:2,delay:300,gap:1400})}catch(er){}setTimeout(()=>evToast(`${e.who[0]} <b>${e.who[1]}</b> が 浜辺に やって来た！<br><small>${e.who[2]} ・ 約20分で 帰る（右上の アイコンから）</small>`),1200);try{sfx.chime()}catch(er){}}}
   else if(btn){btn.remove();btn=null}}catch(er){}}
 Object.assign(MUMS,{nxVis_ufo:['なんか 光ってる！？','UFO や！','宇宙人の お店…？','ピコピコ いうてる'],nxVis_pirate:['海賊船 来た！','あやしい 船…','ヨーホー！','呪われた 品が ありそう'],
   nxVis_mermaid:['人魚さん！？','海の 底の 宝もの…','きれいな 歌声','人魚の お店や'],nxVis_merchant:['旅の 商人さん','ラクダ！？','めずらしい 装備 あるかな','特大 福袋！？']});
 Object.assign(EMO,{nxVis_ufo:['🛸'],nxVis_pirate:['🏴‍☠️'],nxVis_mermaid:['🧜'],nxVis_merchant:['🐫']});
-setInterval(tick,5000);setTimeout(tick,1500);
-return{cur,items,openShop,tick,sched}})();
+setInterval(()=>{if(!document.hidden){try{advance(5)}catch(e){}}tick()},5000);setTimeout(tick,1500);
+return{cur,items,openShop,tick,sched,advance}})();
 /* 古い ショップの 入荷（音楽・海辺など）は もう ない */
 arrDeliver=function(){return null};
 setInterval(()=>{try{const b=$('nxBtn'),sb=$('shopBtn');if(b&&sb)b.style.right=(sb.offsetParent&&getComputedStyle(sb).display!=='none'?sb.offsetWidth+6:0)+'px'}catch(e){}},1500);
