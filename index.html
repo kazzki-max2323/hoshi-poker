@@ -13361,6 +13361,10 @@ setTimeout(()=>{try{const l=nxLay();['nxCst','nxNt','nxCas','nxFlea'].forEach(id
     setTimeout(()=>{try{SCENE.amb(pk(AM))}catch(e){}},3000);setTimeout(()=>{try{SCENE.visit(pk(VI))}catch(e){}},9000);
     setTimeout(()=>{try{const f=NXFL.st();if(f.items.length&&!NXFL.cur){f.n=Math.max(0,(f.n||0)-1);NXFL.spawn()}}catch(e){}},16000);
     if((sec||60)>=80)setTimeout(()=>{try{SCENE.amb(pk(AM))}catch(e){}},45000)}}catch(e){}return r}}
+
+/* ---- お試し：花火大会の たねを 1つずつ（1回だけ） ---- */
+setTimeout(()=>{try{const d=NXS.st();if(d.giftFw1)return;d.giftFw1=1;const ids=['nev_s_fireworks','nev_s_grandfw','nev_s_fw_phoenix','nev_s_fw_sea','nev_s_fw_yanagi','nev_s_fw_cute','nev_s_fw_odama'].filter(id=>TRE.find(t=>t.id===id));
+  ids.forEach(id=>{S.tre[id]=(S.tre[id]||0)+1;S.zukan[id]=1});save();ui();setTimeout(()=>evToast(`🎁 <b>花火大会の たね</b> を ${ids.length}つ もらった<br><small>🎒 アイテム → たからもの → 「曲・イベント」から 使える（夜が おすすめ）</small>`),3500)}catch(e){}},2500);
 </script>
 <!--NXJS-END-->
 </body></html>
