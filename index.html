@@ -13527,6 +13527,12 @@ const FWSND=window.FWSND=(()=>{let bus=null;
     if(kind==='crackle')crackle(t+.4,pan,1.8,60);if(kind==='hiss')nz(t+.25,2.6,{type:'highpass',f:4200,f2:2600,v:.014,att:.5,pan})}
   function pop(pan){if(!init())return;const t=ac.currentTime+.15;nz(t,.12,{type:'bandpass',f:1200,q:1,v:.04,att:.002,pan});nz(t,.5,{type:'lowpass',f:400,v:.04,att:.004,pan})}
   return{launch,boom,crackle,pop}})();
+
+/* ---- 釣りは アプリを 開いている 時間だけ 進む（閉じている 間に かからない） ---- */
+(()=>{const f0=S.fishing;if(f0&&!f0.hooked&&f0.seen){f0.at+=Math.max(0,Date.now()-f0.seen);f0.seen=Date.now();save()}
+  setInterval(()=>{const f=S.fishing;if(f&&!f.hooked&&!document.hidden)f.seen=Date.now()},2000);
+  document.addEventListener('visibilitychange',()=>{const f=S.fishing;if(!f||f.hooked)return;if(document.hidden){f.seen=Date.now();save()}else if(f.seen){f.at+=Math.max(0,Date.now()-f.seen);f.seen=Date.now();save()}});
+  addEventListener('pagehide',()=>{const f=S.fishing;if(f&&!f.hooked){f.seen=Date.now();save()}})})();
 </script>
 <!--NXJS-END-->
 </body></html>
