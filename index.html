@@ -325,6 +325,10 @@ body.nxFw #nxWalk{display:none}
 .nxLan{animation:nxLanF 3s ease-in-out infinite;filter:drop-shadow(0 0 3px rgba(255,140,90,.9))}@keyframes nxLanF{50%{opacity:.75}}
 body.nxFw #nxMatsuri,body.nxFw #nxRain{display:none}
 @media (prefers-reduced-motion:reduce){.nxLan,.nxUmb svg{animation:none}}
+#nxSnow{position:fixed;inset:0;pointer-events:none;z-index:3}
+.nxSnowman{position:absolute;opacity:0;transition:opacity 3s,transform 4s;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}.nxSnowman.in{opacity:1}.nxSnowman.melt{opacity:0}
+.nxSleigh{position:absolute;transition:left 22s linear;filter:drop-shadow(0 0 4px rgba(255,240,200,.35))}
+body.nxFw #nxSnow{display:none}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12904,7 +12908,7 @@ const HOLYP=250000,FUKU=[['s','🛍️','小さな 福袋',5000,1,0],['m','🎁'
 function orbItem(r,o){const ob=X.mkOrb(r,o||{});const p=Math.round(X.OPRICE[r]*(ob.kind==='n'?1:1.5));return{type:'orb',o:ob,p}}
 function eqItem(r,tr){const e=X.mkEq(r);if(tr)e.tr=tr;return{type:'eq',e,p:X.EPRICE[r]}}
 function roll(){const L=[];for(let i=0;i<3;i++){const r=X.rollR(.15),sp=Math.random();L.push(orbItem(r,sp<.15?{kind:'sup'}:sp<.22?{kind:'dng'}:{}))}for(let i=0;i<2;i++)L.push(eqItem(X.rollR(.15)));L.push({type:'holy',p:HOLYP});return L}
-function stock(){const d=D(),g=S.gday||0;if(!d.shop||d.shop.day!==g){d.shop={day:g,items:roll()};save()}try{if(rainKind()&&!d.shop.rain){d.shop.rain=1;TRE.filter(t=>t.src==='rain').sort(()=>Math.random()-.5).slice(0,3).forEach(t=>d.shop.items.push({type:'tre',t,p:Math.round(t.p*2.2),rain:1}));save()}}catch(e){}return d.shop.items}
+function stock(){const d=D(),g=S.gday||0;if(!d.shop||d.shop.day!==g){d.shop={day:g,items:roll()};save()}try{if(window.NXSNOW&&NXSNOW.snowy()&&!d.shop.snow){d.shop.snow=1;TRE.filter(t=>t.src==='snow').sort(()=>Math.random()-.5).slice(0,3).forEach(t=>d.shop.items.push({type:'tre',t,p:Math.round(t.p*2.2),snow:1}));save()}}catch(e){}try{if(rainKind()&&!d.shop.rain){d.shop.rain=1;TRE.filter(t=>t.src==='rain').sort(()=>Math.random()-.5).slice(0,3).forEach(t=>d.shop.items.push({type:'tre',t,p:Math.round(t.p*2.2),rain:1}));save()}}catch(e){}return d.shop.items}
 function itemH(it,i,src){const UI=U();let ico,nm,sub;
   if(it.type==='orb'){ico=UI.orbH(it.o);nm=`${UI.esc(X.orbName(it.o))} ${UI.rtag(it.o.r)}`;sub=it.o.kind==='sup'?X.SUP[it.o.s][2](1,it.o):it.o.kind==='dng'?`${X.DNG[it.o.d][2]} ／ ✖ ${X.DNG[it.o.d][3]}`:it.o.kind==='cur'&&typeof CURSE!=='undefined'?`◎ ${CURSE[it.o.c].good} ／ ✖ ${CURSE[it.o.c].bad}`:(EQK[it.o.k]?EQK[it.o.k][2](X.baseV(it.o)):'')}
   else if(it.type==='eq'){const T=X.TRT[it.e.tr];ico=`<span class="nxOrb" style="--rc:${X.RCOL[it.e.r]};background:#fff7e0">${X.eqIcon(it.e)}</span>`;nm=`${UI.esc(X.eqName(it.e))} ${UI.rtag(it.e.r)}`;sub=`球枠 ${it.e.s.length} ・ ${T[0]} ${T[1]}：${T[2]}`}
@@ -12919,6 +12923,7 @@ function shopHTML(){const L=stock(),F=fukuItems();const vis=window.NXVIS&&NXVIS.
   return `<div class="spanel nxShop" style="color:#4a2a0a"><p class="nxNote">🛒 ショップは <b>買うだけ</b>。品ぞろえは 毎日 かわる。持ち物の 確認・育成・売却は <button class="nxB mint" style="display:inline-block;min-height:0;padding:2px 8px;font-size:.72rem" data-a="openItems">🎒 アイテム</button> から。${vis?`<br>✨ いま 浜辺に <b>${vis.who[0]} ${vis.who[1]}</b> が 来ている！`:''}</p>
    <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🔮 球</h3>${L.map((it,i)=>it.type==='orb'?itemH(it,i,'s'):'').join('')}
    <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🎒 装備</h3>${L.map((it,i)=>it.type==='eq'?itemH(it,i,'s'):'').join('')}
+   ${L.some(x=>x.snow)&&window.NXSNOW&&NXSNOW.snowy()?`<h3 style="margin:8px 0 2px;font-size:.9rem;color:#5a8ac4">❄️ 雪の 日の 品</h3>${L.map((it,i)=>it.snow?itemH(it,i,'s'):'').join('')}`:''}
    ${(()=>{let r=0;try{r=rainKind()}catch(e){}return r&&L.some(x=>x.rain)?`<h3 style="margin:8px 0 2px;font-size:.9rem;color:#3f7fc4">☔ 雨の 日の 品</h3>${L.map((it,i)=>it.rain?itemH(it,i,'s'):'').join('')}`:''})()}
    <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🕊️ 特別な もの</h3>${L.map((it,i)=>it.type==='holy'?itemH(it,i,'s'):'').join('')}
    <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🛍️ 福袋</h3>${F.map((it,i)=>itemH(it,i,'f')).join('')}</div>`}
@@ -13566,10 +13571,10 @@ const NXFEST=window.NXFEST=(()=>{const D=()=>NXS.st(),pk=a=>a[Math.random()*a.le
   const PROGS=['calm','normal','wild','sea'],PNM={calm:'ゆったり',normal:'いろいろ',wild:'はげしめ',sea:'海上 花火'};
   const THEMES=['sea','sky','season','life','cosmos','night','casino',null];
   const CROWD={matsuri:['k','w','pair','k','w','m','c','w','k'],music:['s','spair','s','s'],couples:['spair','spair','pair','s','spair','w'],family:['k','w','m','k','s','pair','c','k'],friends:['w','w','w','s','c','w','pair','m'],quiet:['spair','s','w'],crowd:['w','pair','m','k','s','w','c','spair','w','m','k']};
-  function pickCrowd(kind,prog){if(kind==='matsuri')return{set:'matsuri',shadow:false};if(kind==='music')return{set:'music',shadow:Math.random()<.5};const c=kind==='drone'?pk(['family','friends','couples']):prog==='calm'?pk(['quiet','couples']):prog==='wild'?pk(['crowd','friends']):prog==='sea'?pk(['couples','family']):pk(['couples','family','friends','crowd']);return{set:c,shadow:Math.random()<.4}}
+  function pickCrowd(kind,prog){if(kind==='xmas')return{set:'couples',shadow:Math.random()<.5};if(kind==='matsuri')return{set:'matsuri',shadow:false};if(kind==='music')return{set:'music',shadow:Math.random()<.5};const c=kind==='drone'?pk(['family','friends','couples']):prog==='calm'?pk(['quiet','couples']):prog==='wild'?pk(['crowd','friends']):prog==='sea'?pk(['couples','family']):pk(['couples','family','friends','crowd']);return{set:c,shadow:Math.random()<.4}}
   function plan(){const d=D(),day=S.gday||0;let F=d.fest;if(!F||F.day!==day){const old=F||{};let kind,prog,theme=null;const rv=old.rsv&&old.rsv.day<=day?old.rsv:null;
-      if(rv){kind=rv.kind;prog=rv.prog;theme=rv.theme}else{const r=Math.random();kind=r<.27?'drone':r<.62?'fw':r<.74?'music':r<.86?'matsuri':'none';prog=pk(PROGS)}
-      F=d.fest={day,kind,prog,theme,start:kind==='music'?19.5+R(0,.4):kind==='matsuri'?18.6+R(0,.3):19+R(0,.5),end:kind==='music'?20.9+R(0,.5):kind==='matsuri'?21.2+R(0,.4):20.6+R(0,.5),crowd:pickCrowd(kind,prog),on:false,done:false,rsv:rv?null:(old.rsv||null)};save()}return F}
+      const dt=new Date(),xm=dt.getMonth()===11&&dt.getDate()>=18&&dt.getDate()<=25;if(rv){kind=rv.kind;prog=rv.prog;theme=rv.theme}else if(xm&&(dt.getDate()>=24||Math.random()<.5)){kind='xmas';prog='normal'}else{const r=Math.random();kind=r<.27?'drone':r<.62?'fw':r<.74?'music':r<.86?'matsuri':'none';prog=pk(PROGS)}
+      F=d.fest={day,kind,prog,theme,start:kind==='xmas'?19.2+R(0,.3):kind==='music'?19.5+R(0,.4):kind==='matsuri'?18.6+R(0,.3):19+R(0,.5),end:kind==='xmas'?21+R(0,.3):kind==='music'?20.9+R(0,.5):kind==='matsuri'?21.2+R(0,.4):20.6+R(0,.5),crowd:pickCrowd(kind,prog),on:false,done:false,rsv:rv?null:(old.rsv||null)};save()}return F}
   const h=()=>{try{return GH()}catch(e){return 12}};
   let on0=false,crowd=null,tm=[],murT=0;
   const on=()=>on0;
@@ -13608,17 +13613,19 @@ const NXFEST=window.NXFEST=(()=>{const D=()=>NXS.st(),pk=a=>a[Math.random()*a.le
     setTimeout(()=>{crowd.appendChild(el);requestAnimationFrame(()=>el.classList.add('in'))},200)}
   function drones(F){if(!on0)return;const left=(plan().end-h())*450;if(left<100)return;window._droneTheme=F.theme&&!F.themeUsed?(F.themeUsed=1,F.theme):pk(THEMES)||'mix';try{SCENE.show('drones',110)}catch(e){}tm.push(setTimeout(()=>drones(F),(110+R(15,45))*1000))}
   function begin(F){on0=true;F.on=true;save();document.body.classList.add('nxFest');duck(true);
-    if(F.kind==='fw'){try{SCENE.show('fw_night',Math.max(30,(F.end-h())*450+20))}catch(e){}}else if(F.kind==='music')musicNight(F);else if(F.kind==='matsuri'){NXMATSURI.show(F);tm.push(setTimeout(()=>{try{if(on0&&S.sound)startMusic(Math.random()<.5?'koto_moon':'koto',Math.max(60,(F.end-h())*450))}catch(e){}},2500))}else drones(F);
-    tm.push(setTimeout(()=>{try{say(F.kind==='fw'?'festStart':F.kind==='music'?'musicStart2':F.kind==='matsuri'?'matsuriStart':'droneStart',{n:1,origin:'beach',delay:0})}catch(e){}},F.kind==='fw'?3500:4000));
+    if(F.kind==='fw'){try{SCENE.show('fw_night',Math.max(30,(F.end-h())*450+20))}catch(e){}}else if(F.kind==='music')musicNight(F);else if(F.kind==='xmas'){NXSNOW.sleigh();tm.push(setTimeout(()=>{try{if(on0&&S.sound)startMusic(Math.random()<.5?'musicbox':'musicbox_w',Math.max(60,(F.end-h())*450))}catch(e){}},3000));for(let i=0;i<6;i++)tm.push(setTimeout(()=>{if(on0)NXSNOW.gift()},6000+i*R(15,40)*1000));tm.push(setTimeout(()=>{if(on0)NXSNOW.sleigh()},R(200,400)*1000))}
+    else if(F.kind==='matsuri'){NXMATSURI.show(F);tm.push(setTimeout(()=>{try{if(on0&&S.sound)startMusic(Math.random()<.5?'koto_moon':'koto',Math.max(60,(F.end-h())*450))}catch(e){}},2500))}else drones(F);
+    tm.push(setTimeout(()=>{try{say(F.kind==='fw'?'festStart':F.kind==='xmas'?'xmasStart':F.kind==='music'?'musicStart2':F.kind==='matsuri'?'matsuriStart':'droneStart',{n:1,origin:'beach',delay:0})}catch(e){}},F.kind==='fw'?3500:4000));
     if(F.kind==='music')players(F);crowdStart(F);tm.push(setTimeout(()=>{try{SCENE.visit(pk(['tanuki','fox','rabbit','owl','deer','fukuro'].filter(n=>SCENE.visitors.includes(n))))}catch(e){}},40000));murT=Date.now()+R(70,120)*1000}
   function finish(F){on0=false;F.on=false;F.done=true;save();document.body.classList.remove('nxFest');duck(false);crowdLeave();
     if(F.kind==='music'){try{if(MUS&&MUS.id===F.track)stopMusic()}catch(e){}clearInterval(noteT)}
+    if(F.kind==='xmas'){try{NXSNOW.clearGifts();if(MUS&&/musicbox/.test(MUS.id||''))stopMusic()}catch(e){}}
     if(F.kind==='matsuri'){try{NXMATSURI.hide();if(MUS&&/koto/.test(MUS.id||''))stopMusic()}catch(e){}}
-    const key=F.kind==='fw'?'fwAfter':F.kind==='music'?'musicAfter':F.kind==='matsuri'?'matsuriAfter':'droneAfter';[[2500,key+(F.kind==='fw'?'_p'+F.prog:'')],[8000,key]].forEach(([t,k])=>tm.push(setTimeout(()=>{try{say(k,{n:1,origin:'beach',delay:0})}catch(e){}},t)))}
+    const key=F.kind==='fw'?'fwAfter':F.kind==='xmas'?'xmasAfter':F.kind==='music'?'musicAfter':F.kind==='matsuri'?'matsuriAfter':'droneAfter';[[2500,key+(F.kind==='fw'?'_p'+F.prog:'')],[8000,key]].forEach(([t,k])=>tm.push(setTimeout(()=>{try{say(k,{n:1,origin:'beach',delay:0})}catch(e){}},t)))}
   setInterval(()=>{try{if(document.hidden)return;const F=plan(),hh=h();
     if(!on0&&F.kind!=='none'&&!F.done&&hh>=F.start&&hh<F.end-.05)begin(F);
     else if(on0&&(hh>=F.end||hh<F.start-.2||F.day!==(S.gday||0)))finish(F);
-    else if(on0&&Date.now()>murT){murT=Date.now()+R(80,140)*1000;try{say(F.kind==='fw'?'festMid':F.kind==='music'?'musicMid':F.kind==='matsuri'?'matsuriMid':'droneMid',{n:1,origin:'beach',delay:0})}catch(e){}}}catch(e){}},1000);
+    else if(on0&&Date.now()>murT){murT=Date.now()+R(80,140)*1000;try{say(F.kind==='fw'?'festMid':F.kind==='xmas'?'xmasMid':F.kind==='music'?'musicMid':F.kind==='matsuri'?'matsuriMid':'droneMid',{n:1,origin:'beach',delay:0})}catch(e){}}}catch(e){}},1000);
   function hasRsv(){const F=plan();return !!F.rsv||(F.byRsv&&!F.done)}
   function reserve(kind,prog,theme){const F=plan(),hh=h();if(!F.on&&!F.done&&hh<F.start+.3){Object.assign(F,{kind,prog,theme,byRsv:1,crowd:pickCrowd(kind,prog)});save();evToast(kind==='fw'?`🎆 今夜 <b>花火大会</b>（${PNM[prog]}）が ある みたい<br><small>19時ごろ から</small>`:'🛸 今夜は <b>ドローンショー</b> が ある みたい<br><small>19時ごろ から</small>')}
     else{F.rsv={day:(S.gday||0)+1,kind,prog,theme};save();evToast(kind==='fw'?`🎆 明日の 夜 <b>花火大会</b>（${PNM[prog]}）が ある みたい`:'🛸 明日の 夜は <b>ドローンショー</b> が ある みたい')}}
@@ -13706,6 +13713,35 @@ const NXMATSURI=window.NXMATSURI=(()=>{const R=(a,b)=>a+Math.random()*(b-a),pk=a
   Object.assign(MUMS,{matsuriStart:['屋台 出てる！','お祭りや〜','提灯 きれい','たこ焼きの におい'],matsuriMid:['金魚すくい やりたい','わたあめ 甘い','浴衣の 人 多いね','太鼓の 音が する','射的 当たった？'],matsuriAfter:['お祭り 楽しかった','提灯が 消えていく','また 来年…','祭りの あとって さみしいね']});
   Object.assign(EMO,{matsuriStart:['🏮','🎐'],matsuriMid:['🏮','🍧'],matsuriAfter:['🏮','🌙']});
   return{show,hide,season,openStall}})();
+/* ========== 雪の 日（雪だるま・雪の 呟き・雪の 品）と クリスマスの 夜（サンタの そり・鈴・プレゼント拾い） ========== */
+const NXSNOW=window.NXSNOW=(()=>{const R=(a,b)=>a+Math.random()*(b-a),pk=a=>a[Math.random()*a.length|0];let lay=null,was=0,nextM=0,nextK=0;
+  const snowy=()=>{try{const c=window.WX_TEST!=null?window.WX_TEST:WX.code;return c!=null&&((c>=71&&c<=77)||c===85||c===86)}catch(e){return false}};
+  const L=()=>{if(!lay){lay=document.createElement('div');lay.id='nxSnow';document.body.appendChild(lay)}return lay};const g=()=>{try{return SCENE.dbg()}catch(e){return null}};
+  function snowman(){const G=g();if(!G||L().querySelectorAll('.nxSnowman').length>=2)return;const el=document.createElement('div');el.className='nxSnowman';const sc=pk(['#e2475a','#3f7fc4','#55c8a0','#f2a33a']);
+    el.innerHTML=`<svg viewBox="-14 -38 28 40" width="30" height="42" style="overflow:visible"><ellipse cy="1" rx="11" ry="2" fill="rgba(0,0,0,.25)"/><circle cy="-8" r="9" fill="#f6f8ff"/><circle cy="-23" r="6.5" fill="#fbfcff"/><circle cx="-2.2" cy="-24.5" r=".9" fill="#222"/><circle cx="2.2" cy="-24.5" r=".9" fill="#222"/><path d="M0 -22.6l4 1-4 1z" fill="#f2861e"/>
+     <path d="M-6 -17.5h12" stroke="${sc}" stroke-width="2.4" stroke-linecap="round"/><path d="M4 -17l1.5 5" stroke="${sc}" stroke-width="2" stroke-linecap="round"/><path d="M-7 -12l-7 -5M7 -12l7 -5" stroke="#6a4a2a" stroke-width="1"/><rect x="-4.5" y="-33" width="9" height="4" rx="1" fill="#2a2a3e"/><rect x="-6" y="-29.4" width="12" height="1.4" fill="#2a2a3e"/></svg>`;
+    el.style.left=(G.WL+G.WW*R(.42,.95))+'px';el.style.top=(G.shore-scrollY+R(30,70)*G.k)+'px';el.style.transform=`translate(-50%,-100%) scale(${G.k})`;L().appendChild(el);requestAnimationFrame(()=>el.classList.add('in'));try{say('snowman',{n:1,origin:'beach',delay:800})}catch(e){}}
+  setInterval(()=>{try{if(document.hidden)return;const s=snowy(),now=Date.now();document.body.classList.toggle('nxSnowy',s);
+    if(s){if(!was){was=1;nextM=now+R(10,25)*1000;nextK=now+R(30,80)*1000;try{say('snowBegin',{n:1,origin:'beach',delay:0})}catch(e){}}if(now>nextK){nextK=now+R(150,300)*1000;snowman()}if(now>nextM){nextM=now+R(120,240)*1000;try{say('snowMum',{n:1,origin:'beach',delay:0})}catch(e){}}}
+    else if(was){was=0;if(lay)lay.querySelectorAll('.nxSnowman').forEach((e,i)=>setTimeout(()=>{e.classList.add('melt');setTimeout(()=>e.remove(),4000)},i*1500));try{say('snowEnd',{n:1,origin:'beach',delay:1000})}catch(e){}}}catch(e){}},2500);
+  const P={N:60,R:600,SR:6000,SSR:50000};const add=(id,e,n,r,f,use,src)=>{if(!TRE.find(t=>t.id===id))TRE.push({id,e,n,r,f,p:P[r],src,use})};
+  [['ns1','❄️','雪の 結晶','R',{t:'buff',b:'luck',n:2}],['ns2','⛄','小さな 雪だるま','N',{t:'photo'}],['ns3','🧤','ミトン','N',{t:'coin',lo:300,hi:3000}],['ns4','🧣','手編みの マフラー','SR',{t:'buff',b:'dbl',n:3}],['ns5','☕','ココア','N',{t:'notes'}],['ns6','🛷','木の そり','SR',{t:'grow',n:1}]].forEach(([id,e,n,r,u])=>add(id,e,n,r,'雪の 日に だけ 出会える 品',u,'snow'));
+  [['nx1','🎁','赤い プレゼント','R',{t:'coin',lo:1000,hi:15000}],['nx2','🎁','緑の プレゼント','R',{t:'buff',b:'pay',n:3}],['nx3','🎁','金の プレゼント','SR',{t:'orb',p:.7}],['nx4','🔔','銀の 鈴','SR',{t:'buff',b:'luck',n:3}],['nx5','🍪','ジンジャー クッキー','N',{t:'notes'}],['nx6','🧦','クリスマスの 靴下','SSR',{t:'grow',n:2}]].forEach(([id,e,n,r,u])=>add(id,e,n,r,'クリスマスの 夜の 贈りもの',u,'xmas'));
+  {const _rt=rollTre;rollTre=function(){let t;for(let i=0;i<12;i++){t=_rt.apply(this,arguments);if(!t||(t.src!=='snow'&&t.src!=='xmas'))return t}return t}}
+  /* クリスマスの 夜：サンタの そりが 月の 前を 横切り、浜辺に プレゼントが 落ちて くる（タップで 拾う） */
+  function bells(){try{if(!S.sound)return;[0,.18,.36,.9,1.08,1.26].forEach((d,i)=>bell(i%3===2?1976:1568,.02,d,.9))}catch(e){}}
+  function sleigh(){const G=g();if(!G)return;const el=document.createElement('div');el.className='nxSleigh';el.innerHTML=`<svg viewBox="-60 -14 120 24" width="120" height="24" style="overflow:visible"><g fill="#1a1626">${[-50,-38,-26].map(x=>`<path d="M${x} 0l3-4h6l2-3 1 3h2l-1 4h-2l-1 4h-1l-1-4h-4l-1 4h-1l-1-4z"/><path d="M${x+11} -7l2-4M${x+12} -7l3-2" stroke="#1a1626" stroke-width=".7"/>`).join('')}
+     <path d="M-20 -1L-8 1" stroke="#1a1626" stroke-width=".5"/><path d="M-8 -4h14l3 4h-17z"/><path d="M-9 2h20" stroke="#1a1626" stroke-width="1.2"/><circle cx="2" cy="-7" r="2.6"/><path d="M-1 -7l3-5 3 5z"/><path d="M8 -8h4v4h-4z"/></g><circle cx="-41" cy="-3" r="1" fill="#ff4040"/></svg>`;
+    const y=G.hz*R(.25,.4)-scrollY;el.style.top=y+'px';el.style.left=(G.W+80)+'px';el.style.transform=`scale(${G.k})`;L().appendChild(el);requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.left='-140px'}));bells();setTimeout(()=>el.remove(),23000)}
+  function gift(){const G=g();if(!G)return;const el=document.createElement('button');el.type='button';el.className='nxPick nxGift';let u;for(let i=0;i<20;i++){u=R(.06,.94);if(!(u>.17&&u<.38))break}
+    el.style.left=(G.WL+G.WW*u)+'px';el.style.top=(G.shore-scrollY+R(20,80)*G.k)+'px';el.style.fontSize=(1.1*G.k)+'rem';el.innerHTML='<i>🎁</i><b></b>';
+    el.addEventListener('pointerdown',e=>e.stopPropagation());el.addEventListener('click',e=>{e.stopPropagation();if(el.dataset.done)return;el.dataset.done=1;el.classList.add('got');setTimeout(()=>el.remove(),600);const L2=TRE.filter(t=>t.src==='xmas'),r=Math.random(),t=r<.04?L2.find(x=>x.id==='nx6'):pk(L2.filter(x=>x.id!=='nx6'));S.tre[t.id]=(S.tre[t.id]||0)+1;S.zukan[t.id]=1;save();try{bell(1568,.02,0,.6);bell(2093,.02,.1,.6)}catch(er){}
+      const lb=document.createElement('div');lb.className='nxPickT';lb.style.left=el.style.left;lb.style.top=el.style.top;lb.textContent=`${t.e} ${t.n}`;L().appendChild(lb);setTimeout(()=>lb.remove(),2600)});L().appendChild(el);requestAnimationFrame(()=>el.classList.add('in'))}
+  function clearGifts(){if(lay)lay.querySelectorAll('.nxGift').forEach(e=>{e.classList.add('wash');setTimeout(()=>e.remove(),1500)})}
+  Object.assign(MUMS,{snowBegin:['雪だ！','浜辺に 雪…','白く なってきた','さむ〜い'],snowMum:['雪の 海って 静か','息が 白い','雪と 焚き火、いいね','足あと つけたい','雪合戦 したい'],snowman:['雪だるま できてる！','だれか 作ったんやね','かわいい 雪だるま'],snowEnd:['雪 やんだね','雪だるま 溶けちゃう…'],
+    xmasStart:['シャンシャン…鈴の 音？','サンタさん！？','メリー クリスマス！','空を そりが 飛んでる'],xmasMid:['プレゼント 落ちてる！','浜辺の クリスマス','ツリー きれい','ホワイト クリスマス なら いいのに'],xmasAfter:['いい クリスマス だったね','サンタさん ありがとう','また 来年']});
+  Object.assign(EMO,{snowBegin:['❄️'],snowMum:['❄️','⛄'],snowman:['⛄'],snowEnd:['💧'],xmasStart:['🎅','🔔'],xmasMid:['🎁','🎄'],xmasAfter:['🎄','🌙']});
+  return{snowy,snowman,sleigh,gift,clearGifts,bells}})();
 </script>
 <!--NXJS-END-->
 </body></html>
