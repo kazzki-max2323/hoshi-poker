@@ -302,6 +302,8 @@ body.nxFw.nxFwAfter #bubbles{opacity:1!important;pointer-events:auto!important}
 body.nxFwAfter{cursor:pointer}
 #nxSmoke{position:fixed;inset:0;pointer-events:none;z-index:1}#nxSmoke i{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(190,190,215,.22),rgba(190,190,215,0) 70%);transform:translate(-50%,-50%);animation:nxSmk 18s ease-out forwards;opacity:0}
 @keyframes nxSmk{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + 40px),-60%) scale(1.6)}}
+#nxCrowd2{position:fixed;inset:0;pointer-events:none;z-index:2}
+#nxCrowd2.nxShadowDay .nxPpl svg{filter:brightness(.14) saturate(0) drop-shadow(0 0 1.2px rgba(255,205,160,.4))}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -6810,7 +6812,7 @@ Object.assign(MUMS,{ntHorn:['…汽笛','遠くで 船が','どこ行くんや�
   else if(r<.5){[[420,.35,0],[380,.5,.45]].forEach(([f,d,dl])=>tone(f,d,'sine',.02,dl));setTimeout(()=>{[[420,.3,0],[380,.45,.4]].forEach(([f,d,dl])=>tone(f,d,'sine',.015,dl))},1500);if(Math.random()<.3)say('ntOwl',{delay:1000})}
   else{for(let i=0;i<6;i++)noise(.04+Math.random()*.05,{v:.03,type:'highpass',f:2000+Math.random()*2000});}}catch(e){}},3000)}
 /* 深夜は 波を 静かに */
-{let last=-1;setInterval(()=>{try{if(!ac||!waveBus||document.body.classList.contains('nxFw')||document.body.classList.contains('afterglow')||document.body.classList.contains('airCalm')||document.body.classList.contains('airStill'))return;const h=SCENE.dbg().gh,deep=(h>=23||h<4)?1:0;if(deep===last)return;last=deep;waveBus.gain.setTargetAtTime((S.vol?S.vol.wave:1)*1.15*1.5*(deep?.65:1),ac.currentTime,2)}catch(e){}},4000)}
+{let last=-1;setInterval(()=>{try{if(!ac||!waveBus||document.body.classList.contains('nxFw')||document.body.classList.contains('nxFest')||document.body.classList.contains('afterglow')||document.body.classList.contains('airCalm')||document.body.classList.contains('airStill'))return;const h=SCENE.dbg().gh,deep=(h>=23||h<4)?1:0;if(deep===last)return;last=deep;waveBus.gain.setTargetAtTime((S.vol?S.vol.wave:1)*1.15*1.5*(deep?.65:1),ac.currentTime,2)}catch(e){}},4000)}
 /* 11. 夜の 住人 */
 Object.assign(MUMS,{nt_couple:['月を 見てる 二人','ええ雰囲気','そっとしとこ'],nt_blanket:['毛布 あったかそう','焚き火に 当たってる','夜は 冷えるね'],nt_kid:['星 指さしてる','あれ なに座？','流れ星 探してる']});
 Object.assign(EMO,{nt_couple:['🌙','💞'],nt_blanket:['🔥'],nt_kid:['⭐','👆']});
@@ -9213,7 +9215,7 @@ const SCENE=(()=>{
          for(let i=0;i<=22;i++)pts.push([0,-.32+i/22*.6]);for(let i=0;i<16;i++){const a=i/12*Math.PI*2;pts.push([Math.cos(a)*.06,-.42+Math.sin(a)*.06])}pts.push([.08,-.44],[.12,-.43]);
          for(const sd of[-1,0,1])for(let i=0;i<=26;i++){const u=i/26;pts.push([sd*.22*u+Math.sin(u*4)*.03*sd,.28+.62*u])}
          for(const[a,b2]of pts)P({x:bx,y:by,vx:a*SW/25,vy:b2*SH/25,c:Math.random()<.2?'255,240,200':'255,200,100',tr:0,g:.0006*k,dr:.96,dc:.0055,sp:Math.random()<.4?1:0});}
-       try{FS().boom(pn(bx),(big?1.15:.85)*(cfg.sc>1?1.35:1)*(ty==='phoenix'?1.3:1)*(cfg.mode==='phoenix'&&ty!=='phoenix'?.7:1),ty==='kamuro'||ty==='glit'||ty==='senrin'||ty==='phoenix'?'crackle':ty==='yanagi'?'hiss':'',.18+Math.random()*.25)}catch(e){}st.flash={x:bx,y:by,l:1,c:ty==='yanagi'||ty==='kamuro'?'255,210,120':c}}
+       try{FS().boom(pn(bx),(big?1.15:.85)*(cfg.vol||1)*(cfg.sc>1?1.35:1)*(ty==='phoenix'?1.3:1)*(cfg.mode==='phoenix'&&ty!=='phoenix'?.7:1),ty==='kamuro'||ty==='glit'||ty==='senrin'||ty==='phoenix'?'crackle':ty==='yanagi'?'hiss':'',.18+Math.random()*.25)}catch(e){}st.flash={x:bx,y:by,l:1,c:ty==='yanagi'||ty==='kamuro'?'255,210,120':c}}
      const pn=bx=>Math.max(-.8,Math.min(.8,bx/W*2-1)),FS=()=>window.FWSND;
      const launch=(ty,bx,by,c,c2,big)=>{const d=R(.55,.85);st.rk.push({x:bx+R(-10,10)*k,y:hz,tx:bx,ty:by,t:0,d,ty2:ty,c,c2,big,tr:[]});try{FS().launch(pn(bx),d)}catch(e){}};
      if(cfg.mode==='phoenix'){const G=['255,255,255','255,215,130','255,240,200'];
@@ -9223,11 +9225,14 @@ const SCENE=(()=>{
        if(p<.92&&et>(st.sv||0)&&(p<.26||(p>.6&&p<.85)||p>.88)){st.sv=et+R(1,1.6);const n=7;for(let i=0;i<n;i++){const bx=W*(.08+.84*i/(n-1));launch(Math.random()<.5?'kamuro':'kiku',bx,R(hz*.25,hz*.45),G[Math.random()*3|0],G[1],false)}}}
      if(cfg.niagara&&!st.ng1&&p>cfg.niagara){st.ng1=1;st.ng={x0:W*.1,x1:W*.9,y:hz*.7,until:et+6}}
      if(st.ng&&et<st.ng.until&&st.b.length<1200){for(let xx=st.ng.x0;xx<=st.ng.x1;xx+=7*k){if(Math.random()<.5)P({x:xx+R(-2,2)*k,y:st.ng.y,vx:R(-.1,.1)*k,vy:R(.2,.6)*k,c:Math.random()<.3?'255,255,255':'255,225,160',tr:0,g:.03*k,dr:.99,dc:.03,sp:1})}}
-     if(cfg.mode!=='phoenix'&&p<.92&&et>st.n){const gp=cfg.gap||[.45,1.3];st.n=et+R(gp[0],gp[1]);const ty=pickT(),c=pc();let c2=pc();if(c2===c)c2=COL[(COL.indexOf(c)+3)%COL.length];const big=Math.random()<(cfg.big??.3);
+     if(cfg.mode!=='phoenix'&&!cfg.stop&&p<(cfg.stopAt||.92)&&et>st.n){const gp=cfg.gap||[.45,1.3];st.n=et+R(gp[0],gp[1]);const ty=pickT(),c=pc();let c2=pc();if(c2===c)c2=COL[(COL.indexOf(c)+3)%COL.length];const big=Math.random()<(cfg.big??.3);
+       if(cfg.sm&&Math.random()<cfg.sm){const n=Math.round(R(cfg.smN?cfg.smN[0]:4,cfg.smN?cfg.smN[1]:8)),SMT=[['kiku',3],['botan',3],['glit',1.5],['kamuro',1],['henka',1],['shin',1]];let tot=0;SMT.forEach(q=>tot+=q[1]);
+         for(let i=0;i<n;i++){let r=Math.random()*tot,t2='kiku';for(const q of SMT){r-=q[1];if(r<=0){t2=q[0];break}}const bx=R(W*.06,W*.94),by=R(hz*.18,hz*.55),dl=i*R(.08,.3),d=R(.5,.75);st.rk.push({x:bx+R(-8,8)*k,y:hz,tx:bx,ty:by,t:-dl,d,ty2:t2,c:pc(),c2:pc(),big:false,tr:[],sm:1});try{setTimeout(()=>FS().launch(pn(bx),d),dl*1000)}catch(e){}}
+         st.n=et+R(gp[0],gp[1])+n*.15}else
        if(ty==='mizu'){const bx=R(W*.15,W*.85);burst('kiku',bx,hz-2*k,c,c2,false);st.b.forEach(b=>{if(b.y===hz-2*k&&b.vy>0)b.vy*=-.6})}
        else{const hy=cfg.hy||[.15,.6],bx=R(W*.08,W*.92),by=R(hz*hy[0],hz*hy[1]);launch(ty,bx,by,c,c2,big)}}
      x.save();x.globalCompositeOperation='lighter';
-     for(const r of st.rk){r.t+=(rdt||.016);const q=Math.min(1,r.t/r.d),e=1-Math.pow(1-q,2.2);const cx=r.x+(r.tx-r.x)*e+Math.sin(r.t*18)*.6*k,cy=r.y+(r.ty-r.y)*e;r.tr.push([cx,cy]);if(r.tr.length>9)r.tr.shift();
+     for(const r of st.rk){r.t+=(rdt||.016);if(r.t<0)continue;const q=Math.min(1,r.t/r.d),e=1-Math.pow(1-q,2.2);const cx=r.x+(r.tx-r.x)*e+Math.sin(r.t*18)*.6*k,cy=r.y+(r.ty-r.y)*e;r.tr.push([cx,cy]);if(r.tr.length>9)r.tr.shift();
        for(let i=1;i<r.tr.length;i++){x.strokeStyle=`rgba(255,220,170,${i/r.tr.length*.6*(1-q*.4)})`;x.lineWidth=1.3*k;x.beginPath();x.moveTo(r.tr[i-1][0],r.tr[i-1][1]);x.lineTo(r.tr[i][0],r.tr[i][1]);x.stroke()}
        if(q>=1){r.done=1;burst(r.ty2,r.tx,r.ty,r.c,r.c2,r.big)}}
      st.rk=st.rk.filter(r=>!r.done);
@@ -9245,6 +9250,7 @@ const SCENE=(()=>{
    fw_sea:{layer:'sky',draw(p,st,et,rdt){SHOW._fwx.draw(p,st,et,rdt,{w:[['mizu',3],['botan',1],['kiku',1],['glit',.6]],hy:[.4,.7],gap:[.6,1.4],niagara:.5})}},
    fw_yanagi:{layer:'sky',draw(p,st,et,rdt){SHOW._fwx.draw(p,st,et,rdt,{w:[['yanagi',3],['kamuro',2],['glit',1]],gap:[1,2],big:.4})}},
    fw_cute:{layer:'sky',draw(p,st,et,rdt){SHOW._fwx.draw(p,st,et,rdt,{w:[['heart',2],['smile',1],['star',2],['saturn',1.5],['botan',1],['nishoku',1]],gap:[.7,1.5]})}},
+   fw_night:{layer:'sky',draw(p,st,et,rdt){if(!window.NXFEST)return;const q=NXFEST.q();SHOW._fwx.draw(q,st,et,rdt,NXFEST.cfg(q,st))}},
    fw_odama:{layer:'sky',draw(p,st,et,rdt){SHOW._fwx.draw(p,st,et,rdt,{w:[['kiku',1],['kamuro',1],['henka',1],['shin',1]],gap:[3.2,4.6],sc:1.9,big:1,hy:[.22,.36]})}},
    aurora:{layer:'sky',draw(p,st,et){const a=fade(p,.12,.15);x.save();x.globalCompositeOperation='lighter';const C=['80,255,170','110,210,255','190,120,255'];
      for(let r=0;r<3;r++){for(let px=0;px<=W;px+=3){const y=hz*(.22+r*.09)+Math.sin(px*.004+et*.25+r*2)*hz*.07+Math.sin(px*.012-et*.4+r)*hz*.025,h=hz*(.16+.07*Math.sin(px*.008+et*.3+r)),i=.5+.5*Math.sin(px*.02+et*.8+r*3);
@@ -9485,10 +9491,10 @@ const SCENE=(()=>{
   function frame(now){
     {const idle=performance.now()-(window._lastInput||0)>60000,iv=window._eco?Math.max(90,!document.hasFocus()?140:90):!document.hasFocus()?100:document.body.classList.contains('reachOn')||document.body.classList.contains('dbl')?36:idle?70:42;if(now-last<iv&&!still){requestAnimationFrame(frame);return}}
     const rdt=still?0:Math.min(.1,(now-last)/1000||.033);t+=rdt*.55;last=now;
-    if(!still&&!cur&&now>=nextAt&&!document.hidden&&!(window.NXFW&&NXFW.on())){startEvent();nextAt=now+300000*evMul()}
+    if(!still&&!cur&&now>=nextAt&&!document.hidden&&!(window.NXFW&&NXFW.on())&&!(window.NXFEST&&NXFEST.on())){startEvent();nextAt=now+300000*evMul()}
     if(festOn()){if(ambAt-now>25000)ambAt=now+R(4000,12000);if(visitAt-now>90000)visitAt=now+R(15000,40000)}
-    if(!still&&!vcur&&now>=visitAt&&!document.hidden&&!(window.NXFW&&NXFW.on())){startVisitor();visitAt=now+R(540000,720000)*visMul()*(festOn()?.12:1)}
-    if(!still&&!acur&&now>=ambAt&&!document.hidden&&!(window.NXFW&&NXFW.on())){startAmb();ambAt=now+R(150000,240000)*(festOn()?.08:1)}
+    if(!still&&!vcur&&now>=visitAt&&!document.hidden&&!(window.NXFW&&NXFW.on())&&!(window.NXFEST&&NXFEST.on())){startVisitor();visitAt=now+R(540000,720000)*visMul()*(festOn()?.12:1)}
+    if(!still&&!acur&&now>=ambAt&&!document.hidden&&!(window.NXFW&&NXFW.on())&&!(window.NXFEST&&NXFEST.on())){startAmb();ambAt=now+R(150000,240000)*(festOn()?.08:1)}
     sky();runEvents('sky',rdt);runAmb('sky',rdt);runVisitor('sky',rdt);seasonDraw('sky');try{festX('sky')}catch(e){}try{nightFx('sky')}catch(e){}runShows('sky',rdt);try{skyDeco()}catch(e){}try{sekkiFx()}catch(e){}try{wxSky()}catch(e){}
     ITEMS.forEach(it=>{const target=hasDeco(it.n)?1:0;it.a+=(target-it.a)*(still?1:.04)});
     const by=n=>ITEMS.find(i=>i.n===n);
@@ -12752,7 +12758,8 @@ ITUNLOCK.forEach(([k,p])=>add({id:'nky_'+k,e:'🗝️',n:`${ITEM[k]}の 鍵`,r:p
 try{SCENE.decos().forEach(d=>add({id:'ndc_'+d.n,e:(typeof DECO_INFO!=='undefined'&&DECO_INFO[d.n]?DECO_INFO[d.n][0]:'🎁'),n:d.n,r:prR(d.c*25),f:'浜辺の 置きもの。売ると コインに なる',use:{t:'deco',n:d.n}}))}catch(e){}
 /* ---- ふつうの たからものの 使い道 ---- */
 const POK=[.1,.2,.35,.6,1],DBX=[.2,.35,.5,.8,1.5],ORBP=[.15,.25,.4,.6,1];
-function useOf(t){if(t.use)return t.use;const h0=hsh(t.id),h=(Math.imul(h0^(h0>>>15),0x2c1b3c6d)^Math.imul(h0^(h0>>>12),0x297a2d39))>>>0,c=h%100,ri=RI[t.r]||0,sub=(h>>>8)%3;
+const FWSEED=new Set(['fireworks','grandfw','fw_phoenix','fw_sea','fw_yanagi','fw_cute','fw_odama','drones']);
+function useOf(t){if(t.use&&t.use.t==='event'){const it=SHOP.find(i=>i.id===t.use.id);if(it&&FWSEED.has(it.show))return{t:'reserve',kind:it.show==='drones'?'drone':'fw',prog:{fw_yanagi:'calm',fw_odama:'calm',grandfw:'wild',fw_phoenix:'wild',fw_sea:'sea'}[it.show]||'normal',theme:it.theme||null}}if(t.use)return t.use;const h0=hsh(t.id),h=(Math.imul(h0^(h0>>>15),0x2c1b3c6d)^Math.imul(h0^(h0>>>12),0x297a2d39))>>>0,c=h%100,ri=RI[t.r]||0,sub=(h>>>8)%3;
   if(c<14)return sub===0&&ri<=1?{t:'joker'}:sub===1&&ri>=2?{t:'mul'}:{t:'pay',m:POK[ri]};
   if(c<26)return sub===0?{t:'guard'}:{t:'dblX',m:DBX[ri]};
   if(c<35)return{t:'offer',lv:ri+1};if(c<44)return{t:'orb',p:ORBP[ri]};
@@ -12775,11 +12782,12 @@ function useTxt(t){const u=useOf(t),ri=RI[t.r]||0;switch(u.t){
   case 'jp':return `🎰 ジャックポットが ${Math.round(u.m*100)}% 貯まる`;case 'coin':return `🪙 中から コインが 出てくる（${u.lo.toLocaleString()}〜${u.hi.toLocaleString()}枚）`;
   case 'time':return u.to==='night'?'🌙 浜辺が 夜に なる':'🌅 浜辺が 朝に なる';case 'grow':return `🌱 装備中の 球 1つの Lv が +${u.n}`;
   case 'holy':return '🕊️ 清めの 羽根 1本に なる';case 'visit':return '🛸 来訪者の お店を すぐ 呼ぶ（その日 3回を こえても OK）';
-  case 'omikuji':return '🎴 おみくじを 引く（大吉なら しあわせの波）';case 'photo':return '📷 浜辺の 写真を 撮る（おたのしみ）'}return ''}
+  case 'omikuji':return '🎴 おみくじを 引く（大吉なら しあわせの波）';case 'reserve':return u.kind==='drone'?'🛸 その夜は ドローンショーの 夜に なる（19時ごろ から）':`🎆 その夜は 花火大会に なる（19時ごろ から・${{calm:'ゆったり',normal:'いろいろ',wild:'はげしめ',sea:'海上 花火'}[u.prog]}）`;case 'photo':return '📷 浜辺の 写真を 撮る（おたのしみ）'}return ''}
 function canUse(t){const u=useOf(t);if(u.t==='unlock'&&S.unlocked[u.k])return false;
   if(u.t==='craft'){try{const h=GH();if(!(h>=5&&h<17)&&!X.night())return false;if(h>=5&&h<17){const c=NXCAS.st();if(c.done||c.washed)return false}}catch(e){return false}}
   if(u.t==='guest'){try{const f=NXFL.st();if(!f.items.length||NXFL.cur)return false}catch(e){return false}}
   if(u.t==='fish'&&S.fishing&&S.fishing.hooked)return false;
+  if(u.t==='reserve'){try{if(NXFEST.hasRsv())return false}catch(e){return false}}
   if(u.t==='time'&&S.phase==='busy')return false;if(u.t==='visit'){try{if(NXVIS.cur())return false}catch(e){return false}}
   if(u.t==='grow'){try{const d0=X.st();if(!d0.orbs.some(o=>X.eqOf(o)&&X.isOn(X.eqOf(o))&&o.lv<X.maxLv(o)))return false}catch(e){return false}}if(u.t==='deco')return false;if((u.t==='event'||u.t==='music')&&S.phase==='busy')return false;return true}
 function useIt(t){const u=useOf(t),d=D(),B=d.buf,ri=RI[t.r]||0;if(!canUse(t)||!(S.tre[t.id]>0))return false;S.tre[t.id]--;
@@ -12803,6 +12811,7 @@ function useIt(t){const u=useOf(t),d=D(),B=d.buf,ri=RI[t.r]||0;if(!canUse(t)||!(
   case 'scene':try{SCENE.play()}catch(e){}evToast('🎈 あれ？ 海の ほうで 何か…');break;
   case 'people':try{SCENE.amb()}catch(e){}evToast('👫 浜辺に だれかが やって来た');break;
   case 'letter':{const m=LETTERS[Math.random()*LETTERS.length|0];evToast(`💌 ボトルの 手紙…<br><small>「${m}」</small>`);break}
+  case 'reserve':NXFEST.reserve(u.kind,u.prog,u.theme);break;
   case 'buff':S.buffs[u.b]=(S.buffs[u.b]||0)+u.n;evToast(`${t.e} <b>★${BUFF[u.b]}</b> ＋${u.n}回`);try{renderStatus()}catch(e){}break;
   case 'jp':{const a=Math.round((S.jp||0)*u.m/100)*100;S.jp=(S.jp||0)+a;evToast(`🎰 ジャックポットに <b>+${a.toLocaleString()}</b>枚`);break}
   case 'coin':{const v=Math.round((u.lo+Math.random()*Math.random()*(u.hi-u.lo))/10)*10;S.coins+=v;try{getCoin(v,`${t.e} ${t.n}の 中から`)}catch(e){}break}
@@ -12921,7 +12930,7 @@ function mkStock(k){const T=k==='ufo'?[()=>{const it={type:'orb',o:X.mkOrb(pk(['
   :[()=>{const e=X.mkEq(pk(['SR','SSR','UR']));e.tr=pk(['t_lone','t_mid','t_safe','t_sup','t_spin','t_night']);return{type:'eq',e,p:X.EPRICE[e.r]*1.5}},()=>{const e=X.mkEq(pk(['SSR','UR']));e.tr=pk(['t_lone','t_mid','t_safe','t_sup']);return{type:'eq',e,p:X.EPRICE[e.r]*1.5}},()=>({type:'fuku',k:'x',e:'🎁',n:'特大 福袋',p:3000000,d:'中身は おたのしみ（4つ）：とても いい ものが 出やすい'})];
   const L=T.map(f=>{const it=f();if(it.type==='orb'&&!it.p)it.p=Math.round(X.OPRICE[it.o.r]*1.8);it.p=Math.round(it.p);return it});
   {const ex=TRE.filter(t=>t.vis===k).sort(()=>Math.random()-.5).slice(0,2+(Math.random()<.5?1:0));ex.forEach(t=>L.push({type:'tre',t,p:Math.round(t.p*2.5)}));const g=rollTre(2);if(g&&!L.some(x=>x.type==='tre'&&x.t.id===g.id))L.push({type:'tre',t:g,p:Math.round(g.p*3)})}
-  if(Math.random()<.5){const ds=TRE.filter(t=>/^nev_s_drones/.test(t.id));if(ds.length){const t=ds[Math.random()*ds.length|0];L.push({type:'tre',t,p:Math.round(t.p*3)})}}return L}
+  return L}
 function items(){const e=cur();if(!e)return[];if(!e.stock){e.stock=mkStock(e.k);save()}return e.stock}
 function openShop(){const e=cur(),UI=U();if(!e){evToast('もう 帰って しまった…');UI.M.hidden=true;return}const L=items(),left=leftMin(e);if(UI.P.hidden){UI.open('eq')}
   UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:3rem">${e.who[0]}</span><div><h3>${e.who[1]}の お店</h3><div class="nxTags"><span class="nxTag">${e.who[2]}</span><span class="nxTag" style="background:#ffe0e4;color:#8a1a10">あと 約${left}分で 帰る</span></div></div></div>
@@ -13206,7 +13215,6 @@ const VIS={ufo:{cry:'ピコ…ピコ… ソレ、ホシイ',buy:1.8,ex:'orbUp'},
 const FAC={gen:[1.1,1.5],norm:[.9,1.2],stingy:[.6,.85],col:[1,1.35],art:[.9,1.3]},CP={gen:.7,norm:.5,stingy:.3,col:.55,art:.5};
 let cur=null,bye=null,el=null;
 function gift(kind,r){if(kind==='holy')return{t:'holy'};
-  if(kind==='tre'&&Math.random()<.12){const ds=TRE.filter(t=>/^nev_s_drones/.test(t.id)&&(RI(t.r)<=RI(r)+1));if(ds.length)return{t:'tre',id:ds[Math.random()*ds.length|0].id}}
   if(kind==='tre'){const tr=['N','R','SR','SSR','UR'][Math.min(4,RI(r)+(Math.random()<.25?1:0))];let pool=TRE.filter(t=>t.r===tr&&!/^(ndc_|sz_|g_)/.test(t.id));if(!pool.length)pool=TRE.filter(t=>t.r==='N');return{t:'tre',id:pk(pool).id}}
   if(kind==='eqUp')return{t:'eq',e:X.mkEq(up(r,1))};
   if(kind==='sup')return{t:'orb',o:X.mkOrb(X.RR[Math.min(4,RI(r))],{kind:'sup'})};
@@ -13398,8 +13406,6 @@ setTimeout(()=>{try{const l=nxLay();['nxCst','nxNt','nxCas','nxFlea'].forEach(id
   addEventListener('touchcancel',e=>{if(!g())return;fire('pointerup',e.changedTouches[0])},{capture:true});
 })();
 
-/* ---- ドローンショーの たねが 出やすく（たからもの 約100回に 3回） ---- */
-{const _rt=rollTre;rollTre=function(){const t=_rt.apply(this,arguments);try{if(Math.random()<.021){const ds=TRE.filter(x=>/^nev_s_drones/.test(x.id));const w=ds.map(x=>x.r==='SSR'?1:3),tot=w.reduce((a,b)=>a+b,0);let r=Math.random()*tot;for(let i=0;i<ds.length;i++){r-=w[i];if(r<=0)return ds[i]}}}catch(e){}return t}}
 
 
 /* ---- お試し：花火大会の たねを 1つずつ（1回だけ） ---- */
@@ -13500,7 +13506,7 @@ const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_s
   const _say=say;say=function(){if(on()&&!sayOk)return;return _say.apply(this,arguments)};
   const _ev=evToast;evToast=function(h){if(on()){if(!/不死鳥が 夜空に|はじまり|スタート|開幕/.test(String(h)))q.push(h);return}return _ev.apply(this,arguments)};
   const _tt=treToast;treToast=function(h){if(on()){if(!/はじまり|スタート|開幕/.test(String(h)))q.push(h);return}return _tt.apply(this,arguments)};
-  return{on,start,end,allowNext}})();
+  return{on,start,end,allowNext,svgOf}})();
 
 Object.assign(MUMS,{fwAfter:['きれい だったね…','まだ 目に 焼きついてる','煙の においが 夏っぽい','たーまやー…','終わっちゃった…','また 見たいな','ドーンって 胸に 響いた','静かに なると ちょっと さみしい','空に まだ 光が 残ってる 気がする','いい 夜だね'],
  fwAfter_fireworks:['いい 花火大会 だった','最後の 連発、すごかった','いろんな 形が あったね'],fwAfter_grandfw:['空が ずっと 明るかった','スターマイン 圧巻…','耳が まだ ドーンって 言ってる'],
@@ -13508,7 +13514,7 @@ Object.assign(MUMS,{fwAfter:['きれい だったね…','まだ 目に 焼き�
  fwAfter_fw_yanagi:['柳、ゆっくり 落ちていくの 好き','金色の 雨 みたい だった','静かで いい 花火'],fwAfter_fw_cute:['ハート 見えた？','ニコちゃん かわいかった','土星、ちゃんと 輪っか あった'],
  fwAfter_fw_odama:['大玉、お腹に 響いた','あんな 大きいの 初めて','一発 一発、すごい 迫力']});
 Object.assign(EMO,{fwAfter:['🎆','✨','🌙'],fwAfter_fireworks:['🎆'],fwAfter_grandfw:['🎇'],fwAfter_fw_phoenix:['🕊️','🥹'],fwAfter_fw_sea:['🌊'],fwAfter_fw_yanagi:['🎐'],fwAfter_fw_cute:['💗'],fwAfter_fw_odama:['🎇']});
-{const _cr=crabRace;crabRace=function(){if(window.NXFW&&NXFW.on())return;return _cr.apply(this,arguments)}}
+{const _cr=crabRace;crabRace=function(){if(window.NXFW&&NXFW.on()||window.NXFEST&&NXFEST.on())return;return _cr.apply(this,arguments)}}
 
 /* ---- 花火の 音（打ち上げの ヒュー・ドーン・山の こだま・パチパチ・シャー） ---- */
 const FWSND=window.FWSND=(()=>{let bus=null;
@@ -13533,6 +13539,59 @@ const FWSND=window.FWSND=(()=>{let bus=null;
   setInterval(()=>{const f=S.fishing;if(f&&!f.hooked&&!document.hidden)f.seen=Date.now()},2000);
   document.addEventListener('visibilitychange',()=>{const f=S.fishing;if(!f||f.hooked)return;if(document.hidden){f.seen=Date.now();save()}else if(f.seen){f.at+=Math.max(0,Date.now()-f.seen);f.seen=Date.now();save()}});
   addEventListener('pagehide',()=>{const f=S.fishing;if(f&&!f.hooked){f.seen=Date.now();save()}})})();
+/* ========== 夜の 花火大会・ドローンショー（ふいに 始まる。19時〜21時ごろ。花火 4：ドローン 3：なにもない 3） ========== */
+const NXFEST=window.NXFEST=(()=>{const D=()=>NXS.st(),pk=a=>a[Math.random()*a.length|0],R=(a,b)=>a+Math.random()*(b-a);
+  const PROGS=['calm','normal','wild','sea'],PNM={calm:'ゆったり',normal:'いろいろ',wild:'はげしめ',sea:'海上 花火'};
+  const THEMES=['sea','sky','season','life','cosmos','night','casino',null];
+  const CROWD={couples:['spair','spair','pair','s','spair','w'],family:['k','w','m','k','s','pair','c','k'],friends:['w','w','w','s','c','w','pair','m'],quiet:['spair','s','w'],crowd:['w','pair','m','k','s','w','c','spair','w','m','k']};
+  function pickCrowd(kind,prog){const c=kind==='drone'?pk(['family','friends','couples']):prog==='calm'?pk(['quiet','couples']):prog==='wild'?pk(['crowd','friends']):prog==='sea'?pk(['couples','family']):pk(['couples','family','friends','crowd']);return{set:c,shadow:Math.random()<.4}}
+  function plan(){const d=D(),day=S.gday||0;let F=d.fest;if(!F||F.day!==day){const old=F||{};let kind,prog,theme=null;const rv=old.rsv&&old.rsv.day<=day?old.rsv:null;
+      if(rv){kind=rv.kind;prog=rv.prog;theme=rv.theme}else{const r=Math.random();kind=r<.3?'drone':r<.7?'fw':'none';prog=pk(PROGS)}
+      F=d.fest={day,kind,prog,theme,start:19+R(0,.5),end:20.6+R(0,.5),crowd:pickCrowd(kind,prog),on:false,done:false,rsv:rv?null:(old.rsv||null)};save()}return F}
+  const h=()=>{try{return GH()}catch(e){return 12}};
+  let on0=false,crowd=null,tm=[],murT=0;
+  const on=()=>on0;
+  function q(){const F=plan();return Math.max(0,Math.min(1,(h()-F.start)/(F.end-F.start)))}
+  /* その日の プログラムに 合わせた 打ち上げの しかた（間隔 1〜15秒、間・スターマイン・フィナーレ） */
+  function cfg(qq){const F=plan();if(!on0)return{stop:true};const P=F.prog;let c;
+    if(P==='calm')c={w:[['yanagi',3],['kamuro',2],['kiku',1.5],['botan',1],['henka',1],['shin',1]],gap:[8,15],sm:.03,smN:[3,4],big:.45};
+    else if(P==='wild')c={w:[['kiku',3],['botan',2],['glit',1.5],['kamuro',1.2],['senrin',1.2],['cross',1],['henka',1],['shin',1],['nishoku',1],['star',.5],['heart',.4]],gap:[1,4],sm:.22,smN:[6,11],big:.35};
+    else if(P==='sea')c={w:[['mizu',3],['botan',1.5],['kiku',1],['glit',1],['kamuro',.8]],hy:[.4,.7],gap:[3,9],sm:.08,smN:[4,7],niagara:.55};
+    else c={w:[['kiku',3],['botan',2],['yanagi',1.5],['kamuro',1.2],['senrin',1],['heart',.6],['saturn',.6],['henka',1.4],['star',.6],['shin',1.4],['cross',1],['glit',1],['nishoku',1],['smile',.3],['mizu',.5]],gap:[3,10],sm:.1,smN:[4,7]};
+    c.stopAt=.985;
+    const pause=P==='wild'?[[.5,.53]]:[[.33,.37],[.66,.69]];if(pause.some(([a,b])=>qq>=a&&qq<b))return Object.assign(c,{stop:true});
+    const smSec=P==='wild'?[[.24,.29],[.74,.79]]:P==='calm'?[[.6,.62]]:[[.45,.5]];if(smSec.some(([a,b])=>qq>=a&&qq<b))Object.assign(c,{sm:.65,gap:[.8,2],smN:P==='calm'?[3,5]:[5,9]});
+    if(qq>=.92)Object.assign(c,{gap:P==='calm'?[2.5,5]:[.5,1.4],sm:P==='calm'?.25:.55,smN:P==='calm'?[3,5]:[6,12],big:.6});
+    if(qq<.03)Object.assign(c,{gap:[2,4]});return c}
+  /* 見物人 */
+  function crowdStart(F){if(!crowd){crowd=document.createElement('div');crowd.id='nxCrowd2';document.body.appendChild(crowd)}crowd.innerHTML='';crowd.classList.toggle('nxShadowDay',!!F.crowd.shadow);
+    let g;try{g=SCENE.dbg()}catch(e){return}const plan2=(CROWD[F.crowd.set]||CROWD.couples).slice().sort(()=>Math.random()-.5);
+    plan2.forEach((kind,i)=>{let F2;try{F2=NXFW.svgOf(kind)}catch(e){return}const el=document.createElement('div');el.className='nxPpl';el.innerHTML=`<div class="nxSway" style="animation-duration:${(5+Math.random()*4).toFixed(1)}s;animation-delay:-${(Math.random()*5).toFixed(1)}s">${F2.html}</div>`;
+      const u0=(i+.2+Math.random()*.6)/plan2.length,u=u0<.13?.04+u0:.4+(u0-.13)/.87*.56,v=Math.random(),sc=(.95+v*.45)*g.k;/* フリマの シート（左 3割あたり）を よける */el.style.left=(g.WL+g.WW*u)+'px';el.style.top=(g.shore-scrollY+(16+v*36)*g.k)+'px';el.style.transform=`translate(-50%,-100%) scale(${sc})`;el.style.zIndex=10+Math.round(v*10);
+      crowd.appendChild(el);tm.push(setTimeout(()=>el.classList.add('in'),3000+i*4500+Math.random()*3000))})}
+  function crowdLeave(){if(!crowd)return;[...crowd.querySelectorAll('.nxPpl')].sort(()=>Math.random()-.5).forEach((e,i)=>tm.push(setTimeout(()=>e.classList.remove('in'),6000+i*1800)));tm.push(setTimeout(()=>{if(!on0&&crowd)crowd.innerHTML=''},6000+12*1800+3000))}
+  function duck(onp){try{if(!ac)return;const t=ac.currentTime,V=S.vol||{},base=(V.wave??1)*1.15*1.5;waveBus.gain.cancelScheduledValues(t);waveBus.gain.setTargetAtTime(onp?Math.min(base*.4,.45):base,t,1.5)}catch(e){}}
+  function drones(F){if(!on0)return;const left=(plan().end-h())*450;if(left<100)return;window._droneTheme=F.theme&&!F.themeUsed?(F.themeUsed=1,F.theme):pk(THEMES)||'mix';try{SCENE.show('drones',110)}catch(e){}tm.push(setTimeout(()=>drones(F),(110+R(15,45))*1000))}
+  function begin(F){on0=true;F.on=true;save();document.body.classList.add('nxFest');duck(true);
+    if(F.kind==='fw'){try{SCENE.show('fw_night',Math.max(30,(F.end-h())*450+20))}catch(e){}}else drones(F);
+    tm.push(setTimeout(()=>{try{say(F.kind==='fw'?'festStart':'droneStart',{n:1,origin:'beach',delay:0})}catch(e){}},F.kind==='fw'?3500:4000));
+    crowdStart(F);tm.push(setTimeout(()=>{try{SCENE.visit(pk(['tanuki','fox','rabbit','owl','deer','fukuro'].filter(n=>SCENE.visitors.includes(n))))}catch(e){}},40000));murT=Date.now()+R(70,120)*1000}
+  function finish(F){on0=false;F.on=false;F.done=true;save();document.body.classList.remove('nxFest');duck(false);crowdLeave();
+    const key=F.kind==='fw'?'fwAfter':'droneAfter';[[2500,key+(F.kind==='fw'?'_p'+F.prog:'')],[8000,key]].forEach(([t,k])=>tm.push(setTimeout(()=>{try{say(k,{n:1,origin:'beach',delay:0})}catch(e){}},t)))}
+  setInterval(()=>{try{if(document.hidden)return;const F=plan(),hh=h();
+    if(!on0&&F.kind!=='none'&&!F.done&&hh>=F.start&&hh<F.end-.05)begin(F);
+    else if(on0&&(hh>=F.end||hh<F.start-.2||F.day!==(S.gday||0)))finish(F);
+    else if(on0&&Date.now()>murT){murT=Date.now()+R(80,140)*1000;try{say(F.kind==='fw'?'festMid':'droneMid',{n:1,origin:'beach',delay:0})}catch(e){}}}catch(e){}},1000);
+  function hasRsv(){const F=plan();return !!F.rsv||(F.byRsv&&!F.done)}
+  function reserve(kind,prog,theme){const F=plan(),hh=h();if(!F.on&&!F.done&&hh<F.start+.3){Object.assign(F,{kind,prog,theme,byRsv:1,crowd:pickCrowd(kind,prog)});save();evToast(kind==='fw'?`🎆 今夜 <b>花火大会</b>（${PNM[prog]}）が ある みたい<br><small>19時ごろ から</small>`:'🛸 今夜は <b>ドローンショー</b> が ある みたい<br><small>19時ごろ から</small>')}
+    else{F.rsv={day:(S.gday||0)+1,kind,prog,theme};save();evToast(kind==='fw'?`🎆 明日の 夜 <b>花火大会</b>（${PNM[prog]}）が ある みたい`:'🛸 明日の 夜は <b>ドローンショー</b> が ある みたい')}}
+  Object.assign(MUMS,{festStart:['あ、花火！','花火 上がった！','今夜 花火 やってる！','ドーンって 聞こえた','わぁ…花火だ'],festMid:['たーまやー','きれい…','今の 大きかった','煙が 月に かかってる','ずっと 見てられる','夏の 夜って いいね'],
+    droneStart:['あれ、空に 光が 並んでる','ドローンショーや！','光が 動いてる…','なんか 始まった'],droneMid:['すごい 形…','どうやって 動いてるんやろ','次は 何に なるかな','きれいに そろってる'],droneAfter:['ドローン、すごかった','光の 絵、きれいだったね','また 見たいな','空が 静かに なった'],
+    fwAfter_pcalm:['ゆっくりで いい 花火だった','柳が きれいだった','静かな 夜に ぴったり'],fwAfter_pnormal:['いろんな 形が あったね','ハート 見えた？','いい 花火大会 だった'],fwAfter_pwild:['すごい 迫力 だった…','耳が まだ ドーンって 言ってる','最後の 連発、すごかった'],fwAfter_psea:['水中花火、海が 光ってた','ナイアガラ きれい だった','波に うつってたね']});
+  Object.assign(EMO,{festStart:['🎆','👀'],festMid:['🎆','✨'],droneStart:['🛸','👀'],droneMid:['✨','🛸'],droneAfter:['🛸','🌙'],fwAfter_pcalm:['🎐'],fwAfter_pnormal:['🎆'],fwAfter_pwild:['🎇'],fwAfter_psea:['🌊']});
+  return{plan,q,cfg,on,reserve,hasRsv,PNM}})();
+/* たねは もう 拾えない（花火・ドローンは 夜に ふいに 始まる） */
+{const _rt=rollTre;rollTre=function(){let t;for(let i=0;i<12;i++){t=_rt.apply(this,arguments);if(!t||!/^nev_s_(fireworks|grandfw|fw_|drones)/.test(t.id))return t}return t}}
 </script>
 <!--NXJS-END-->
 </body></html>
