@@ -316,6 +316,15 @@ body.nxFwAfter{cursor:pointer}
 .nxStrum{transform-box:fill-box;transform-origin:50% 50%;animation:nxStrumA .5s ease-in-out infinite}@keyframes nxStrumA{50%{transform:rotate(-3deg)}}
 body.nxFw #nxWalk{display:none}
 @media (prefers-reduced-motion:reduce){.nxPick b,.nxStrum{animation:none}}
+#nxRain{position:fixed;inset:0;pointer-events:none;z-index:2}
+.nxFrog{position:absolute;transform:translate(-50%,-50%);transition:transform .35s ease-out,opacity 1.2s;filter:brightness(.85) drop-shadow(0 2px 1px rgba(0,0,0,.35))}.nxFrog.hop{margin-top:-6px}.nxFrog.out{opacity:0}
+.nxUmb{position:absolute;filter:brightness(.88) drop-shadow(0 2px 1px rgba(0,0,0,.3))}.nxUmb svg{display:block;animation:nxStep .6s ease-in-out infinite}@keyframes nxStep{50%{transform:translateY(-1px)}}
+#nxMatsuri{position:fixed;inset:0;pointer-events:none;z-index:2}
+.nxStall{position:absolute;border:none;background:none;padding:0;cursor:pointer;pointer-events:auto;opacity:0;transition:opacity 2s;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 0 6px rgba(255,180,100,.35))}.nxStall.in{opacity:1}.nxStall svg{display:block}
+.nxLanS{position:absolute;inset:0;opacity:0;transition:opacity 2.5s}.nxLanS.in{opacity:1}
+.nxLan{animation:nxLanF 3s ease-in-out infinite;filter:drop-shadow(0 0 3px rgba(255,140,90,.9))}@keyframes nxLanF{50%{opacity:.75}}
+body.nxFw #nxMatsuri,body.nxFw #nxRain{display:none}
+@media (prefers-reduced-motion:reduce){.nxLan,.nxUmb svg{animation:none}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12895,7 +12904,7 @@ const HOLYP=250000,FUKU=[['s','🛍️','小さな 福袋',5000,1,0],['m','🎁'
 function orbItem(r,o){const ob=X.mkOrb(r,o||{});const p=Math.round(X.OPRICE[r]*(ob.kind==='n'?1:1.5));return{type:'orb',o:ob,p}}
 function eqItem(r,tr){const e=X.mkEq(r);if(tr)e.tr=tr;return{type:'eq',e,p:X.EPRICE[r]}}
 function roll(){const L=[];for(let i=0;i<3;i++){const r=X.rollR(.15),sp=Math.random();L.push(orbItem(r,sp<.15?{kind:'sup'}:sp<.22?{kind:'dng'}:{}))}for(let i=0;i<2;i++)L.push(eqItem(X.rollR(.15)));L.push({type:'holy',p:HOLYP});return L}
-function stock(){const d=D(),g=S.gday||0;if(!d.shop||d.shop.day!==g){d.shop={day:g,items:roll()};save()}return d.shop.items}
+function stock(){const d=D(),g=S.gday||0;if(!d.shop||d.shop.day!==g){d.shop={day:g,items:roll()};save()}try{if(rainKind()&&!d.shop.rain){d.shop.rain=1;TRE.filter(t=>t.src==='rain').sort(()=>Math.random()-.5).slice(0,3).forEach(t=>d.shop.items.push({type:'tre',t,p:Math.round(t.p*2.2),rain:1}));save()}}catch(e){}return d.shop.items}
 function itemH(it,i,src){const UI=U();let ico,nm,sub;
   if(it.type==='orb'){ico=UI.orbH(it.o);nm=`${UI.esc(X.orbName(it.o))} ${UI.rtag(it.o.r)}`;sub=it.o.kind==='sup'?X.SUP[it.o.s][2](1,it.o):it.o.kind==='dng'?`${X.DNG[it.o.d][2]} ／ ✖ ${X.DNG[it.o.d][3]}`:it.o.kind==='cur'&&typeof CURSE!=='undefined'?`◎ ${CURSE[it.o.c].good} ／ ✖ ${CURSE[it.o.c].bad}`:(EQK[it.o.k]?EQK[it.o.k][2](X.baseV(it.o)):'')}
   else if(it.type==='eq'){const T=X.TRT[it.e.tr];ico=`<span class="nxOrb" style="--rc:${X.RCOL[it.e.r]};background:#fff7e0">${X.eqIcon(it.e)}</span>`;nm=`${UI.esc(X.eqName(it.e))} ${UI.rtag(it.e.r)}`;sub=`球枠 ${it.e.s.length} ・ ${T[0]} ${T[1]}：${T[2]}`}
@@ -12910,6 +12919,7 @@ function shopHTML(){const L=stock(),F=fukuItems();const vis=window.NXVIS&&NXVIS.
   return `<div class="spanel nxShop" style="color:#4a2a0a"><p class="nxNote">🛒 ショップは <b>買うだけ</b>。品ぞろえは 毎日 かわる。持ち物の 確認・育成・売却は <button class="nxB mint" style="display:inline-block;min-height:0;padding:2px 8px;font-size:.72rem" data-a="openItems">🎒 アイテム</button> から。${vis?`<br>✨ いま 浜辺に <b>${vis.who[0]} ${vis.who[1]}</b> が 来ている！`:''}</p>
    <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🔮 球</h3>${L.map((it,i)=>it.type==='orb'?itemH(it,i,'s'):'').join('')}
    <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🎒 装備</h3>${L.map((it,i)=>it.type==='eq'?itemH(it,i,'s'):'').join('')}
+   ${(()=>{let r=0;try{r=rainKind()}catch(e){}return r&&L.some(x=>x.rain)?`<h3 style="margin:8px 0 2px;font-size:.9rem;color:#3f7fc4">☔ 雨の 日の 品</h3>${L.map((it,i)=>it.rain?itemH(it,i,'s'):'').join('')}`:''})()}
    <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🕊️ 特別な もの</h3>${L.map((it,i)=>it.type==='holy'?itemH(it,i,'s'):'').join('')}
    <h3 style="margin:8px 0 2px;font-size:.9rem;color:#b8500a">🛍️ 福袋</h3>${F.map((it,i)=>itemH(it,i,'f')).join('')}</div>`}
 {const _bs=buildShop;buildShop=function(){if(!['music','show','deco','fuku'].includes(S.shopTab))S.shopTab='music';const r=_bs.apply(this,arguments);try{const B=$('shopBody');if(!B)return r;
@@ -13555,11 +13565,11 @@ const FWSND=window.FWSND=(()=>{let bus=null;
 const NXFEST=window.NXFEST=(()=>{const D=()=>NXS.st(),pk=a=>a[Math.random()*a.length|0],R=(a,b)=>a+Math.random()*(b-a);
   const PROGS=['calm','normal','wild','sea'],PNM={calm:'ゆったり',normal:'いろいろ',wild:'はげしめ',sea:'海上 花火'};
   const THEMES=['sea','sky','season','life','cosmos','night','casino',null];
-  const CROWD={music:['s','spair','s','s'],couples:['spair','spair','pair','s','spair','w'],family:['k','w','m','k','s','pair','c','k'],friends:['w','w','w','s','c','w','pair','m'],quiet:['spair','s','w'],crowd:['w','pair','m','k','s','w','c','spair','w','m','k']};
-  function pickCrowd(kind,prog){if(kind==='music')return{set:'music',shadow:Math.random()<.5};const c=kind==='drone'?pk(['family','friends','couples']):prog==='calm'?pk(['quiet','couples']):prog==='wild'?pk(['crowd','friends']):prog==='sea'?pk(['couples','family']):pk(['couples','family','friends','crowd']);return{set:c,shadow:Math.random()<.4}}
+  const CROWD={matsuri:['k','w','pair','k','w','m','c','w','k'],music:['s','spair','s','s'],couples:['spair','spair','pair','s','spair','w'],family:['k','w','m','k','s','pair','c','k'],friends:['w','w','w','s','c','w','pair','m'],quiet:['spair','s','w'],crowd:['w','pair','m','k','s','w','c','spair','w','m','k']};
+  function pickCrowd(kind,prog){if(kind==='matsuri')return{set:'matsuri',shadow:false};if(kind==='music')return{set:'music',shadow:Math.random()<.5};const c=kind==='drone'?pk(['family','friends','couples']):prog==='calm'?pk(['quiet','couples']):prog==='wild'?pk(['crowd','friends']):prog==='sea'?pk(['couples','family']):pk(['couples','family','friends','crowd']);return{set:c,shadow:Math.random()<.4}}
   function plan(){const d=D(),day=S.gday||0;let F=d.fest;if(!F||F.day!==day){const old=F||{};let kind,prog,theme=null;const rv=old.rsv&&old.rsv.day<=day?old.rsv:null;
-      if(rv){kind=rv.kind;prog=rv.prog;theme=rv.theme}else{const r=Math.random();kind=r<.3?'drone':r<.7?'fw':r<.85?'music':'none';prog=pk(PROGS)}
-      F=d.fest={day,kind,prog,theme,start:kind==='music'?19.5+R(0,.4):19+R(0,.5),end:kind==='music'?20.9+R(0,.5):20.6+R(0,.5),crowd:pickCrowd(kind,prog),on:false,done:false,rsv:rv?null:(old.rsv||null)};save()}return F}
+      if(rv){kind=rv.kind;prog=rv.prog;theme=rv.theme}else{const r=Math.random();kind=r<.27?'drone':r<.62?'fw':r<.74?'music':r<.86?'matsuri':'none';prog=pk(PROGS)}
+      F=d.fest={day,kind,prog,theme,start:kind==='music'?19.5+R(0,.4):kind==='matsuri'?18.6+R(0,.3):19+R(0,.5),end:kind==='music'?20.9+R(0,.5):kind==='matsuri'?21.2+R(0,.4):20.6+R(0,.5),crowd:pickCrowd(kind,prog),on:false,done:false,rsv:rv?null:(old.rsv||null)};save()}return F}
   const h=()=>{try{return GH()}catch(e){return 12}};
   let on0=false,crowd=null,tm=[],murT=0;
   const on=()=>on0;
@@ -13598,16 +13608,17 @@ const NXFEST=window.NXFEST=(()=>{const D=()=>NXS.st(),pk=a=>a[Math.random()*a.le
     setTimeout(()=>{crowd.appendChild(el);requestAnimationFrame(()=>el.classList.add('in'))},200)}
   function drones(F){if(!on0)return;const left=(plan().end-h())*450;if(left<100)return;window._droneTheme=F.theme&&!F.themeUsed?(F.themeUsed=1,F.theme):pk(THEMES)||'mix';try{SCENE.show('drones',110)}catch(e){}tm.push(setTimeout(()=>drones(F),(110+R(15,45))*1000))}
   function begin(F){on0=true;F.on=true;save();document.body.classList.add('nxFest');duck(true);
-    if(F.kind==='fw'){try{SCENE.show('fw_night',Math.max(30,(F.end-h())*450+20))}catch(e){}}else if(F.kind==='music')musicNight(F);else drones(F);
-    tm.push(setTimeout(()=>{try{say(F.kind==='fw'?'festStart':F.kind==='music'?'musicStart2':'droneStart',{n:1,origin:'beach',delay:0})}catch(e){}},F.kind==='fw'?3500:4000));
+    if(F.kind==='fw'){try{SCENE.show('fw_night',Math.max(30,(F.end-h())*450+20))}catch(e){}}else if(F.kind==='music')musicNight(F);else if(F.kind==='matsuri'){NXMATSURI.show(F);tm.push(setTimeout(()=>{try{if(on0&&S.sound)startMusic(Math.random()<.5?'koto_moon':'koto',Math.max(60,(F.end-h())*450))}catch(e){}},2500))}else drones(F);
+    tm.push(setTimeout(()=>{try{say(F.kind==='fw'?'festStart':F.kind==='music'?'musicStart2':F.kind==='matsuri'?'matsuriStart':'droneStart',{n:1,origin:'beach',delay:0})}catch(e){}},F.kind==='fw'?3500:4000));
     if(F.kind==='music')players(F);crowdStart(F);tm.push(setTimeout(()=>{try{SCENE.visit(pk(['tanuki','fox','rabbit','owl','deer','fukuro'].filter(n=>SCENE.visitors.includes(n))))}catch(e){}},40000));murT=Date.now()+R(70,120)*1000}
   function finish(F){on0=false;F.on=false;F.done=true;save();document.body.classList.remove('nxFest');duck(false);crowdLeave();
     if(F.kind==='music'){try{if(MUS&&MUS.id===F.track)stopMusic()}catch(e){}clearInterval(noteT)}
-    const key=F.kind==='fw'?'fwAfter':F.kind==='music'?'musicAfter':'droneAfter';[[2500,key+(F.kind==='fw'?'_p'+F.prog:'')],[8000,key]].forEach(([t,k])=>tm.push(setTimeout(()=>{try{say(k,{n:1,origin:'beach',delay:0})}catch(e){}},t)))}
+    if(F.kind==='matsuri'){try{NXMATSURI.hide();if(MUS&&/koto/.test(MUS.id||''))stopMusic()}catch(e){}}
+    const key=F.kind==='fw'?'fwAfter':F.kind==='music'?'musicAfter':F.kind==='matsuri'?'matsuriAfter':'droneAfter';[[2500,key+(F.kind==='fw'?'_p'+F.prog:'')],[8000,key]].forEach(([t,k])=>tm.push(setTimeout(()=>{try{say(k,{n:1,origin:'beach',delay:0})}catch(e){}},t)))}
   setInterval(()=>{try{if(document.hidden)return;const F=plan(),hh=h();
     if(!on0&&F.kind!=='none'&&!F.done&&hh>=F.start&&hh<F.end-.05)begin(F);
     else if(on0&&(hh>=F.end||hh<F.start-.2||F.day!==(S.gday||0)))finish(F);
-    else if(on0&&Date.now()>murT){murT=Date.now()+R(80,140)*1000;try{say(F.kind==='fw'?'festMid':F.kind==='music'?'musicMid':'droneMid',{n:1,origin:'beach',delay:0})}catch(e){}}}catch(e){}},1000);
+    else if(on0&&Date.now()>murT){murT=Date.now()+R(80,140)*1000;try{say(F.kind==='fw'?'festMid':F.kind==='music'?'musicMid':F.kind==='matsuri'?'matsuriMid':'droneMid',{n:1,origin:'beach',delay:0})}catch(e){}}}catch(e){}},1000);
   function hasRsv(){const F=plan();return !!F.rsv||(F.byRsv&&!F.done)}
   function reserve(kind,prog,theme){const F=plan(),hh=h();if(!F.on&&!F.done&&hh<F.start+.3){Object.assign(F,{kind,prog,theme,byRsv:1,crowd:pickCrowd(kind,prog)});save();evToast(kind==='fw'?`🎆 今夜 <b>花火大会</b>（${PNM[prog]}）が ある みたい<br><small>19時ごろ から</small>`:'🛸 今夜は <b>ドローンショー</b> が ある みたい<br><small>19時ごろ から</small>')}
     else{F.rsv={day:(S.gday||0)+1,kind,prog,theme};save();evToast(kind==='fw'?`🎆 明日の 夜 <b>花火大会</b>（${PNM[prog]}）が ある みたい`:'🛸 明日の 夜は <b>ドローンショー</b> が ある みたい')}}
@@ -13642,6 +13653,59 @@ const NXWALK=window.NXWALK=(()=>{const D=()=>NXS.st(),R=(a,b)=>a+Math.random()*(
   Object.assign(MUMS,{walkStart:['朝の 浜辺は 落とし物が 多いね','波が 何か 置いていった','おはよう、浜辺','朝の 散歩、気持ちいい'],walkFirst:['なにか 拾った！','いいもの みっけ','朝 いちばんの 拾いもの'],walkGone:['潮が 満ちてきた','波が 持っていっちゃった','また 明日の 朝ね']});
   Object.assign(EMO,{walkStart:['🌅','🐚'],walkFirst:['✨'],walkGone:['🌊']});
   return{st,spawn}})();
+/* ========== 雨の 日の 楽しみ（カエル・傘の 人・雨の 呟き・雨上がりの 虹・ショップの 雨の 品） ========== */
+const NXRAIN=window.NXRAIN=(()=>{const R=(a,b)=>a+Math.random()*(b-a),pk=a=>a[Math.random()*a.length|0];let lay=null,was=0,nextF=0,nextU=0,nextM=0;
+  const rk=()=>{try{return rainKind()}catch(e){return 0}};const L=()=>{if(!lay){lay=document.createElement('div');lay.id='nxRain';document.body.appendChild(lay)}return lay};
+  const g=()=>{try{return SCENE.dbg()}catch(e){return null}};
+  function croak(){try{if(!S.sound||!ac)return;const t=ac.currentTime+.05;for(let i=0;i<2+(Math.random()*3|0);i++){const o=ac.createOscillator(),f=ac.createBiquadFilter(),gg=ac.createGain();o.type='sawtooth';const t0=t+i*R(.18,.3),b=R(160,260);o.frequency.setValueAtTime(b,t0);o.frequency.linearRampToValueAtTime(b*1.25,t0+.08);f.type='bandpass';f.frequency.value=900;f.Q.value=3;
+      gg.gain.setValueAtTime(.0001,t0);gg.gain.exponentialRampToValueAtTime(.035,t0+.015);gg.gain.exponentialRampToValueAtTime(.0001,t0+.12);o.connect(f).connect(gg).connect(sfxBus);o.start(t0);o.stop(t0+.15)}}catch(e){}}
+  function frog(){const G=g();if(!G)return;const el=document.createElement('div');el.className='nxFrog';el.textContent='🐸';const x0=G.WL+G.WW*R(.08,.92),y=G.shore-scrollY+R(20,70)*G.k;el.style.left=x0+'px';el.style.top=y+'px';el.style.fontSize=(.95*G.k)+'rem';L().appendChild(el);
+    const dir=Math.random()<.5?-1:1;let n=0;const hop=()=>{if(!el.isConnected)return;n++;el.style.transform=`translate(-50%,-50%) translate(${dir*n*14*G.k}px,0) scaleX(${-dir})`;el.classList.add('hop');setTimeout(()=>el.classList.remove('hop'),300);if(Math.random()<.45)croak();if(n<6)setTimeout(hop,R(1200,2600));else{el.classList.add('out');setTimeout(()=>el.remove(),1500)}};setTimeout(hop,800)}
+  const UMB=['#e8768f','#7aa2ff','#f2c46b','#55c8a0','#c48bff','#ff9a5c','#e2475a','#3f7fc4'];
+  function walker(){const G=g();if(!G)return;const c=pk(UMB),dir=Math.random()<.5?1:-1,kid=Math.random()<.25,two=!kid&&Math.random()<.3;const el=document.createElement('div');el.className='nxUmb';
+    const one=(x,cc,sc)=>`<g transform="translate(${x} 0) scale(${sc})"><path d="M-3 -2v-14h6v14z" fill="#2a2a3e"/><rect x="-1.6" y="-2" width="1.4" height="2" fill="#222"/><rect x=".4" y="-2" width="1.4" height="2" fill="#222"/><circle cy="-18" r="3.2" fill="#17141f"/><path d="M0 -21v-8" stroke="#555" stroke-width=".6"/><path d="M-11 -27Q0 -38 11 -27Z" fill="${cc}"/><path d="M-11 -27Q-8 -25.5 -5.5 -27Q-3 -25.5 0 -27Q3 -25.5 5.5 -27Q8 -25.5 11 -27" fill="rgba(0,0,0,.15)"/></g>`;
+    el.innerHTML=`<svg viewBox="-24 -40 48 42" width="${48}" height="42" style="overflow:visible">${one(0,c,kid?.7:1)}${two?one(dir*-15,pk(UMB),1):''}</svg>`;
+    const y=G.shore-scrollY+R(10,40)*G.k,from=dir>0?G.WL-30:G.WL+G.WW+30,to=dir>0?G.WL+G.WW+30:G.WL-30,dur=R(26,40);el.style.top=y+'px';el.style.left=from+'px';el.style.transform=`translate(-50%,-100%) scale(${G.k})`;el.style.transition=`left ${dur}s linear`;L().appendChild(el);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.left=to+'px'}));setTimeout(()=>el.remove(),dur*1000+500)}
+  setInterval(()=>{try{if(document.hidden)return;const r=rk(),now=Date.now();document.body.classList.toggle('nxRainy',!!r);
+    if(r){if(!was){was=1;nextF=now+R(20,60)*1000;nextU=now+R(15,40)*1000;nextM=now+R(8,20)*1000;try{say('rainBegin',{n:1,origin:'beach',delay:0})}catch(e){}}
+      if(now>nextF){nextF=now+R(70,150)*1000;frog()}if(now>nextU&&!(window.NXFEST&&NXFEST.on())){nextU=now+R(90,200)*1000;walker()}if(now>nextM){nextM=now+R(120,240)*1000;try{say('rainMum',{n:1,origin:'beach',delay:0})}catch(e){}}}
+    else if(was){was=0;try{const h=GH();if(h>=6&&h<18.5)SCENE.play('rainbow')}catch(e){}try{say('rainEnd',{n:1,origin:'beach',delay:1500})}catch(e){}if(lay)lay.querySelectorAll('.nxFrog').forEach(e=>e.remove())}}catch(e){}},2000);
+  Object.assign(MUMS,{rainBegin:['あ、雨…','ぽつぽつ 来た','雨の 浜辺も いいね','傘 持ってきて よかった'],rainMum:['雨の 音、落ち着く','波と 雨の 音が まざってる','カエルが 鳴いてる','しっとり してきた','雨の 日は のんびり','雨粒が 海に 落ちてく'],rainEnd:['雨 やんだ！','空が 明るく なってきた','虹 出るかな','雨上がりの におい']});
+  Object.assign(EMO,{rainBegin:['☔'],rainMum:['🌧️','🐸'],rainEnd:['🌈','☀️']});
+  return{rk,frog,walker}})();
+/* 雨の 日の たからもの と ショップの 品 */
+(()=>{const P={N:60,R:600,SR:6000,SSR:50000};const add=(id,e,n,r,f,use)=>{if(!TRE.find(t=>t.id===id))TRE.push({id,e,n,r,f,p:P[r],src:'rain',use})};
+ [['nr1','🧸','てるてる坊主','R',{t:'sky'}],['nr2','🐸','カエルの 置物','R',{t:'buff',b:'luck',n:2}],['nr3','☂️','蛇の目傘','SR',{t:'buff',b:'dbl',n:3}],['nr4','🐌','カタツムリの 殻','N',{t:'letter'}],['nr5','🔵','雨粒の ビー玉','SR',{t:'grow',n:1}],
+  ['nr6','🌈','虹の かけら','SSR',{t:'buff',b:'pay',n:6}],['nr7','🫖','雨音の 急須','R',{t:'notes'}],['nr8','☁️','雨雲の 綿','R',{t:'coin',lo:800,hi:9000}]].forEach(([id,e,n,r,u])=>add(id,e,n,r,'雨の 日に だけ 出会える 品',u));
+ {const _rt=rollTre;rollTre=function(){let t;for(let i=0;i<12;i++){t=_rt.apply(this,arguments);if(!t||(t.src!=='rain'&&t.src!=='fest'))return t}return t}}})();
+/* ========== 浜辺の お祭り（屋台・提灯・お祭りの 品。NXFEST の kind 'matsuri'） ========== */
+const NXMATSURI=window.NXMATSURI=(()=>{const R=(a,b)=>a+Math.random()*(b-a),pk=a=>a[Math.random()*a.length|0];let lay=null;
+  const P={N:60,R:600,SR:6000,SSR:50000};const add=(id,e,n,r,u)=>{if(!TRE.find(t=>t.id===id))TRE.push({id,e,n,r,f:'お祭りの 屋台で 手に 入れた 品',p:P[r],src:'fest',use:u})};
+  [['nm1','🐟','金魚','R',{t:'buff',b:'luck',n:2}],['nm2','🎈','水ヨーヨー','N',{t:'buff',b:'pay',n:1}],['nm3','🦊','狐の お面','R',{t:'animal'}],['nm4','🍎','りんご飴','N',{t:'coin',lo:200,hi:2500}],['nm5','🍧','かき氷','N',{t:'sky'}],
+   ['nm6','🏮','祭り 提灯','SR',{t:'time',to:'night'}],['nm7','🎁','射的の 景品','SR',{t:'orb',p:.6}],['nm8','🐙','たこ焼き','N',{t:'notes'}],['nm9','🍭','わたあめ','N',{t:'photo'}]].forEach(a=>add(...a));
+  const STALLS=[['金魚すくい','#3f7fc4',[['nm1',500]]],['ヨーヨー','#55c8a0',[['nm2',300]]],['お面','#c48bff',[['nm3',800]]],['りんご飴','#e2475a',[['nm4',200]]],['かき氷','#7ad0ff',[['nm5',300]]],['射的','#f2a33a',[['nm7',2500],['nm6',3000]]],['たこ焼き','#d9732f',[['nm8',250]]],['わたあめ','#ff9fc4',[['nm9',300]]]];
+  const season=()=>{const m=new Date().getMonth()+1;return m>=6&&m<=8?'夏祭り':m>=9&&m<=11?'秋祭り':m===12||m<=2?'冬の 灯り祭り':'春祭り'};
+  function stallSvg(nm,c){return `<svg viewBox="-26 -46 52 48" width="62" height="57" style="overflow:visible"><ellipse cx="0" cy="1" rx="24" ry="2.4" fill="rgba(0,0,0,.4)"/>
+    <rect x="-22" y="-26" width="44" height="26" fill="#3a2a22"/><rect x="-20" y="-14" width="40" height="14" fill="#5a3a26"/><rect x="-22" y="-16" width="44" height="3" fill="#7a5232"/>
+    <rect x="-18" y="-25" width="36" height="9" fill="rgba(255,210,140,.55)"/><path d="M-26 -26L-22 -38H22L26 -26Z" fill="${c}"/><path d="M-26 -26L-22 -38H-14L-17 -26ZM-8 -26L-6 -38H2L1 -26ZM10 -26L10 -38H18L19 -26Z" fill="rgba(255,255,255,.55)"/>
+    <rect x="-16" y="-45" width="32" height="8" rx="1.5" fill="#f8efe0"/><text x="0" y="-39" text-anchor="middle" font-size="5.6" font-weight="800" fill="#7a2a1a" font-family="sans-serif">${nm}</text>
+    <circle class="nxLan" cx="-19" cy="-22" r="2.8" fill="#ff7a4a"/><circle class="nxLan" cx="19" cy="-22" r="2.8" fill="#ff7a4a"/></svg>`}
+  function show(F){if(!lay){lay=document.createElement('div');lay.id='nxMatsuri';document.body.appendChild(lay);lay.addEventListener('click',e=>{const b=e.target.closest('.nxStall');if(b){e.stopPropagation();openStall(+b.dataset.i)}});lay.addEventListener('pointerdown',e=>{if(e.target.closest('.nxStall'))e.stopPropagation()})}
+    let G;try{G=SCENE.dbg()}catch(e){return}lay.innerHTML='';const pick=STALLS.slice().sort(()=>Math.random()-.5).slice(0,4);F.stalls=pick.map(s=>STALLS.indexOf(s));save();
+    const U=[.07,.47,.66,.9];let lan='';const y=G.shore-scrollY+6*G.k;
+    pick.forEach((s,i)=>{const el=document.createElement('button');el.type='button';el.className='nxStall';el.dataset.i=STALLS.indexOf(s);el.innerHTML=stallSvg(s[0],s[1]);el.style.left=(G.WL+G.WW*U[i])+'px';el.style.top=y+'px';el.style.transform=`translate(-50%,-100%) scale(${G.k})`;lay.appendChild(el);setTimeout(()=>el.classList.add('in'),600+i*700)});
+    const W=G.W,ly=G.shore-scrollY-34*G.k;for(let x=8;x<W-4;x+=26*G.k){const yy=ly+Math.sin((x/W)*Math.PI*6)*3*G.k+6*G.k;lan+=`<circle class="nxLan" cx="${x}" cy="${yy+6}" r="${2.6*G.k}" fill="${Math.round(x/(26*G.k))%3===0?'#ffffff':'#ff6a4a'}" style="animation-delay:-${(Math.random()*3).toFixed(1)}s"/>`}
+    const sv=document.createElement('div');sv.className='nxLanS';sv.innerHTML=`<svg width="${W}" height="${G.H}" style="position:absolute;left:0;top:0;overflow:visible"><path d="M0 ${ly+6}${Array.from({length:12},(_,i)=>` Q${W*(i+.5)/12} ${ly+12} ${W*(i+1)/12} ${ly+6}`).join('')}" stroke="rgba(30,20,20,.7)" stroke-width="1" fill="none"/>${lan}</svg>`;lay.appendChild(sv);setTimeout(()=>sv.classList.add('in'),200)}
+  function hide(){if(!lay)return;lay.querySelectorAll('.nxStall,.nxLanS').forEach((e,i)=>setTimeout(()=>e.classList.remove('in'),i*400));setTimeout(()=>{if(lay&&!(window.NXFEST&&NXFEST.on()))lay.innerHTML=''},5000)}
+  function openStall(i){const s=STALLS[i],UI=NXUI;if(!s)return;UI.M.innerHTML=`<div class="nxDet"><button class="nxDx" data-a="mclose">✕</button><div class="nxTop"><span style="font-size:2.6rem">🏮</span><div><h3>${s[0]}の 屋台</h3><div class="nxTags"><span class="nxTag">${season()}</span></div></div></div>
+     ${s[2].map(([id,p])=>{const t=TRE.find(x=>x.id===id);return `<div class="nxRow" style="cursor:default"><span style="font-size:1.9rem">${t.e}</span><div class="nxInfo"><b>${t.n} ${UI.rtag(t.r)}</b><small>${window.NXT?NXT.useTxt(t):''}</small></div><button class="nxB go" style="flex:0 0 auto" data-mt="${id}" data-p="${p}" ${S.coins<p?'disabled':''}>🪙 ${p.toLocaleString()}</button></div>`}).join('')}
+     <p class="nxNote">お祭りの 夜だけの 屋台。🪙 ${S.coins.toLocaleString()}枚</p></div>`;UI.M.hidden=false}
+  NXUI.M.addEventListener('click',e=>{const b=e.target.closest('[data-mt]');if(!b)return;e.stopPropagation();const p=+b.dataset.p,t=TRE.find(x=>x.id===b.dataset.mt);if(!t||S.coins<p)return;S.coins-=p;S.tre[t.id]=(S.tre[t.id]||0)+1;S.zukan[t.id]=1;save();ui();try{getCoin&&0;sfx.coin()}catch(er){}
+    evToast(`${t.e} <b>${t.n}</b> を 手に 入れた`);NXUI.M.hidden=true});
+  Object.assign(MUMS,{matsuriStart:['屋台 出てる！','お祭りや〜','提灯 きれい','たこ焼きの におい'],matsuriMid:['金魚すくい やりたい','わたあめ 甘い','浴衣の 人 多いね','太鼓の 音が する','射的 当たった？'],matsuriAfter:['お祭り 楽しかった','提灯が 消えていく','また 来年…','祭りの あとって さみしいね']});
+  Object.assign(EMO,{matsuriStart:['🏮','🎐'],matsuriMid:['🏮','🍧'],matsuriAfter:['🏮','🌙']});
+  return{show,hide,season,openStall}})();
 </script>
 <!--NXJS-END-->
 </body></html>
