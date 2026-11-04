@@ -304,6 +304,18 @@ body.nxFwAfter{cursor:pointer}
 @keyframes nxSmk{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + 40px),-60%) scale(1.6)}}
 #nxCrowd2{position:fixed;inset:0;pointer-events:none;z-index:2}
 #nxCrowd2.nxShadowDay .nxPpl svg{filter:brightness(.14) saturate(0) drop-shadow(0 0 1.2px rgba(255,205,160,.4))}
+#nxWalk{position:fixed;inset:0;pointer-events:none;z-index:3}
+.nxPick{position:absolute;transform:translate(-50%,-50%) scale(.6);opacity:0;border:none;background:none;padding:8px;margin:0;cursor:pointer;pointer-events:auto;transition:opacity 1.2s,transform .6s;-webkit-tap-highlight-color:transparent;line-height:1}
+.nxPick.in{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.nxPick i{font-style:normal;display:block;filter:drop-shadow(0 2px 1px rgba(0,0,0,.35)) brightness(.95)}
+.nxPick b{position:absolute;left:62%;top:22%;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 6px 2px rgba(255,250,220,.9);animation:nxGlint 2.8s ease-in-out infinite}
+@keyframes nxGlint{0%,70%,100%{opacity:0;transform:scale(.4)}80%{opacity:1;transform:scale(1)}}
+.nxPick.got{transform:translate(-50%,-120%) scale(1.25);opacity:0;transition:all .5s}.nxPick.wash{opacity:0;transform:translate(-50%,-70%) scale(.8);transition:all 1.4s}
+.nxPickT{position:absolute;transform:translate(-50%,-150%);font-family:var(--round);font-weight:800;font-size:.72rem;color:#5a3a10;background:rgba(255,248,230,.92);border:1px solid #e0b060;border-radius:999px;padding:2px 9px;white-space:nowrap;pointer-events:none;animation:nxPickU 2.6s ease-out forwards}
+@keyframes nxPickU{0%{opacity:0;transform:translate(-50%,-110%)}15%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-230%)}}
+.nxStrum{transform-box:fill-box;transform-origin:50% 50%;animation:nxStrumA .5s ease-in-out infinite}@keyframes nxStrumA{50%{transform:rotate(-3deg)}}
+body.nxFw #nxWalk{display:none}
+@media (prefers-reduced-motion:reduce){.nxPick b,.nxStrum{animation:none}}
 /*NXCSS-END*/</style><link rel="manifest" href="manifest.webmanifest"><script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{}))</script></head><body>
 <meta name="theme-color" content="#0b1030">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13543,11 +13555,11 @@ const FWSND=window.FWSND=(()=>{let bus=null;
 const NXFEST=window.NXFEST=(()=>{const D=()=>NXS.st(),pk=a=>a[Math.random()*a.length|0],R=(a,b)=>a+Math.random()*(b-a);
   const PROGS=['calm','normal','wild','sea'],PNM={calm:'ゆったり',normal:'いろいろ',wild:'はげしめ',sea:'海上 花火'};
   const THEMES=['sea','sky','season','life','cosmos','night','casino',null];
-  const CROWD={couples:['spair','spair','pair','s','spair','w'],family:['k','w','m','k','s','pair','c','k'],friends:['w','w','w','s','c','w','pair','m'],quiet:['spair','s','w'],crowd:['w','pair','m','k','s','w','c','spair','w','m','k']};
-  function pickCrowd(kind,prog){const c=kind==='drone'?pk(['family','friends','couples']):prog==='calm'?pk(['quiet','couples']):prog==='wild'?pk(['crowd','friends']):prog==='sea'?pk(['couples','family']):pk(['couples','family','friends','crowd']);return{set:c,shadow:Math.random()<.4}}
+  const CROWD={music:['s','spair','s','s'],couples:['spair','spair','pair','s','spair','w'],family:['k','w','m','k','s','pair','c','k'],friends:['w','w','w','s','c','w','pair','m'],quiet:['spair','s','w'],crowd:['w','pair','m','k','s','w','c','spair','w','m','k']};
+  function pickCrowd(kind,prog){if(kind==='music')return{set:'music',shadow:Math.random()<.5};const c=kind==='drone'?pk(['family','friends','couples']):prog==='calm'?pk(['quiet','couples']):prog==='wild'?pk(['crowd','friends']):prog==='sea'?pk(['couples','family']):pk(['couples','family','friends','crowd']);return{set:c,shadow:Math.random()<.4}}
   function plan(){const d=D(),day=S.gday||0;let F=d.fest;if(!F||F.day!==day){const old=F||{};let kind,prog,theme=null;const rv=old.rsv&&old.rsv.day<=day?old.rsv:null;
-      if(rv){kind=rv.kind;prog=rv.prog;theme=rv.theme}else{const r=Math.random();kind=r<.3?'drone':r<.7?'fw':'none';prog=pk(PROGS)}
-      F=d.fest={day,kind,prog,theme,start:19+R(0,.5),end:20.6+R(0,.5),crowd:pickCrowd(kind,prog),on:false,done:false,rsv:rv?null:(old.rsv||null)};save()}return F}
+      if(rv){kind=rv.kind;prog=rv.prog;theme=rv.theme}else{const r=Math.random();kind=r<.3?'drone':r<.7?'fw':r<.85?'music':'none';prog=pk(PROGS)}
+      F=d.fest={day,kind,prog,theme,start:kind==='music'?19.5+R(0,.4):19+R(0,.5),end:kind==='music'?20.9+R(0,.5):20.6+R(0,.5),crowd:pickCrowd(kind,prog),on:false,done:false,rsv:rv?null:(old.rsv||null)};save()}return F}
   const h=()=>{try{return GH()}catch(e){return 12}};
   let on0=false,crowd=null,tm=[],murT=0;
   const on=()=>on0;
@@ -13567,31 +13579,69 @@ const NXFEST=window.NXFEST=(()=>{const D=()=>NXS.st(),pk=a=>a[Math.random()*a.le
   function crowdStart(F){if(!crowd){crowd=document.createElement('div');crowd.id='nxCrowd2';document.body.appendChild(crowd)}crowd.innerHTML='';crowd.classList.toggle('nxShadowDay',!!F.crowd.shadow);
     let g;try{g=SCENE.dbg()}catch(e){return}const plan2=(CROWD[F.crowd.set]||CROWD.couples).slice().sort(()=>Math.random()-.5);
     plan2.forEach((kind,i)=>{let F2;try{F2=NXFW.svgOf(kind)}catch(e){return}const el=document.createElement('div');el.className='nxPpl';el.innerHTML=`<div class="nxSway" style="animation-duration:${(5+Math.random()*4).toFixed(1)}s;animation-delay:-${(Math.random()*5).toFixed(1)}s">${F2.html}</div>`;
-      const u0=(i+.2+Math.random()*.6)/plan2.length,u=u0<.13?.04+u0:.4+(u0-.13)/.87*.56,v=Math.random(),sc=(.95+v*.45)*g.k;/* フリマの シート（左 3割あたり）を よける */el.style.left=(g.WL+g.WW*u)+'px';el.style.top=(g.shore-scrollY+(16+v*36)*g.k)+'px';el.style.transform=`translate(-50%,-100%) scale(${sc})`;el.style.zIndex=10+Math.round(v*10);
+      const u0=(i+.2+Math.random()*.6)/plan2.length,u=u0<.13?.04+u0:.4+(u0-.13)/.87*.56,v=Math.random(),sc=(.95+v*.45)*g.k;/* フリマの シート（左 3割あたり）を よける */if(F.crowd.set==='music'&&g.fire){const O=[[46,-2],[74,-12],[-74,-10],[26,-28]][i%4];el.style.left=(g.fire[0]+O[0]*g.k)+'px';el.style.top=(g.fire[1]-scrollY+O[1]*g.k)+'px'}else{el.style.left=(g.WL+g.WW*u)+'px';el.style.top=(g.shore-scrollY+(16+v*36)*g.k)+'px'}el.style.transform=`translate(-50%,-100%) scale(${sc})`;el.style.zIndex=10+Math.round(v*10);
       crowd.appendChild(el);tm.push(setTimeout(()=>el.classList.add('in'),3000+i*4500+Math.random()*3000))})}
   function crowdLeave(){if(!crowd)return;[...crowd.querySelectorAll('.nxPpl')].sort(()=>Math.random()-.5).forEach((e,i)=>tm.push(setTimeout(()=>e.classList.remove('in'),6000+i*1800)));tm.push(setTimeout(()=>{if(!on0&&crowd)crowd.innerHTML=''},6000+12*1800+3000))}
   function duck(onp){try{if(!ac)return;const t=ac.currentTime,V=S.vol||{},base=(V.wave??1)*1.15*1.5;waveBus.gain.cancelScheduledValues(t);waveBus.gain.setTargetAtTime(onp?Math.min(base*.4,.45):base,t,1.5)}catch(e){}}
+  /* 焚き火の 音楽会 */
+  let noteT=0;const MT=[['guitar','g'],['guitar_y','g'],['uke','g'],['hawaii_s','g'],['hawaii','g'],['harp','h'],['koto_moon','k'],['waltz','a'],['celtic','f'],['lullaby','g']];
+  function musicNight(F){const m=MT[Math.random()*MT.length|0];F.track=m[0];F.inst=m[1];save();const sec=Math.max(60,(F.end-h())*450);tm.push(setTimeout(()=>{try{if(on0&&S.sound)startMusic(m[0],sec)}catch(e){}},2500));
+    clearInterval(noteT);noteT=setInterval(()=>{if(!on0||document.hidden)return;try{SCENE.notes()}catch(e){}},2600)}
+  function player(inst){const ins=inst==='a'?`<rect x="-7" y="-15" width="9" height="7" rx="1" fill="#6a3a2a"/><path d="M-6 -14v5M-4 -14v5M-2 -14v5" stroke="#e8d0a0" stroke-width=".5"/>`
+      :inst==='k'?`<rect x="-14" y="-5" width="24" height="2.6" rx="1" fill="#8a5a2a"/><path d="M-12 -5l18 0" stroke="#f0e0b0" stroke-width=".3"/>`
+      :inst==='h'?`<path d="M-9 -2L-9 -20Q-2 -24 2 -14Z" fill="none" stroke="#c8a050" stroke-width="1.4"/><path d="M-8 -18L-1 -6M-8 -14L-3 -6M-8 -10L-5 -6" stroke="#f0e0b0" stroke-width=".3"/>`
+      :inst==='f'?`<path d="M2 -20L-6 -12" stroke="#3a2a20" stroke-width=".6"/><ellipse cx="-1" cy="-17" rx="3" ry="2" transform="rotate(-40 -1 -17)" fill="#7a4a2a"/>`
+      :`<ellipse cx="-3" cy="-9" rx="5.6" ry="4.4" fill="#8a5a2a"/><circle cx="-3" cy="-9" r="1.4" fill="#2a1a10"/><path d="M1 -11L11 -17" stroke="#5a3a20" stroke-width="1.6" stroke-linecap="round"/>`;
+    return `<svg viewBox="-18 -34 36 36" width="40" height="40" style="overflow:visible"><ellipse cx="0" cy="0" rx="11" ry="2.2" fill="rgba(0,0,0,.38)"/><path d="M-8 -.4Q-9 -8 -6 -16.6L6 -16.6Q9 -8 8 -.4Z" fill="#2c3a4e"/><rect x="-1.4" y="-19.2" width="2.8" height="2.8" fill="#9c7a68"/><ellipse cy="-22.4" rx="4.6" ry="3.9" fill="#17141f"/><g class="nxStrum">${ins}</g><path d="M-6 -16.6Q0 -18.4 6 -16.6" stroke="rgba(255,190,120,.55)" stroke-width="1" fill="none"/></svg>`}
+  function players(F){let g;try{g=SCENE.dbg()}catch(e){return}if(!crowd){crowd=document.createElement('div');crowd.id='nxCrowd2';document.body.appendChild(crowd)}const fx=g.fire?g.fire[0]:g.WL+g.WW*.4,fy=g.fire?g.fire[1]:g.shore+80*g.k;
+    const el=document.createElement('div');el.className='nxPpl nxPlayer';el.innerHTML=player(F.inst||'g');el.style.left=(fx-42*g.k)+'px';el.style.top=(fy-scrollY+4*g.k)+'px';el.style.transform=`translate(-50%,-100%) scale(${g.k*1.45})`;el.style.zIndex=30;
+    setTimeout(()=>{crowd.appendChild(el);requestAnimationFrame(()=>el.classList.add('in'))},200)}
   function drones(F){if(!on0)return;const left=(plan().end-h())*450;if(left<100)return;window._droneTheme=F.theme&&!F.themeUsed?(F.themeUsed=1,F.theme):pk(THEMES)||'mix';try{SCENE.show('drones',110)}catch(e){}tm.push(setTimeout(()=>drones(F),(110+R(15,45))*1000))}
   function begin(F){on0=true;F.on=true;save();document.body.classList.add('nxFest');duck(true);
-    if(F.kind==='fw'){try{SCENE.show('fw_night',Math.max(30,(F.end-h())*450+20))}catch(e){}}else drones(F);
-    tm.push(setTimeout(()=>{try{say(F.kind==='fw'?'festStart':'droneStart',{n:1,origin:'beach',delay:0})}catch(e){}},F.kind==='fw'?3500:4000));
-    crowdStart(F);tm.push(setTimeout(()=>{try{SCENE.visit(pk(['tanuki','fox','rabbit','owl','deer','fukuro'].filter(n=>SCENE.visitors.includes(n))))}catch(e){}},40000));murT=Date.now()+R(70,120)*1000}
+    if(F.kind==='fw'){try{SCENE.show('fw_night',Math.max(30,(F.end-h())*450+20))}catch(e){}}else if(F.kind==='music')musicNight(F);else drones(F);
+    tm.push(setTimeout(()=>{try{say(F.kind==='fw'?'festStart':F.kind==='music'?'musicStart2':'droneStart',{n:1,origin:'beach',delay:0})}catch(e){}},F.kind==='fw'?3500:4000));
+    if(F.kind==='music')players(F);crowdStart(F);tm.push(setTimeout(()=>{try{SCENE.visit(pk(['tanuki','fox','rabbit','owl','deer','fukuro'].filter(n=>SCENE.visitors.includes(n))))}catch(e){}},40000));murT=Date.now()+R(70,120)*1000}
   function finish(F){on0=false;F.on=false;F.done=true;save();document.body.classList.remove('nxFest');duck(false);crowdLeave();
-    const key=F.kind==='fw'?'fwAfter':'droneAfter';[[2500,key+(F.kind==='fw'?'_p'+F.prog:'')],[8000,key]].forEach(([t,k])=>tm.push(setTimeout(()=>{try{say(k,{n:1,origin:'beach',delay:0})}catch(e){}},t)))}
+    if(F.kind==='music'){try{if(MUS&&MUS.id===F.track)stopMusic()}catch(e){}clearInterval(noteT)}
+    const key=F.kind==='fw'?'fwAfter':F.kind==='music'?'musicAfter':'droneAfter';[[2500,key+(F.kind==='fw'?'_p'+F.prog:'')],[8000,key]].forEach(([t,k])=>tm.push(setTimeout(()=>{try{say(k,{n:1,origin:'beach',delay:0})}catch(e){}},t)))}
   setInterval(()=>{try{if(document.hidden)return;const F=plan(),hh=h();
     if(!on0&&F.kind!=='none'&&!F.done&&hh>=F.start&&hh<F.end-.05)begin(F);
     else if(on0&&(hh>=F.end||hh<F.start-.2||F.day!==(S.gday||0)))finish(F);
-    else if(on0&&Date.now()>murT){murT=Date.now()+R(80,140)*1000;try{say(F.kind==='fw'?'festMid':'droneMid',{n:1,origin:'beach',delay:0})}catch(e){}}}catch(e){}},1000);
+    else if(on0&&Date.now()>murT){murT=Date.now()+R(80,140)*1000;try{say(F.kind==='fw'?'festMid':F.kind==='music'?'musicMid':'droneMid',{n:1,origin:'beach',delay:0})}catch(e){}}}catch(e){}},1000);
   function hasRsv(){const F=plan();return !!F.rsv||(F.byRsv&&!F.done)}
   function reserve(kind,prog,theme){const F=plan(),hh=h();if(!F.on&&!F.done&&hh<F.start+.3){Object.assign(F,{kind,prog,theme,byRsv:1,crowd:pickCrowd(kind,prog)});save();evToast(kind==='fw'?`🎆 今夜 <b>花火大会</b>（${PNM[prog]}）が ある みたい<br><small>19時ごろ から</small>`:'🛸 今夜は <b>ドローンショー</b> が ある みたい<br><small>19時ごろ から</small>')}
     else{F.rsv={day:(S.gday||0)+1,kind,prog,theme};save();evToast(kind==='fw'?`🎆 明日の 夜 <b>花火大会</b>（${PNM[prog]}）が ある みたい`:'🛸 明日の 夜は <b>ドローンショー</b> が ある みたい')}}
   Object.assign(MUMS,{festStart:['あ、花火！','花火 上がった！','今夜 花火 やってる！','ドーンって 聞こえた','わぁ…花火だ'],festMid:['たーまやー','きれい…','今の 大きかった','煙が 月に かかってる','ずっと 見てられる','夏の 夜って いいね'],
+    musicStart2:['ギターの 音が 聞こえる…','焚き火で 演奏会や','いい 音…','だれか 弾いてる'],musicMid:['この 曲 好き','焚き火と 音楽、最高','波の 音と 合ってる','ずっと 聞いてたい'],musicAfter:['いい 演奏 だったね','拍手〜','また 聞きたいな','静かに なったね'],
     droneStart:['あれ、空に 光が 並んでる','ドローンショーや！','光が 動いてる…','なんか 始まった'],droneMid:['すごい 形…','どうやって 動いてるんやろ','次は 何に なるかな','きれいに そろってる'],droneAfter:['ドローン、すごかった','光の 絵、きれいだったね','また 見たいな','空が 静かに なった'],
     fwAfter_pcalm:['ゆっくりで いい 花火だった','柳が きれいだった','静かな 夜に ぴったり'],fwAfter_pnormal:['いろんな 形が あったね','ハート 見えた？','いい 花火大会 だった'],fwAfter_pwild:['すごい 迫力 だった…','耳が まだ ドーンって 言ってる','最後の 連発、すごかった'],fwAfter_psea:['水中花火、海が 光ってた','ナイアガラ きれい だった','波に うつってたね']});
-  Object.assign(EMO,{festStart:['🎆','👀'],festMid:['🎆','✨'],droneStart:['🛸','👀'],droneMid:['✨','🛸'],droneAfter:['🛸','🌙'],fwAfter_pcalm:['🎐'],fwAfter_pnormal:['🎆'],fwAfter_pwild:['🎇'],fwAfter_psea:['🌊']});
+  Object.assign(EMO,{musicStart2:['🎸','🎵'],musicMid:['🎵','🔥'],musicAfter:['👏','🎵'],festStart:['🎆','👀'],festMid:['🎆','✨'],droneStart:['🛸','👀'],droneMid:['✨','🛸'],droneAfter:['🛸','🌙'],fwAfter_pcalm:['🎐'],fwAfter_pnormal:['🎆'],fwAfter_pwild:['🎇'],fwAfter_psea:['🌊']});
   return{plan,q,cfg,on,reserve,hasRsv,PNM}})();
 /* たねは もう 拾えない（花火・ドローンは 夜に ふいに 始まる） */
 {const _rt=rollTre;rollTre=function(){let t;for(let i=0;i<12;i++){t=_rt.apply(this,arguments);if(!t||!/^nev_s_(fireworks|grandfw|fw_|drones)/.test(t.id))return t}return t}}
+/* ========== 朝の 散歩（浜辺の 5時〜7時半。砂浜に 落ちている 物を タップで 拾う） ========== */
+const NXWALK=window.NXWALK=(()=>{const D=()=>NXS.st(),R=(a,b)=>a+Math.random()*(b-a);let layer=null,timers=[];
+  const h=()=>{try{return GH()}catch(e){return 12}};
+  function st(){const d=D(),day=S.gday||0;if(!d.walk||d.walk.day!==day)d.walk={day,todo:4+(Math.random()*4|0),got:0,spawned:0,next:5+R(.05,.3),gone:false};return d.walk}
+  function lay(){if(!layer){layer=document.createElement('div');layer.id='nxWalk';document.body.appendChild(layer)}return layer}
+  function spot(){let g;try{g=SCENE.dbg()}catch(e){return null}let u;for(let i=0;i<20;i++){u=R(.05,.95);if(!(u>.17&&u<.38)&&!(u>.64&&u<.84))break}
+    const top=g.shore+R(18,90)*g.k,fy=(g.fire?g.fire[1]:9e9);const y=Math.min(top,fy-30*g.k);return{x:g.WL+g.WW*u,y:y-scrollY,k:g.k}}
+  const LOOK=['🐚','🦪','🪨','🌿','🍶','🪵','✨','🫙'];
+  function spawn(){const w=st(),p=spot();if(!p)return;w.spawned++;save();const el=document.createElement('button');el.className='nxPick';el.type='button';el.style.left=p.x+'px';el.style.top=p.y+'px';el.style.fontSize=(1.05*p.k)+'rem';
+    const look=LOOK[Math.random()*LOOK.length|0];el.innerHTML=`<i>${look}</i><b></b>`;el.addEventListener('pointerdown',e=>{e.stopPropagation()});el.addEventListener('click',e=>{e.stopPropagation();pick(el,p)});lay().appendChild(el);requestAnimationFrame(()=>el.classList.add('in'))}
+  function label(p,txt){const t=document.createElement('div');t.className='nxPickT';t.style.left=p.x+'px';t.style.top=p.y+'px';t.innerHTML=txt;lay().appendChild(t);setTimeout(()=>t.remove(),2600)}
+  function pick(el,p){if(el.dataset.done)return;el.dataset.done=1;el.classList.add('got');setTimeout(()=>el.remove(),600);const w=st();w.got++;const r=Math.random();
+    try{tone(1320,.06,'sine',.03);tone(1760,.08,'sine',.025,.07)}catch(e){}
+    if(r<.12){const v=Math.round(R(30,300)*Math.max(1,(S.bet||1)/20)/10)*10;S.coins+=v;label(p,`🪙 +${v.toLocaleString()}`);ui()}
+    else{const t=rollTre(r>.95?2:.4);if(t){S.tre[t.id]=(S.tre[t.id]||0)+1;S.zukan[t.id]=1;label(p,`${t.e} ${t.n}`)}}
+    save();if(w.got===1){try{say('walkFirst',{n:1,origin:'beach',delay:600})}catch(e){}}}
+  function clear(msg){const L=layer?[...layer.querySelectorAll('.nxPick')]:[];L.forEach((e,i)=>setTimeout(()=>{e.classList.add('wash');setTimeout(()=>e.remove(),1500)},i*200));if(msg&&L.length)try{say('walkGone',{n:1,origin:'beach',delay:800})}catch(e){}}
+  setInterval(()=>{try{if(document.hidden)return;const w=st(),hh=h();if(hh>=5&&hh<7.5){if(w.spawned<w.todo&&hh>=w.next){spawn();w.next=hh+R(.08,.3);if(w.spawned===1)try{say('walkStart',{n:1,origin:'beach',delay:1500})}catch(e){}}}
+    else if(layer&&layer.querySelector('.nxPick:not(.wash)'))clear(hh>=7.5&&hh<9)}catch(e){}},1500);
+  addEventListener('resize',()=>{if(layer)layer.querySelectorAll('.nxPick').forEach(e=>e.remove())});
+  Object.assign(MUMS,{walkStart:['朝の 浜辺は 落とし物が 多いね','波が 何か 置いていった','おはよう、浜辺','朝の 散歩、気持ちいい'],walkFirst:['なにか 拾った！','いいもの みっけ','朝 いちばんの 拾いもの'],walkGone:['潮が 満ちてきた','波が 持っていっちゃった','また 明日の 朝ね']});
+  Object.assign(EMO,{walkStart:['🌅','🐚'],walkFirst:['✨'],walkGone:['🌊']});
+  return{st,spawn}})();
 </script>
 <!--NXJS-END-->
 </body></html>
