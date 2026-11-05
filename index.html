@@ -13742,6 +13742,9 @@ const NXSNOW=window.NXSNOW=(()=>{const R=(a,b)=>a+Math.random()*(b-a),pk=a=>a[Ma
     xmasStart:['シャンシャン…鈴の 音？','サンタさん！？','メリー クリスマス！','空を そりが 飛んでる'],xmasMid:['プレゼント 落ちてる！','浜辺の クリスマス','ツリー きれい','ホワイト クリスマス なら いいのに'],xmasAfter:['いい クリスマス だったね','サンタさん ありがとう','また 来年']});
   Object.assign(EMO,{snowBegin:['❄️'],snowMum:['❄️','⛄'],snowman:['⛄'],snowEnd:['💧'],xmasStart:['🎅','🔔'],xmasMid:['🎁','🎄'],xmasAfter:['🎄','🌙']});
   return{snowy,snowman,sleigh,gift,clearGifts,bells}})();
+
+/* ---- 島の お店（🏝️）の ボタンは、アイテムの ボタンの 左に 置く（重ならない） ---- */
+setInterval(()=>{try{const t=$('townBtns'),b=$('nxBtn'),w=$('window');if(!t||!b||!w)return;const r=w.getBoundingClientRect(),br=b.getBoundingClientRect();if(!br.width)return;const right=Math.round(r.right-br.left+6);if(t.style.getPropertyValue('right')!==right+'px'){t.style.setProperty('right',right+'px','important');t.style.setProperty('top',Math.round(br.top-r.top+br.height/2-14)+'px','important');t.style.setProperty('max-width',`calc(100% - ${right+10}px)`,'important')}}catch(e){}},1000);
 </script>
 <!--NXJS-END-->
 </body></html>
