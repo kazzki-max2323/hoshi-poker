@@ -6119,7 +6119,7 @@ setInterval(()=>{if(document.body.classList.contains('pc')&&document.documentEle
 (()=>{const ul=document.querySelector('#rules ul:last-of-type');if(ul)ul.insertAdjacentHTML('beforeend','<li><b>🔮 星の 宝珠</b>：流れ星・連勝の 宝箱・チャンスの アタリ・夜空 などから ときどき 手に入る 7色の 玉。7つ そろうと 星くじらが 願いを ひとつ かなえてくれます。<b>🎰 ジャックポット チャレンジ</b>は 7️⃣7️⃣7️⃣で 貯まった ジャックポットを ぜんぶ もらえる！</li>')})();
 
 /* たからものの 合成効果を 表示 */
-{const _a=addTre;addTre=function(t,sub){if(t&&t.sk)sub=(sub||'GET！')+`<br><small>✨ 合成すると ${treSkTxt(t)}</small>`;return _a.call(this,t,sub)}}
+/* 合成は なし：手に 入れた ときの 合成の 説明は 出さない */
 {const _sh=synHTML;synHTML=function(){return _sh().replace(/(<button class="synIt[^"]*" data-t="tre" data-id="([^"]+)"[^>]*>[\s\S]*?)(<b class="synP">)/g,(m,a,id,b)=>{const t=TRE.find(x=>x.id===id);return a+(t&&t.sk?`<b class="synSk">✨${treSkTxt(t)}</b>`:'')+b})}}
 
 /* ========== v120 ========== */
@@ -9992,7 +9992,7 @@ synPattern=function(it,kind){const M=window._synMods||[];if(M.includes('cap6')||
 /* 能力上限 6 の 表示 */
 {const _en=eqName;eqName=function(it){return _en(it)+(it&&it.cap>5?' ⑥':'')}}
 /* 表示の 条件を「能力 or 素材効果」に */
-{const _a=addTre;addTre=function(t,sub){if(t&&t.syn&&!t.sk)sub=(sub||'GET！')+`<br><small>✨ 合成すると ${treSkTxt(t)}</small>`;return _a.call(this,t,sub)}}
+/* 合成は なし：手に 入れた ときの 合成の 説明は 出さない */
 {const _sh=synHTML;synHTML=function(){return _sh().replace(/(<button class="synIt[^"]*" data-t="tre" data-id="([^"]+)"[^>]*>[\s\S]*?)(<b class="synP">)/g,(m,a,id,b)=>{const t=TRE.find(x=>x.id===id);if(!t||!t.syn||t.sk||/synSk/.test(a))return m;return a+`<b class="synSk">✨${treSkTxt(t)}</b>`+b})}}
 (()=>{const ul=document.querySelector('#rules ul:last-of-type');if(ul)ul.insertAdjacentHTML('beforeend','<li><b>🧪 素材の 力</b>：たからものの 中には、装備と 合成すると「球の 伸び ×1.2」「大きく 伸びやすい」「球枠 ＋1 チャンス」などの 特別な 効果を 持つ ものが あります。また、能力の ついた たからものは ときどき その 能力の 球を 生みます。図鑑や 売る 画面で 確認できます。</li>')})();
 
@@ -13745,6 +13745,9 @@ const NXSNOW=window.NXSNOW=(()=>{const R=(a,b)=>a+Math.random()*(b-a),pk=a=>a[Ma
 
 /* ---- 島の お店（🏝️）の ボタンは、アイテムの ボタンの 左に 置く（重ならない） ---- */
 setInterval(()=>{try{const t=$('townBtns'),b=$('nxBtn'),w=$('window');if(!t||!b||!w)return;const r=w.getBoundingClientRect(),br=b.getBoundingClientRect();if(!br.width)return;const right=Math.round(r.right-br.left+6);if(t.style.getPropertyValue('right')!==right+'px'){t.style.setProperty('right',right+'px','important');t.style.setProperty('top',Math.round(br.top-r.top+br.height/2-14)+'px','important');t.style.setProperty('max-width',`calc(100% - ${right+10}px)`,'important')}}catch(e){}},1000);
+
+/* 手に 入れた ときの 通知に「使うと どうなるか」を 出す */
+{const _a=addTre;addTre=function(t,sub){try{if(t&&window.NXT){const u=NXT.useTxt(t);if(u)sub=(sub||'GET！')+`<br><small>${u}</small>`}}catch(e){}return _a.call(this,t,sub)}}
 </script>
 <!--NXJS-END-->
 </body></html>
