@@ -13748,6 +13748,12 @@ setInterval(()=>{try{const t=$('townBtns'),b=$('nxBtn'),w=$('window');if(!t||!b|
 
 /* 手に 入れた ときの 通知に「使うと どうなるか」を 出す */
 {const _a=addTre;addTre=function(t,sub){try{if(t&&window.NXT){const u=NXT.useTxt(t);if(u)sub=(sub||'GET！')+`<br><small>${u}</small>`}}catch(e){}return _a.call(this,t,sub)}}
+
+/* ---- ジャックポットを わくわくする 大きさに：貯まり方 約2.7倍、ベットに 合わせた 最低額（ベットの 500倍）、当たった あとも その額から ---- */
+{const floor=()=>Math.max(100000,Math.max(1,S.bet||1)*500);
+ const _dl=deal;deal=async function(){const ok=!window._chLock&&S.phase!=='busy'&&S.coins>0;if(ok){S.jp+=Math.max(15,(S.bet||1)*.25);if(S.jp<floor())S.jp=floor()}return _dl.apply(this,arguments)};
+ setInterval(()=>{try{if(S.jp<floor()){S.jp=floor();save()}}catch(e){}},3000);
+ try{if(S.jp<floor()){S.jp=floor();save()}}catch(e){}}
 </script>
 <!--NXJS-END-->
 </body></html>
