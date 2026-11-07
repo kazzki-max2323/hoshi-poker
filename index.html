@@ -13788,4 +13788,71 @@ const NXJP=window.NXJP=(()=>{const D=()=>NXS.st(),R=(a,b)=>a+Math.random()*(b-a)
   return{add,gold,won}})();
 </script>
 <!--NXJS-END-->
+<!--NXCALMWIN-START v314-->
+<style>
+#nxCs{position:fixed;z-index:6;pointer-events:none;width:260px;height:84px;margin-left:-130px;opacity:0;transition:opacity .8s}
+#nxCs.on{opacity:1}
+#nxCs svg{width:100%;height:100%;overflow:visible}
+#nxCs line{stroke:rgba(255,214,120,.55);stroke-width:1.2;opacity:0;transition:opacity 1s}
+#nxCs line.on{opacity:1}
+#nxCs .st{fill:#ffe9a8;stroke:rgba(140,80,0,.55);stroke-width:.6;opacity:0;transform-box:fill-box;transform-origin:center;transition:opacity .6s}
+#nxCs .st.on{opacity:.95;filter:drop-shadow(0 0 4px rgba(255,200,90,.95))}
+#nxCs .st.new{animation:nxCsPop 1.4s ease-out both}
+@keyframes nxCsPop{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(2.2);filter:drop-shadow(0 0 10px #fff3c4)}100%{opacity:.95;transform:scale(1)}}
+#nxCs.full .st.on{animation:nxCsTw 1.6s ease-in-out 2}
+@keyframes nxCsTw{50%{opacity:1;filter:drop-shadow(0 0 8px #ffe9a8)}}
+#nxCs .lb{position:absolute;right:-6px;bottom:-4px;font-size:.75rem;color:#fff3c4;opacity:.85;text-shadow:0 0 6px rgba(255,220,140,.8)}
+#bigwin.nxCalm{background:radial-gradient(circle at 50% 45%,rgba(20,20,40,.35),rgba(0,0,0,.55) 70%)}
+#bigwin.nxCalm .bwr{display:none}
+body.nxCalmW .pop .rays{display:none!important}
+body.nxBw .pop{visibility:hidden}
+@media (prefers-reduced-motion:reduce){#nxCs .st.new,#nxCs.full .st.on{animation:none}}
+</style>
+<script>
+/* v314：ダブルアップ 勝ちの 演出を 静かに。連勝で 量は 増やさず、夜空に 星を ひとつずつ 灯して 星座を つくる */
+const NXCALM=(()=>{
+  let calm=false,offT=0,run={tier:0};const B={coin:0,conf:0,fw:0,spark:0};
+  const CAP={coin:12,conf:0,fw:0,spark:70};
+  /* 勝負の 間だけ、量を おさえる */
+  const o={rain:FX.rain,burst:FX.burst,firework:FX.firework,meteor:FX.meteor};
+  FX.rain=function(t,n,opt){if(calm){if(t==='coin'){n=Math.min(n,CAP.coin-B.coin);B.coin+=Math.max(0,n)}else if(t==='confetti'){n=Math.min(n,CAP.conf-B.conf);B.conf+=Math.max(0,n)}if(n<=0)return}return o.rain.call(this,t,n,opt)};
+  FX.burst=function(x,y,n,t,opt){if(calm){if(t==='coin'){n=Math.min(n,CAP.coin-B.coin);B.coin+=Math.max(0,n);if(n<=0)return}else if(t==='spark'){n=Math.min(n,30,CAP.spark-B.spark);B.spark+=Math.max(0,n);if(n<=0)return}else if(t==='confetti')return}return o.burst.call(this,x,y,n,t,opt)};
+  FX.firework=function(){if(calm){if(B.fw>=CAP.fw)return;B.fw++}return o.firework.apply(this,arguments)};
+  FX.meteor=function(){if(calm)return;return o.meteor.apply(this,arguments)};
+  {const _sh=shake;shake=function(){if(calm)return;return _sh.apply(this,arguments)}}
+  {const ss=SCENE.show;SCENE.show=function(k){if(calm&&['fireworks','balloons','goldrain','aurora'].includes(k))return;return ss.apply(this,arguments)}}
+  /* BIG WIN：ランクが 上がった 時だけ、静かに */
+  {const _bw=bigWinFX;bigWinFX=async function(amt){if(!calm)return _bw.apply(this,arguments);
+    const lv=amt>=500000?4:amt>=100000?3:amt>=20000?2:1;if(lv<=run.tier)return;run.tier=lv;
+    const el=$('bigwin');document.body.classList.add('nxBw');el.className='on nxCalm l'+lv;el.querySelector('.bwt').textContent=['','BIG WIN','SUPER WIN','MEGA WIN','LEGEND WIN'][lv];
+    countUp(el.querySelector('.bwn'),amt,1100,v=>v.toLocaleString()+' 枚');try{sfx.fanfare(Math.min(2,lv))}catch(e){}
+    try{say('bigwin'+lv,{n:1+Math.min(2,lv),delay:600,gap:800,ctx:{amt}})}catch(e){}
+    try{o.burst(FX.W()/2,FX.H()*.45,20,'spark',{colors:['#fff3c4','#ffe066','#ffffff'],speed:3,g:.01})}catch(e){}
+    await wait(1900+lv*250);el.className='';document.body.classList.remove('nxBw')}}
+  /* 星座：連勝の 数だけ 星が 灯る */
+  const PT=[[14,58],[40,40],[66,52],[92,26],[120,36],[146,14],[172,30],[198,18],[222,44],[246,30]];
+  let shown=0;
+  function box(){let d=$('nxCs');if(!d){d=document.createElement('div');d.id='nxCs';
+      let s='<svg viewBox="0 0 260 84">';for(let k=1;k<PT.length;k++)s+=`<line x1="${PT[k-1][0]}" y1="${PT[k-1][1]}" x2="${PT[k][0]}" y2="${PT[k][1]}"/>`;
+      PT.forEach(p=>{const[x,y]=p,a=7,b=1.8;s+=`<path class="st" d="M${x} ${y-a}L${x+b} ${y-b}L${x+a} ${y}L${x+b} ${y+b}L${x} ${y+a}L${x-b} ${y+b}L${x-a} ${y}L${x-b} ${y-b}Z"/>`});
+      d.innerHTML=s+'</svg><span class="lb"></span>';document.body.appendChild(d)}
+    const t=document.querySelector('.wrap');if(t){const r=t.getBoundingClientRect();d.style.left=(r.left+r.width/2)+'px';d.style.top=(Math.max(0,r.top)+Math.round(Math.min(100,innerHeight*.12)))+'px'}return d}
+  const NOTE=[784,880,988,1175,1319,1568,1760,1976,2349,2637];
+  function draw(n,fresh){const d=box(),st=d.querySelectorAll('.st'),ln=d.querySelectorAll('line'),m=Math.min(n,PT.length);
+    st.forEach((s,k)=>{s.classList.toggle('on',k<m);if(!fresh)s.classList.remove('new')});ln.forEach((l,k)=>l.classList.toggle('on',k<m-1));
+    d.querySelector('.lb').textContent=n>PT.length?n+'れんしょう':'';d.classList.toggle('on',n>0)}
+  function light(n){const d=box();draw(n,true);const st=d.querySelectorAll('.st');const k=Math.min(n,PT.length)-1;
+    for(let j=Math.max(0,shown);j<=k;j++){const s=st[j];if(!s)continue;s.classList.remove('new');void s.getBoundingClientRect();s.classList.add('new')}
+    if(n%5===0){d.classList.remove('full');void d.offsetWidth;d.classList.add('full');setTimeout(()=>d.classList.remove('full'),3400)}
+    tsnd(()=>{const f=NOTE[Math.min(n,NOTE.length)-1];tone(f,.5,'sine',.022);tone(f*1.5,.6,'sine',.01,.12);if(n%5===0)tone(f*2,.9,'sine',.012,.3)});shown=Math.min(n,PT.length)}
+  function clear(){const d=$('nxCs');if(d)d.classList.remove('on');shown=0;run.tier=0}
+  /* 勝負の 外側に ラップ */
+  {const _pd=pickDouble;pickDouble=async function(i){const s0=S.streak||0;clearTimeout(offT);calm=true;document.body.classList.add('nxCalmW');B.coin=0;B.conf=0;B.fw=0;B.spark=0;if(!s0)run.tier=0;
+    try{return await _pd.apply(this,arguments)}finally{offT=setTimeout(()=>{calm=false;document.body.classList.remove('nxCalmW')},2800)}}}
+  {const _us=updStreak;updStreak=function(pop){const r=_us.apply(this,arguments);try{if(pop&&calm&&(S.streak||0)>0)light(S.streak)}catch(e){}return r}}
+  setInterval(()=>{try{const live=(S.streak||0)>0&&(S.win||0)>0&&['won','dblPick','dblTie','busy'].includes(S.phase);if(!live){if(shown||($('nxCs')&&$('nxCs').classList.contains('on')))clear()}else{const d=$('nxCs');if(d&&!d.classList.contains('on'))draw(S.streak)}}catch(e){}},600);
+  addEventListener('resize',()=>{try{if($('nxCs'))box()}catch(e){}});
+  return{light,clear,get calm(){return calm},get B(){return B}}})();
+</script>
+<!--NXCALMWIN-END-->
 </body></html>
