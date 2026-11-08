@@ -13440,9 +13440,7 @@ setTimeout(()=>{try{const l=nxLay();['nxCst','nxNt','nxCas','nxFlea'].forEach(id
 
 
 
-/* ---- お試し：花火大会の たねを 1つずつ（1回だけ） ---- */
-setTimeout(()=>{try{const d=NXS.st();if(d.giftFw1)return;d.giftFw1=1;const ids=['nev_s_fireworks','nev_s_grandfw','nev_s_fw_phoenix','nev_s_fw_sea','nev_s_fw_yanagi','nev_s_fw_cute','nev_s_fw_odama'].filter(id=>TRE.find(t=>t.id===id));
-  ids.forEach(id=>{S.tre[id]=(S.tre[id]||0)+1;S.zukan[id]=1});save();ui();setTimeout(()=>evToast(`🎁 <b>花火大会の たね</b> を ${ids.length}つ もらった<br><small>🎒 アイテム → たからもの → 「曲・イベント」から 使える（夜が おすすめ）</small>`),3500)}catch(e){}},2500);
+/* v316：最初に 花火大会の たねを 配る お試しは やめた */
 
 /* ---- 花火見物モード：花火大会の 間は 画面を すっきり（呟き・通知・星座・フリマ・上の ボタンを かくす）、浴衣の 人などが 集まる ---- */
 const NXFW=window.NXFW=(()=>{const FWS=['fireworks','grandfw','fw_phoenix','fw_sea','fw_yanagi','fw_cute','fw_odama'];let until=0,q=[],crowd=null,ppl=[],tm=[],last='fireworks',after=0,sayOk=false;
