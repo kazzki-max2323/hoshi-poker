@@ -13812,7 +13812,7 @@ body.nxBw .pop{visibility:hidden}
 /* v314：ダブルアップ 勝ちの 演出を 静かに。連勝で 量は 増やさず、夜空に 星を ひとつずつ 灯して 星座を つくる */
 const NXCALM=(()=>{
   let calm=false,offT=0,run={tier:0};const B={coin:0,conf:0,fw:0,spark:0};
-  const CAP={coin:12,conf:0,fw:0,spark:70};
+  const CAP={coin:12,conf:0,fw:2,spark:70};
   /* 勝負の 間だけ、量を おさえる */
   const o={rain:FX.rain,burst:FX.burst,firework:FX.firework,meteor:FX.meteor};
   FX.rain=function(t,n,opt){if(calm){if(t==='coin'){n=Math.min(n,CAP.coin-B.coin);B.coin+=Math.max(0,n)}else if(t==='confetti'){n=Math.min(n,CAP.conf-B.conf);B.conf+=Math.max(0,n)}if(n<=0)return}return o.rain.call(this,t,n,opt)};
@@ -13855,4 +13855,140 @@ const NXCALM=(()=>{
   return{light,clear,get calm(){return calm},get B(){return B}}})();
 </script>
 <!--NXCALMWIN-END-->
+<!--NXTIERWIN-START v315-->
+<style>
+#nxWfx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:6}
+#nxWfx>*{position:absolute;pointer-events:none}
+#nxWfx .e{font-style:normal;line-height:1;display:block}
+/* 海：波打ちぎわの 光 */
+.nxWv{left:0;width:100%;height:4px;margin-top:-2px;border-radius:4px;background:var(--c);filter:blur(1.5px);box-shadow:0 0 12px var(--c);opacity:0;animation:nxWvF 3.4s ease-out forwards}
+@keyframes nxWvF{0%{opacity:0;clip-path:inset(0 100% 0 0)}15%{opacity:.9}55%{opacity:.85;clip-path:inset(0 0 0 0)}100%{opacity:0;clip-path:inset(0 0 0 0)}}
+.nxWvH{width:34%;height:8px;margin-top:-4px;border-radius:8px;background:radial-gradient(closest-side,#fff,var(--c) 60%,transparent);filter:blur(1px);animation:nxWvH 1.9s ease-in-out forwards}
+@keyframes nxWvH{from{left:-34%}to{left:100%}}
+/* イルカ */
+.nxDol{animation:nxDolX 1.7s linear forwards}.nxDol i{animation:nxDolY 1.7s ease-in-out forwards}
+@keyframes nxDolX{to{transform:translateX(var(--dx))}}
+@keyframes nxDolY{0%{opacity:0;transform:translateY(10px) rotate(-35deg) scaleX(var(--fx))}12%{opacity:1}50%{transform:translateY(var(--hy)) rotate(0) scaleX(var(--fx))}88%{opacity:1}100%{opacity:0;transform:translateY(10px) rotate(35deg) scaleX(var(--fx))}}
+/* 光の 輪 */
+.nxRg{border:2px solid rgba(255,240,190,.85);border-radius:50%;box-shadow:0 0 8px rgba(255,230,150,.6);transform:translate(-50%,-50%);width:16px;height:5px;opacity:0;animation:nxRg 2.6s ease-out forwards}
+@keyframes nxRg{0%{opacity:0}10%{opacity:1}100%{opacity:0;width:var(--w);height:calc(var(--w)*.22)}}
+/* ヨット */
+.nxYa{animation:nxYa 6s linear forwards}.nxYa i{filter:drop-shadow(0 0 6px rgba(255,220,120,.95));animation:nxBob 1.2s ease-in-out infinite}
+@keyframes nxYa{0%{opacity:0;transform:translateX(0)}12%{opacity:1}85%{opacity:1}100%{opacity:0;transform:translateX(var(--dx))}}
+@keyframes nxBob{50%{transform:translateY(-1.5px) rotate(2deg)}}
+/* 空：大きな 流れ星 */
+.nxMt{width:180px;height:2px;border-radius:2px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,250,220,.9));box-shadow:0 0 6px rgba(255,240,200,.8);transform-origin:right center;opacity:0;animation:nxMt 2.6s ease-in forwards}
+.nxMt::after{content:'';position:absolute;right:-3px;top:-3px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 10px 3px rgba(255,245,200,.9)}
+@keyframes nxMt{0%{opacity:0;transform:translate(0,0) rotate(var(--r))}10%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r))}}
+/* 虹 */
+.nxRb{border-radius:50% 50% 0 0/100% 100% 0 0;background:radial-gradient(ellipse 50% 100% at 50% 100%,transparent 76%,rgba(160,90,255,.35) 78%,rgba(70,140,255,.35) 81%,rgba(80,220,120,.35) 84%,rgba(255,230,80,.38) 87%,rgba(255,150,60,.36) 90%,rgba(255,70,90,.32) 93%,transparent 95%);opacity:0;animation:nxFade 5.5s ease-in-out forwards}
+@keyframes nxFade{0%{opacity:0}25%{opacity:1}70%{opacity:1}100%{opacity:0}}
+/* 渡り鳥 */
+.nxBd{animation:nxBdX 6s linear forwards}
+@keyframes nxBdX{0%{opacity:0;transform:translateX(0)}10%{opacity:1}88%{opacity:1}100%{opacity:0;transform:translateX(var(--dx))}}
+.nxBd svg{position:absolute;overflow:visible}.nxBd path{fill:none;stroke:var(--c);stroke-width:1.6;stroke-linecap:round;transform-box:fill-box;transform-origin:center;animation:nxFlap .5s ease-in-out infinite alternate}
+@keyframes nxFlap{to{transform:scaleY(-.4)}}
+/* 光の 柱 */
+.nxPl{width:46px;margin-left:-23px;top:0;background:linear-gradient(180deg,rgba(255,255,255,0),var(--c));filter:blur(6px);opacity:0;animation:nxFade 5s ease-in-out forwards}
+.nxPg{width:120px;height:18px;margin:-9px 0 0 -60px;border-radius:50%;background:radial-gradient(closest-side,var(--c),transparent);opacity:0;animation:nxFade 5s ease-in-out forwards}
+/* 浜辺の 人たち */
+.nxPp{animation:nxPpW 1.8s ease-out forwards}.nxPp i{animation:nxHop .45s ease-in-out 1.9s 5 alternate}
+@keyframes nxPpW{from{transform:translateX(0)}to{transform:translateX(var(--dx))}}
+@keyframes nxHop{to{transform:translateY(-7px)}}
+.nxClap{opacity:0;animation:nxClap 1s ease-out forwards}
+@keyframes nxClap{0%{opacity:0;transform:translateY(0) scale(.5)}30%{opacity:1;transform:translateY(-8px) scale(1)}100%{opacity:0;transform:translateY(-22px) scale(1)}}
+.nxOut{animation:nxOut .9s ease-in forwards}@keyframes nxOut{to{opacity:0}}
+/* カニの ダンス */
+.nxCb i{animation:nxCbIn .6s ease-out both,nxCbD .5s ease-in-out .7s 6 alternate}
+@keyframes nxCbIn{from{opacity:0;transform:translateY(10px)}}
+@keyframes nxCbD{from{transform:translateX(-6px) rotate(-8deg)}to{transform:translateX(6px) rotate(8deg)}}
+/* 砂の 文字 */
+.nxSd{transform:translateX(-50%);white-space:nowrap;font-weight:800;letter-spacing:.12em;color:var(--c);text-shadow:0 1px 0 rgba(255,255,255,.35),0 -1px 0 rgba(0,0,0,.25);clip-path:inset(0 100% 0 0);animation:nxSdW 2.2s ease-in-out .2s forwards}
+@keyframes nxSdW{to{clip-path:inset(0 0 0 0)}}
+/* 灯台 */
+.nxLh{width:10px;transform:translateX(-50%);background:linear-gradient(180deg,#e8e2d6 0 22%,#c0392b 22% 44%,#e8e2d6 44% 66%,#c0392b 66% 88%,#e8e2d6 88%);clip-path:polygon(25% 0,75% 0,100% 100%,0 100%);opacity:0;animation:nxFade 6s ease-in-out forwards}
+.nxLb{width:260px;height:56px;margin:-28px 0 0 -260px;transform-origin:right center;background:linear-gradient(270deg,rgba(255,244,200,.85),rgba(255,244,200,0));clip-path:polygon(0 0,100% 46%,100% 54%,0 100%);opacity:0;animation:nxLb 4.6s ease-in-out .6s forwards}
+@keyframes nxLb{0%{opacity:0;transform:rotate(-30deg) scaleY(.6)}15%{opacity:.9}45%{transform:rotate(0) scaleY(1.5)}50%{opacity:1}100%{opacity:0;transform:rotate(340deg) scaleY(.6)}}
+.nxLg{width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;background:radial-gradient(closest-side,#fffbe6,rgba(255,236,170,.6) 40%,transparent);opacity:0;animation:nxLg 4.6s ease-in-out .6s forwards}
+@keyframes nxLg{0%,30%{opacity:.3;transform:scale(.5)}46%{opacity:1;transform:scale(2.6)}60%{opacity:.4;transform:scale(1)}100%{opacity:0}}
+/* クジラ */
+.nxWh i{animation:nxWh 2.8s ease-in-out forwards}
+@keyframes nxWh{0%{opacity:0;transform:translateY(30px) rotate(10deg) scale(.8)}15%{opacity:1}50%{transform:translateY(-62px) rotate(-18deg) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(34px) rotate(28deg) scale(.95)}}
+.nxDp{width:5px;height:5px;border-radius:50%;background:#e6f7ff;box-shadow:0 0 6px #bfefff;opacity:0;animation:nxDp 1.3s ease-out forwards}
+@keyframes nxDp{0%{opacity:1;transform:translate(0,0)}60%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+/* ウミガメ */
+.nxTt{animation:nxTt 5.5s ease-out forwards}.nxTt i{animation:nxWob .6s ease-in-out infinite alternate}
+@keyframes nxTt{0%{opacity:0;transform:translate(0,0)}12%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+@keyframes nxWob{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+/* オーロラ */
+.nxAu{left:-10%;width:120%;border-radius:50%;background:linear-gradient(90deg,transparent,rgba(90,255,170,.45),rgba(120,210,255,.35),rgba(170,120,255,.4),transparent);filter:blur(10px);mix-blend-mode:screen;opacity:0;animation:nxAu 6s ease-in-out forwards}
+@keyframes nxAu{0%{opacity:0;transform:skewX(-20deg) scaleY(.6)}30%{opacity:1}50%{transform:skewX(15deg) scaleY(1.2)}75%{opacity:.9;transform:skewX(-10deg) scaleY(.9)}100%{opacity:0;transform:skewX(10deg) scaleY(.7)}}
+/* 宝の 光 */
+.nxTr{width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:radial-gradient(closest-side,#fffbe6,rgba(255,215,100,.75) 45%,rgba(255,200,80,0));opacity:0;animation:nxTr 3.4s ease-in-out forwards}
+@keyframes nxTr{0%{opacity:0;transform:translateY(16px) scale(.3)}25%{opacity:1}70%{opacity:1;transform:translateY(-58px) scale(1.15)}100%{opacity:0;transform:translateY(-70px) scale(2)}}
+.nxSp{width:4px;height:4px;border-radius:50%;background:#fff6c9;box-shadow:0 0 6px 1px #ffd86a;opacity:0;animation:nxSp 1.8s ease-out forwards}
+@keyframes nxSp{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+@media (prefers-reduced-motion:reduce){#nxWfx{display:none}}
+</style>
+<script>
+/* v315：ダブルアップ 勝ちの 演出を 金額で 種類を 変える。① 〜1万：手もと（今までの 小さな 演出）② 1万〜：海 ③ 10万〜：空 ④ 100万〜：浜辺の 人たち ⑤ 1000万〜：とっておき。量は 増やさない。各段 4種類から ランダム（続けて 同じ物は 出ない）・昼夜で 変わる */
+const NXTIER=(()=>{
+  const tierOf=v=>v>=1e7?5:v>=1e6?4:v>=1e5?3:v>=1e4?2:1;
+  let busy=0;const last={};
+  function lay(){const l=nxLay();if(!l)return null;let d=$('nxWfx');if(!d||d.parentNode!==l){if(d)d.remove();d=document.createElement('div');d.id='nxWfx';l.appendChild(d)}return d}
+  function geo(){const g=SCENE.dbg();return{W:g.WW,H:g.WH,k:g.k,hz:g.hz-g.WT,sh:g.shore-g.WT,fx:g.fire[0]-g.WL,fy:g.fire[1]-g.WT,dark:g.dark,gh:g.gh}}
+  const R=(a,b)=>a+Math.random()*(b-a);
+  function mk(L,cls,css,html,ms){const d=document.createElement('div');d.className=cls;if(css)for(const k in css)d.style.setProperty(k,css[k]);if(html)d.innerHTML=html;L.appendChild(d);setTimeout(()=>d.remove(),ms||7000);return d}
+  const px=v=>Math.round(v)+'px';
+  const ding=(fs,gap,v)=>tsnd(()=>fs.forEach((f,i)=>tone(f,.7,'sine',v||.018,i*(gap||.12))));
+  const FXS={
+    /* ② 海 */
+    wave(L,g){const c=g.dark>.6?'#5ff0ff':g.dark>.3?'#ffd9a0':'#fffbe6';mk(L,'nxWv',{top:px(g.sh),'--c':c});mk(L,'nxWvH',{top:px(g.sh),'--c':c});ding([1047,1568],.18)},
+    dolphin(L,g){const lr=Math.random()<.5,x0=lr?g.W*R(.15,.3):g.W*R(.6,.75),y=g.hz+(g.sh-g.hz)*R(.35,.6);
+      for(let n=0;n<2;n++)setTimeout(()=>{const d=mk(L,'nxDol',{left:px(x0+(lr?-1:1)*n*22*g.k),top:px(y+n*4),'--dx':px((lr?1:-1)*95*g.k)},`<i class="e" style="font-size:${px(20*g.k)};--hy:${px(-38*g.k)};--fx:${lr?-1:1}">🐬</i>`,2200)},n*320);
+      ding([1319,1760,2093],.1)},
+    ring(L,g){const x=g.W*R(.35,.65),y=g.hz+(g.sh-g.hz)*R(.4,.6);for(let n=0;n<3;n++)mk(L,'nxRg',{left:px(x),top:px(y),'--w':px(g.W*.62),'animation-delay':n*.5+'s'},'',4200);ding([1568,1976,2349],.22,.014)},
+    yacht(L,g){const lr=Math.random()<.5;mk(L,'nxYa',{left:px(lr?-30:g.W+6),top:px(g.hz-20*g.k),'--dx':px((lr?1:-1)*(g.W+40))},`<i class="e" style="font-size:${px(20*g.k)}">⛵</i>`,6200);ding([1175,1568],.25)},
+    /* ③ 空 */
+    meteor(L,g){const lr=Math.random()<.5,r=lr?18:162;mk(L,'nxMt',{left:px(lr?-60:g.W-120),top:px(g.hz*R(.12,.3)),'--r':r+'deg','--dx':px((lr?1:-1)*g.W*.75),'--dy':px(g.hz*.3)},'',3000);ding([2093,2637,3136],.15,.014)},
+    rainbow(L,g){const w=g.W*1.15;mk(L,'nxRb',{left:px((g.W-w)/2),top:px(g.hz-w*.5),width:px(w),height:px(w*.5)},'',5800);ding([1047,1319,1568,2093],.2,.014)},
+    birds(L,g){const lr=Math.random()<.5,c=g.dark>.6?'rgba(230,236,255,.85)':'rgba(40,40,60,.75)';let s='';
+      const P=[[0,0],[-1,1],[1,1],[-2,2],[2,2],[-3,3],[3,3]];P.forEach(([a,b])=>{const x=(lr?-b:b)*11*g.k,y=a*8*g.k;s+=`<svg style="left:${x}px;top:${y}px" width="16" height="8"><path d="M0 4 Q4 0 8 4 Q12 0 16 4" style="animation-delay:${(Math.abs(a)*.08).toFixed(2)}s"/></svg>`});
+      mk(L,'nxBd',{left:px(lr?-40:g.W+40),top:px(g.hz*R(.3,.5)),'--c':c,'--dx':px((lr?1:-1)*(g.W+90))},s,6200);ding([1760,1568],.3,.012)},
+    pillar(L,g){const x=g.W*R(.3,.7),c=g.dark>.6?'rgba(190,215,255,.5)':'rgba(255,236,190,.6)';mk(L,'nxPl',{left:px(x),height:px(g.hz+2),'--c':c},'',5200);mk(L,'nxPg',{left:px(x),top:px(g.hz+(g.sh-g.hz)*.3),'--c':c},'',5200);ding([784,1175,1568],.3,.016)},
+    /* ④ 浜辺の 人たち */
+    gather(L,g){const Q=['🧑','👧','👦','👩','🧓','👨','🐕','🐈'].sort(()=>Math.random()-.5).slice(0,4),y=g.fy-6*g.k;
+      Q.forEach((e,n)=>{const left=n%2===0,sx=left?-24:g.W+4,tx=g.fx+(left?-1:1)*(26+(n>>1)*22)*g.k;const d=mk(L,'nxPp',{left:px(sx),top:px(y-(n>>1)*6),'--dx':px(tx-sx)},`<i class="e" style="font-size:${px(20*g.k)}">${e}</i>`,6200);
+        for(let c=0;c<3;c++)setTimeout(()=>mk(L,'nxClap',{left:px(tx+4),top:px(y-(n>>1)*6-14*g.k)},`<i class="e" style="font-size:${px(11*g.k)}">${e==='🐕'||e==='🐈'?'♪':'👏'}</i>`,1200),2000+c*900+n*150);setTimeout(()=>d.classList.add('nxOut'),5200)});
+      setTimeout(()=>{try{sfx.clap(.35)}catch(e){}},2000);setTimeout(()=>{try{sfx.clap(.3)}catch(e){}},3200)},
+    crab(L,g){const y=g.sh+(g.fy-g.sh)*.45;for(let n=0;n<5;n++){const d=mk(L,'nxCb',{left:px(g.W*(.22+n*.13)),top:px(y+(n%2)*5)},`<i class="e" style="font-size:${px(15*g.k)};animation-delay:${n*.12}s,${.7+(n%2)*.25}s">🦀</i>`,6000);setTimeout(()=>d.classList.add('nxOut'),4600)}
+      tsnd(()=>{[523,659,784,659,523,659,784,1047].forEach((f,i)=>tone(f,.12,'triangle',.016,.7+i*.25))})},
+    sand(L,g){const c=g.dark>.6?'rgba(225,215,190,.55)':'rgba(120,85,45,.7)',t=pick(['おめでとう','すごい！','ばんざい','おみごと']);const d=mk(L,'nxSd',{left:px(g.W/2),top:px(g.sh+(g.fy-g.sh)*.35),'font-size':px(22*g.k),'--c':c},t,6500);setTimeout(()=>d.classList.add('nxOut'),5400);
+      tsnd(()=>{for(let i=0;i<10;i++)noise(.06,{v:.012,type:'bandpass',f:3000,q:2,delay:.2+i*.2})})},
+    lighthouse(L,g){const x=g.W*.9,y=g.hz,h=26*g.k;mk(L,'nxLh',{left:px(x),top:px(y-h),height:px(h)},'',6200);mk(L,'nxLb',{left:px(x),top:px(y-h)},'',5600);mk(L,'nxLg',{left:px(x),top:px(y-h)},'',5600);ding([880,1319],.8,.016)},
+    /* ⑤ とっておき */
+    whale(L,g){const x=g.W*R(.35,.6),y=g.hz+(g.sh-g.hz)*.45;mk(L,'nxWh',{left:px(x-27*g.k),top:px(y-30*g.k)},`<i class="e" style="font-size:${px(54*g.k)}">🐋</i>`,3200);
+      setTimeout(()=>{for(let n=0;n<14;n++){const a=-Math.PI*R(.1,.9);mk(L,'nxDp',{left:px(x),top:px(y),'--dx':px(Math.cos(a)*R(20,60)*g.k),'--dy':px(Math.sin(a)*R(25,60)*g.k)},'',1500)}for(let n=0;n<2;n++)mk(L,'nxRg',{left:px(x),top:px(y+6),'--w':px(g.W*.5),'animation-delay':n*.4+'s'},'',3400);
+        tsnd(()=>noise(.6,{v:.05,type:'lowpass',f:900}))},2200);tsnd(()=>{tone(110,1.4,'sine',.03);tone(165,1.2,'sine',.02,.3)});ding([1047,1319,1568,2093,2637],.14,.014)},
+    turtle(L,g){const x=g.W*R(.3,.6),y=g.sh-4;[[1,0,0],[.6,-24,10],[.6,20,14],[.55,-6,22]].forEach(([s,ox,oy],n)=>mk(L,'nxTt',{left:px(x+ox*g.k),top:px(y+oy*.3*g.k),'--dx':px(-14*g.k),'--dy':px((g.fy-g.sh)*.45),'animation-delay':(n*.35)+'s'},`<i class="e" style="font-size:${px(30*s*g.k)}">🐢</i>`,7000));ding([784,988,1175,1568],.3,.014)},
+    aurora(L,g){for(let n=0;n<3;n++)mk(L,'nxAu',{top:px(g.hz*(.08+n*.14)),height:px(g.hz*.22),'animation-delay':n*.4+'s'},'',7200);ding([523,659,784,1047,1319],.35,.012)},
+    treasure(L,g){const x=g.W*R(.4,.6),y=g.hz+(g.sh-g.hz)*.5;mk(L,'nxTr',{left:px(x),top:px(y)},'',3600);
+      setTimeout(()=>{for(let n=0;n<16;n++){const a=Math.PI*2*n/16;mk(L,'nxSp',{left:px(x),top:px(y-58*g.k),'--dx':px(Math.cos(a)*R(30,60)*g.k),'--dy':px(Math.sin(a)*R(20,45)*g.k-20)},'',2000)}},2300);ding([1568,1976,2349,2637,3136,3520],.1,.013)}};
+  const POOL={2:['wave','dolphin','ring','yacht'],3:['meteor','rainbow','birds','pillar'],4:['gather','crab','sand','lighthouse'],5:['whale','turtle','aurora','treasure']};
+  function ok(k,g){const night=g.dark>.6,eve=g.gh>=16.5&&g.gh<19.5;if(k==='meteor'||k==='aurora')return night;if(k==='rainbow')return !night&&!eve&&g.dark<.35;if(k==='birds')return g.dark<.8;return true}
+  function play(v){const t=tierOf(v);if(t<2)return false;let g;try{g=geo()}catch(e){return false}const L=lay();if(!L)return false;
+    let P=POOL[t].filter(k=>ok(k,g));const P2=P.filter(k=>k!==last[t]);if(P2.length)P=P2;const k=P[Math.random()*P.length|0];last[t]=k;
+    try{FXS[k](L,g)}catch(e){}try{say('wt_'+k,{n:1,origin:'beach',delay:1400})}catch(e){}return k}
+  Object.assign(MUMS,{wt_wave:['波が 光った…','波打ちぎわが きれい','海も よろこんでる'],wt_dolphin:['イルカ！','イルカが 跳ねた〜','お祝いに 来てくれた？'],wt_ring:['海に 光の 輪…','なにか いる？','きれいな 輪っか'],wt_yacht:['ヨットが 光ってる','帆が 金色…','いい 風'],
+    wt_meteor:['大きな 流れ星！','願いごと 間に合った？','空が 祝ってる'],wt_rainbow:['虹！','虹が かかった','空まで おめでとう'],wt_birds:['渡り鳥…','鳥たちも 見てる','V字で 飛んでく'],wt_pillar:['光の 柱…','空から 光が','神さまの 光？'],
+    wt_gather:['みんな 集まってきた','拍手 ありがとう〜','浜辺の 人気者'],wt_crab:['カニが 踊ってる！','カニ ダンス','横歩きで 祝ってくれる'],wt_sand:['砂に 文字が…','だれが 書いたん？','浜辺からの お祝い'],wt_lighthouse:['灯台の 光が こっちに','まぶしい！','灯台も おめでとう'],
+    wt_whale:['クジラ！！','クジラが 跳んだ…！','一生 忘れへん'],wt_turtle:['ウミガメの 親子…！','カメさんが 見に来た','ゆっくり おめでとう'],wt_aurora:['オーロラ…！？','南の 海で オーロラ…','夢みたい'],wt_treasure:['海の 底から 光が…','宝の 光！','海の 神さまの ごほうび']});
+  try{Object.assign(EMO,{wt_whale:['🐋','✨'],wt_turtle:['🐢'],wt_aurora:['🌌'],wt_dolphin:['🐬'],wt_crab:['🦀'],wt_rainbow:['🌈']})}catch(e){}
+  /* 1万枚 以上は 手もとの 小さな 演出の かわりに これ。BIG WIN の 暗い 画面も 出さない */
+  {const _wf=winFx;winFx=function(el){try{if(NXCALM.calm&&tierOf(S.win||0)>=2)return}catch(e){}return _wf.apply(this,arguments)}}
+  {const _bw=bigWinFX;bigWinFX=async function(amt){if(NXCALM.calm)return;return _bw.apply(this,arguments)}}
+  {const _us=updStreak;updStreak=function(pop){const r=_us.apply(this,arguments);try{if(pop&&NXCALM.calm&&(S.streak||0)>0&&(S.win||0)>0){const now=Date.now();if(now-busy>1500){busy=now;setTimeout(()=>play(S.win||0),300)}}}catch(e){}return r}}
+  return{play,tierOf,FXS,POOL}})();
+</script>
+<!--NXTIERWIN-END-->
 </body></html>
